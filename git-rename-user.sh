@@ -7,8 +7,8 @@ git filter-branch --force --env-filter '
         CORRECT_NAME1="VitaliyAndrushko"
         CORRECT_EMAIL1="vitalika1988@gmail.com"
         OLD_EMAIL2="front.soft.front@gmail.com"
-        OLD_NAME2 = "frontSoftFront"
-        CORRECT_NAME2="Admin"
+        OLD_NAME2="frontSoftFront"
+        CORRECT_NAME2="FrontSoftUser"
         CORRECT_EMAIL2="front.soft.front@gmail.com"
         if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL1" ]
         then
@@ -20,12 +20,12 @@ git filter-branch --force --env-filter '
             export GIT_AUTHOR_NAME="$CORRECT_NAME1"
             export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL1"
         fi
-        if [ "$GIT_COMMITTER_NAME" = "frontSoftFront" ]
+        if [ "$GIT_COMMITTER_NAME" = "$OLD_NAME2" ]
         then
             export GIT_AUTHOR_NAME="$CORRECT_NAME2"
             export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL2"
         fi
-        if [ "$GIT_AUTHOR_NAME" = "frontSoftFront" ]
+        if [ "$GIT_AUTHOR_NAME" = "$OLD_NAME2" ]
         then
             export GIT_AUTHOR_NAME="$CORRECT_NAME2"
             export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL2"
