@@ -2,7 +2,7 @@
 
 # bash script to rename git commit user
 
-git filter-branch --env-filter '
+git filter-branch --force --env-filter '
         OLD_EMAIL="vitalika1988@gmail.com"
         CORRECT_NAME="Vitalika1988"
         CORRECT_EMAIL="vitalika1988@gmail.com"
