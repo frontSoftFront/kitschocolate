@@ -18,7 +18,7 @@
 #         fi
 # ' --tag-name-filter cat -- --branches --tags
 
-git filter-branch --env-filter '
+git filter-branch --force --env-filter '
         if [ "$GIT_COMMITTER_EMAIL" = "vitaliy@gmail.com" ];
         then
                 GIT_COMMITTER_NAME="Mars";
