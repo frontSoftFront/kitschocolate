@@ -3,7 +3,7 @@
 # bash script to rename git commit username
 
 git filter-branch --commit-filter '
-        if [ "$GIT_COMMITTER_NAME" = "VitaliyAndrushko" ];
+        if [ "$GIT_COMMITTER_EMAIL" = "vitalika1988@gmail.com" ];
         then
                 GIT_COMMITTER_NAME="Vitaliy";
                 GIT_AUTHOR_NAME="Vitaliy";
@@ -13,3 +13,5 @@ git filter-branch --commit-filter '
         else
                 git commit-tree "$@";
         fi' HEAD
+
+# git filter-branch --force --commit-filter - use --force if backup exist
