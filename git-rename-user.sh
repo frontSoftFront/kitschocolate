@@ -2,7 +2,7 @@
 
 # bash script to rename git commit username
 
-git filter-branch --commit-filter -f '
+git filter-branch --force --commit-filter '
         if [ "$GIT_COMMITTER_NAME" = "VitaliyAndrushko" ];
         then
                 GIT_COMMITTER_NAME="Vitaliy";
