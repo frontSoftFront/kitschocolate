@@ -7,7 +7,7 @@ git filter-branch --force --env-filter '
         CORRECT_NAME1="VitaliyAndrushko"
         CORRECT_EMAIL1="vitalika1988@gmail.com"
         OLD_EMAIL2="front.soft.front@gmail.com"
-        OLD_NAME2="frontSoftFront"
+        OLD_NAME2="Admin"
         CORRECT_NAME2="FrontSoftUser"
         CORRECT_EMAIL2="front.soft.front@gmail.com"
         if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL1" ]
