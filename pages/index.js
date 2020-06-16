@@ -207,7 +207,3 @@ export default function Home() {
     </div>
   )
 }
-
-// NOTE: test
-
-// NOTE: test
