@@ -1,22 +1,22 @@
+import * as R from 'ramda';
 import React from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
+import Head from 'next/head';
 import { useSelector, useDispatch } from 'react-redux';
 import { wrapper } from '../store';
 // actions
 import actions from '../store/action';
 // ////////////////////////////////////////////////
 
-const HomePage = props => {
+const OrderPage = props => {
   const basket = useSelector(state => state.basket);
+  const data = R.merge(basket, { sdaasd: 3232 });
   const dispatch = useDispatch();
-  const handler = () =>
-    dispatch(actions.basketActions.setBasketList({ some: 2 }));
   return (
     <div>
-      <div onClick={() => dispatch(actions.basketActions.setBasketList({ some: 2 }))}>hello</div>
-      <Link passHref href='/order'>
-        order
+      <div onClick={() => dispatch(actions.basketActions.setBasketList(data))}>hello</div>
+      <Link passHref href='/'>
+        home
       </Link>
     </div>
   );
@@ -24,4 +24,4 @@ const HomePage = props => {
 
 export const getStaticProps = wrapper.getStaticProps();
 
-export default HomePage;
+export default OrderPage;
