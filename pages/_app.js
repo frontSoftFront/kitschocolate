@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { useStore } from 'react-redux';
-import { createFirestoreInstance } from 'redux-firestore';
+// import { createFirestoreInstance } from 'redux-firestore'; // If you need it
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 // firebase
 import firebase from '../firebase/client-app';
@@ -14,14 +14,14 @@ import GlobalStyles from '../ui/global-styles';
 const WrappedApp = ({ Component, pageProps }) => {
   const store = useStore();
   const rrfConfig = {
-    userProfile: 'users',
+    userProfile: 'users'
     // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
     // enableClaims: true // Get custom claims along with the profile
   };
   const rrfProps = {
     firebase,
     config: rrfConfig,
-    createFirestoreInstance,
+    // createFirestoreInstance, // If you need it
     dispatch: store.dispatch
   };
   return (

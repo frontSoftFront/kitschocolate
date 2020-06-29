@@ -6,7 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducer';
 /// ///////////////////////////////////////////////
 
-const bindMiddleware = middleware => {
+const bindMiddleware = () => {
   if (
     typeof window !== 'undefined' &&
     process &&
