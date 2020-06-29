@@ -1,7 +1,8 @@
 import logger from 'redux-logger';
+import { createStore, applyMiddleware } from 'redux';
 import { HYDRATE, createWrapper } from 'next-redux-wrapper';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+// reducer
 import rootReducer from './reducer';
 /// ///////////////////////////////////////////////
 
