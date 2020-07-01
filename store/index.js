@@ -4,7 +4,7 @@ import { HYDRATE, createWrapper } from 'next-redux-wrapper';
 import { composeWithDevTools } from 'redux-devtools-extension';
 // reducer
 import rootReducer from './reducer';
-/// ///////////////////////////////////////////////
+/// //////////////////////////////////////////////////
 
 const bindMiddleware = () => {
   if (
