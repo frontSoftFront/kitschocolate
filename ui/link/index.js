@@ -7,6 +7,7 @@ export const StyledLink = styled.a`
   ${opacity}
   ${fontSize}
   ${fontWeight}
+  cursor: pointer;
   text-transform: ${({ textTransform }) => textTransform};
   &:hover {
     color: ${({ hoveredColor }) => hoveredColor};

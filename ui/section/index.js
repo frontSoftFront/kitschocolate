@@ -2,23 +2,23 @@ import styled from 'styled-components';
 import {
   space,
   width,
-  color,
-  fontSize,
-  maxWidth,
+  height,
   alignItems,
+  borderColor,
+  borderBottom,
   flexDirection,
   justifyContent
 } from 'styled-system';
 // //////////////////////////////////////////////////
 
-export const Nav = styled.nav`
+export const Section = styled.div`
   ${space}
   ${width}
-  ${color}
-  ${fontSize}
-  ${maxWidth}
+  ${height}
   ${alignItems}
+  ${borderBottom}
+  ${borderColor}
   ${flexDirection}
   ${justifyContent}
-  display: flex;
+  display: ${({ display }) => display};
 `;

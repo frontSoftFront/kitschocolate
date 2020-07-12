@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "babel-eslint": "9.0.0",
+    "babel-plugin-styled-components": "^1.10.7",
     "eslint": "6.1.0",
     "eslint-config-airbnb": "18.0.0",
     "eslint-config-nextjs": "1.0.6",

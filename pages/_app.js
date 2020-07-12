@@ -27,11 +27,10 @@ const WrappedApp = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
-        <title>title</title>
         <meta charSet="utf-8" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Caveat&family=Montserrat&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Caveat&family=Montserrat:wght@300;400;500&display=swap"
         />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>

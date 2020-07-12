@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+import { space } from 'styled-system';
 // //////////////////////////////////////////////////
 
 export const PageWrapper = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  max-width: 1500px;
+  ${space}
+  max-width: 1400px;
 `;

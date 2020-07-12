@@ -6,8 +6,11 @@ import {
   height,
   border,
   display,
+  maxWidth,
+  maxHeight,
   borderTop,
   borderLeft,
+  borderColor,
   borderRight,
   borderBottom,
   borderRadius
@@ -21,9 +24,12 @@ export const Box = styled.div`
   ${height}
   ${border}
   ${display}
+  ${maxWidth}
+  ${maxHeight}
   ${borderTop}
   ${borderLeft}
   ${borderRight}
   ${borderBottom}
   ${borderRadius}
+  ${borderColor}
 `;
