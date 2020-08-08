@@ -1,6 +1,7 @@
 import React from 'react';
 // components
 import Layout from '../components/layout';
+import HomeSlider from '../components/slider';
 // theme
 import Theme from '../theme';
 // store
@@ -19,13 +20,6 @@ import {
   ArticleTitle
 } from '../ui';
 // ////////////////////////////////////////////////
-
-const images = [
-  '../static/home/chocolates/1.png',
-  '../static/home/chocolates/2.png',
-  '../static/home/chocolates/3.png',
-  '../static/home/chocolates/4.png'
-];
 
 const HomePage = () => (
   <Layout title="Home">
@@ -122,32 +116,9 @@ const HomePage = () => (
       >
         Найчастіше замовляють
       </SectionTitle>
-      <Flex mt={100} justifyContent="space-between">
-        {images.map((item, index) => (
-          <Box key={index} width="25%">
-            <Img src={item} width="100%" height="28vw" maxHeight={400} />
-            <Box mx="auto" mt={40} width="90%">
-              <Text
-                fontSize={18}
-                fontWeight={600}
-                textAlign="center"
-                color={Theme.colors.congoBrown}
-              >
-                Молочний Шоколад з Кокосом
-              </Text>
-              <Text
-                mt={10}
-                fontSize={18}
-                fontWeight="bold"
-                textAlign="center"
-                color={Theme.colors.congoBrown}
-              >
-                78 грн
-              </Text>
-            </Box>
-          </Box>
-        ))}
-      </Flex>
+      <Box mt={60}>
+        <HomeSlider />
+      </Box>
     </Section>
   </Layout>
 );

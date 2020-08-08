@@ -101,3 +101,45 @@ export const basket = ({ w, h, color }) => (
     />
   </svg>
 );
+
+export const arrow = ({ w, h, color }) => (
+  <svg
+    fill="none"
+    width={w || 50}
+    height={h || 50}
+    viewBox="0 0 50 50"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clipRule="evenodd"
+      fillRule="evenodd"
+      d="M49 1H1v48h48V1z"
+      stroke={color || '#A18071'}
+    />
+    <path
+      fill={color || '#A18071'}
+      d="M25 17l1.41 1.41L20.83 24H33v2H20.83l5.58 5.59L25 33l-8-8 8-8z"
+    />
+  </svg>
+);
+
+export const styledArrow = ({ w, h, color }) => (
+  <svg
+    fill="none"
+    width={w || 50}
+    height={h || 50}
+    viewBox="0 0 48 48"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M0 0h48v48H0V0z"
+      fill={color || '#A18071'}
+    />
+    <path
+      fill="#fff"
+      d="M24 16l-1.41 1.41L28.17 23H16v2h12.17l-5.58 5.59L24 32l8-8-8-8z"
+    />
+  </svg>
+);

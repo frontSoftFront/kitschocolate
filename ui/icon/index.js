@@ -8,6 +8,7 @@ export const IconWrapper = styled.div`
   ${border}
   ${position}
   opacity: 0.9;
+  user-select: none;
   width: max-content;
   cursor: ${({ cursor }) => cursor || 'pointer'};
 

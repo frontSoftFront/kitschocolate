@@ -1,6 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 import { useStore } from 'react-redux';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 // import { createFirestoreInstance } from 'redux-firestore'; // If you need it
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 // firebase
