@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useStore } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-// import { createFirestoreInstance } from 'redux-firestore'; // If you need it
+import { createFirestoreInstance } from 'redux-firestore'; // If you need it
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 // firebase
 import firebase from '../firebase/client-app';
@@ -23,7 +23,7 @@ const WrappedApp = ({ Component, pageProps }) => {
   const rrfProps = {
     firebase,
     config: rrfConfig,
-    // createFirestoreInstance, // If you need it
+    createFirestoreInstance, // If you need it
     dispatch: store.dispatch
   };
   return (

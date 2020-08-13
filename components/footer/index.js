@@ -85,7 +85,7 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => (
           </Text>
         </Box>
       </Flex>
-      <Flex mt={85} mb={50} width={200} justifyContent="space-between">
+      <Flex my={50} width={200} justifyContent="space-between">
         {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
           <StyledLink key={index} href={link} target="_blank">
             <Icon iconName={icon} />
