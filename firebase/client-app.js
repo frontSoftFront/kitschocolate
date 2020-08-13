@@ -5,7 +5,7 @@ import 'firebase/firestore'; // If you need it
 // import 'firebase/auth'; // If you need it
 // import 'firebase/analytics'; // If you need it
 // import 'firebase/functions'; // If you need it
-// ////a//////////////////////////////////////////////
+// //////////////////////////////////////////////////
 
 const clientCredentials = {
   appId: process.env.FIREBASE_APP_ID,
@@ -17,23 +17,11 @@ const clientCredentials = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 };
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyA_JNGWr-TlYsxQxGSILFuhfyyYfYqwmiA',
-//   authDomain: 'bookbook-api-v1.firebaseapp.com',
-//   databaseURL: 'https://bookbook-api-v1.firebaseio.com',
-//   projectId: 'bookbook-api-v1',
-//   storageBucket: 'bookbook-api-v1.appspot.com',
-//   messagingSenderId: '271861363707',
-//   appId: '1:271861363707:web:258548d4895aca4c26915e',
-//   measurementId: 'G-NK7SJBYX65',
-// };
-
 // Check that `window` is in scope for the analytics module!
 if (!firebase.apps.length) {
   firebase.initializeApp(clientCredentials);
-  // firebase.storage();firebaseConfig
   firebase.database();
-  firebase.firestore(); // If you need it
+  firebase.firestore();
   // firebase.functions(); // If you need it
 }
 

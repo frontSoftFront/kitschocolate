@@ -23,7 +23,7 @@ const WrappedApp = ({ Component, pageProps }) => {
   const rrfProps = {
     firebase,
     config: rrfConfig,
-    createFirestoreInstance, // If you need it
+    createFirestoreInstance,
     dispatch: store.dispatch
   };
   return (

@@ -14,6 +14,7 @@ const PricesSlider = ({ list }) => {
   const slider = useRef(null);
   const next = () => slider.current.slickNext();
   const prev = () => slider.current.slickPrev();
+
   return (
     <Box>
       <Flex mb={20} mr={20} ml="auto" width="max-content">
@@ -23,7 +24,7 @@ const PricesSlider = ({ list }) => {
       <Slider ref={slider} {...priceSettings}>
         {list.map(({ price, title, imageUrl }, index) => (
           <Box key={index} px={20}>
-            <Img src={imageUrl} width="100%" height="100%" maxHeight={400} />
+            <Img width="100%" height="100%" src={imageUrl} maxHeight={400} />
             <Box mx="auto" mt={40} width="90%">
               <Text
                 fontSize={18}

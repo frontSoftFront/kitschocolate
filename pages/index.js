@@ -31,8 +31,8 @@ const HomePage = () => {
   if (R.isNil(data)) return <div>Loading...</div>;
 
   const { images, reccuringOrder } = data;
-  const { left, right, holidaySetList } = images;
   const { list } = reccuringOrder;
+  const { left, right, holidaySetList } = images;
 
   return (
     <Layout title="Home">
