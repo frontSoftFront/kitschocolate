@@ -1,8 +1,8 @@
 import firebase from 'firebase/app';
+import 'firebase/storage';
 import 'firebase/database';
-// import 'firebase/firestore'; // If you need it
+import 'firebase/firestore'; // If you need it
 // import 'firebase/auth'; // If you need it
-// import 'firebase/storage'; // If you need it
 // import 'firebase/analytics'; // If you need it
 // import 'firebase/functions'; // If you need it
 // //////////////////////////////////////////////////
@@ -21,7 +21,7 @@ const clientCredentials = {
 if (!firebase.apps.length) {
   firebase.initializeApp(clientCredentials);
   firebase.database();
-  // firebase.firestore(); // If you need it
+  firebase.firestore();
   // firebase.functions(); // If you need it
 }
 
