@@ -1,7 +1,7 @@
 import React from 'react';
 import * as R from 'ramda';
 import { useSelector } from 'react-redux';
-import { useFirestoreConnect } from 'react-redux-firebase';
+import { useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../components/layout';
 import PricesSlider from '../components/slider/prices-slider';
@@ -24,15 +24,17 @@ import {
 // ////////////////////////////////////////////////
 
 const HomePage = () => {
-  useFirestoreConnect('home');
+  useFirebaseConnect('home');
   const data = useSelector(state =>
-    R.path(['firestore', 'data', 'home'], state)
+    R.path(['firebase', 'data', 'home'], state)
   );
   if (R.isNil(data)) return <div>Loading...</div>;
 
-  const { images, reccuringOrder } = data;
-  const { list } = reccuringOrder;
-  const { left, right, holidaySetList } = images;
+  const { images, recurringOrders } = data;
+  const { section1, holidaySet } = images;
+  const { left, right } = section1;
+  const holidaySetList = R.values(holidaySet);
+  const recurringOrderList = R.values(recurringOrders);
 
   return (
     <Layout title="Home">
@@ -119,7 +121,7 @@ const HomePage = () => {
           Найчастіше замовляють
         </SectionTitle>
         <Box mt={50}>
-          <PricesSlider list={list} />
+          <PricesSlider list={recurringOrderList} />
         </Box>
       </Section>
     </Layout>
