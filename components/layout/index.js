@@ -9,7 +9,7 @@ import Footer from '../footer';
 import { PageWrapper } from '../../ui';
 // //////////////////////////////////////////////////
 
-const Layout = ({ title, loading, children }) => {
+const Layout = ({ title, children }) => {
   const { push, route } = useRouter();
   const activeNavItem = R.equals(route);
   const handleGoToHomePage = () => push('/');

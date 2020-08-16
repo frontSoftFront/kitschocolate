@@ -36,7 +36,7 @@ const PricesSlider = ({ mt, list, title }) => {
       <Slider ref={slider} {...priceSettings}>
         {list.map(({ price, title, imageUrl }, index) => (
           <Box key={index} px={20}>
-            <Img src={imageUrl} width="100%" height="100%" maxHeight={400} />
+            <Img width="100%" height="100%" src={imageUrl} maxHeight={400} />
             <Box mx="auto" mt={40} width="90%">
               <Text
                 fontSize={18}
