@@ -15,7 +15,7 @@ const HolidaySetSlider = ({ list }) => {
 
   return (
     <Box>
-      <Flex mb={20} mr={20} ml="auto" width="max-content">
+      <Flex mb={20} ml="auto" width="max-content">
         <Icon iconName="arrow" handleClick={prev} />
         <Icon ml={20} iconName="styledArrow" handleClick={next} />
       </Flex>

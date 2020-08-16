@@ -1,4 +1,13 @@
+const exportPathMap = () => ({
+  '/': { page: '/' },
+  '/shop': { page: '/shop' },
+  '/about': { page: '/about' },
+  '/recipe': { page: '/recipe' },
+  '/partnership': { page: '/partnership' }
+});
+
 module.exports = {
+  exportPathMap,
   env: {
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
