@@ -28,8 +28,8 @@ const HomePage = () => {
   const data = useSelector(state =>
     R.path(['firebase', 'data', 'home'], state)
   );
-  if (R.isNil(data)) return <div>Loading...</div>;
-
+  const loading = R.isNil(data);
+  if (loading) return <div>Loading...</div>;
   const { images, recurringOrders } = data;
   const { section1, holidaySet } = images;
   const { left, right } = section1;

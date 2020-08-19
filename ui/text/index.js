@@ -5,6 +5,7 @@ import {
   opacity,
   fontSize,
   textAlign,
+  lineHeight,
   fontFamily,
   fontWeight
 } from 'styled-system';
@@ -16,7 +17,9 @@ export const Text = styled.div`
   ${opacity}
   ${fontSize}
   ${textAlign}
+  ${lineHeight}
   ${fontFamily}
   ${fontWeight}
   word-break: ${({ wordBreak }) => wordBreak};
+  text-decoration: ${({ textDecoration }) => textDecoration};
 `;

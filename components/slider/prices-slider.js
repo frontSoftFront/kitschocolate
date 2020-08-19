@@ -10,16 +10,28 @@ import { Img, Box, Text, Flex } from '../../ui';
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
-const PricesSlider = ({ list }) => {
+const PricesSlider = ({ mt, list, title }) => {
   const slider = useRef(null);
   const next = () => slider.current.slickNext();
   const prev = () => slider.current.slickPrev();
 
   return (
-    <Box>
-      <Flex mb={20} mr={20} ml="auto" width="max-content">
-        <Icon iconName="arrow" handleClick={prev} />
-        <Icon ml={20} iconName="styledArrow" handleClick={next} />
+    <Box mt={mt}>
+      <Flex px={20} mb={20} alignItems="center" justifyContent="space-between">
+        {title && (
+          <Text
+            fontSize={25}
+            lineHeight={1.2}
+            textDecoration="underline"
+            color={Theme.colors.quincy}
+          >
+            {title}
+          </Text>
+        )}
+        <Flex ml="auto" width="max-content">
+          <Icon iconName="arrow" handleClick={prev} />
+          <Icon ml={20} iconName="styledArrow" handleClick={next} />
+        </Flex>
       </Flex>
       <Slider ref={slider} {...priceSettings}>
         {list.map(({ price, title, imageUrl }, index) => (
