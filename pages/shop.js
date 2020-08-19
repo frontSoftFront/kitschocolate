@@ -1,3 +1,4 @@
+import is from 'is_js';
 import React from 'react';
 import * as R from 'ramda';
 import { useSelector } from 'react-redux';
@@ -17,14 +18,15 @@ const makeSortedByOrderArrayFromObject = R.compose(
 );
 
 const ShopPage = () => {
-  useFirebaseConnect(['shop', 'chocolates']);
+  // TODO: check how order of collections affects data on useFirebaseConnect
+  useFirebaseConnect(['chocolates', 'shop']);
   const categories = useSelector(state =>
     R.path(['firebase', 'data', 'shop', 'categories'], state)
   );
   const chocolateList = useSelector(state =>
     R.path(['firebase', 'data', 'chocolates'], state)
   );
-  const loading = R.and(R.isNil(categories), R.isNil(chocolateList));
+  const loading = is.any.null(categories, chocolateList);
   if (loading) return <div>Loading...</div>;
 
   const mappedCategories = R.compose(
@@ -41,16 +43,16 @@ const ShopPage = () => {
 
   return (
     <Layout title="Shop">
-      <Section py={75}>
+      <Section py={50}>
         <SectionTitle
           fontSize={45}
           textAlign="center"
           color={Theme.colors.congoBrown}
         >
-          Правдивий шоколад від какаобоба до плитки 
+          Правдивий шоколад від какаобоба до плитки
         </SectionTitle>
         {mappedCategories.map(({ order, title, chocolates }) => (
-          <PricesSlider mt={75} key={order} title={title} list={chocolates} />
+          <PricesSlider mt={50} key={order} title={title} list={chocolates} />
         ))}
       </Section>
     </Layout>
