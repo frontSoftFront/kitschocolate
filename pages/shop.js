@@ -52,7 +52,12 @@ const ShopPage = () => {
           Правдивий шоколад від какаобоба до плитки
         </SectionTitle>
         {mappedCategories.map(({ order, title, chocolates }) => (
-          <PricesSlider mt={50} key={order} title={title} list={chocolates} />
+          <PricesSlider
+            mt={50}
+            key={order}
+            list={chocolates}
+            categoryTitle={title}
+          />
         ))}
       </Section>
     </Layout>

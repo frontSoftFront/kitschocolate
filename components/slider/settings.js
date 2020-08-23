@@ -1,6 +1,7 @@
 const defaultSettings = {
   speed: 500,
   dots: false,
+  swipe: false,
   infinite: true,
   initialSlide: 0,
   slidesToScroll: 1
