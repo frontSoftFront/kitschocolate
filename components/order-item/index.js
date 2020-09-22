@@ -8,11 +8,23 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Flex, Section, Text, Article, Button, ArticleTitle } from '../../ui';
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Article,
+  Section,
+  ArticleTitle
+} from '../../ui';
 // //////////////////////////////////////////////////
 
 const OrderItem = ({ orderItem }) => {
   const { title, weight, prices, description } = orderItem;
+  const [activeSize, setActiveSize] = useState('small');
+  const [totalPrice, setTotalPrice] = useState(R.path([activeSize], prices));
+  const activeWeight = R.prop(activeSize, weight);
+  const quantity = R.propOr('gr', 'quantity', weight);
 
   return (
     <Section>
@@ -20,11 +32,27 @@ const OrderItem = ({ orderItem }) => {
         <ArticleTitle>{title}</ArticleTitle>
         <Text>{description}</Text>
       </Article>
-      <Flex></Flex>
-      <Flex>
-        <Button>MINI</Button>
-        <Button>standart</Button>
+      <Box>
+        <Flex>
+          <Text>Size: {activeSize}</Text>
+          <Text>
+            Weight: {activeWeight} {quantity}
+          </Text>
+        </Flex>
+        <Flex>
+          <Button onClick={() => setActiveSize('small')}>MINI</Button>
+          <Button onClick={() => setActiveSize('medium')}>STANDART</Button>
+        </Flex>
+      </Box>
+      <Flex
+        py={20}
+        borderTop="3px solid"
+        borderBottom="3px solid"
+        borderColor={Theme.colors.transparentBlue}
+      >
+        <Text>$ {totalPrice}</Text>
       </Flex>
+      <Button onClick={() => console.log('say hi')}>Add to cart</Button>
     </Section>
   );
 };

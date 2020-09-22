@@ -4,6 +4,7 @@ export default {
     woodyBrown: '#4c3434',
     congoBrown: '#644543',
     lighterGrey: '#dadada',
-    lightSlateGrey: '#818c96'
+    lightSlateGrey: '#818c96',
+    transparentBlue: '#e6ebef'
   }
 };
