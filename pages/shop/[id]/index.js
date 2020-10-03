@@ -6,6 +6,8 @@ import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../../../components/layout';
 import OrderItem from '../../../components/order-item';
+// theme
+import Theme from '../../../theme';
 // ui
 import { Flex, Section, PageTitle } from '../../../ui';
 // ////////////////////////////////////////////////
@@ -15,7 +17,6 @@ const ShopPage = () => {
   const {
     query: { id }
   } = useRouter();
-  debugger;
   useFirebaseConnect(`chocolates/${id}`);
   const data = useSelector(state =>
     R.path(['firebase', 'data', 'chocolates', id], state)
@@ -25,9 +26,17 @@ const ShopPage = () => {
 
   return (
     <Layout title={title}>
-      <Section>
-        <PageTitle>{title}</PageTitle>
-        <Flex>
+      <Section py={50}>
+        <PageTitle
+          fontSize={45}
+          textAlign="center"
+          fontFamily="Caveat"
+          color={Theme.colors.congoBrown}
+        >
+          Магазин / {title}
+        </PageTitle>
+        <Flex mt={50} justifyContent="space-between">
+          <Flex />
           <OrderItem orderItem={data} />
         </Flex>
       </Section>

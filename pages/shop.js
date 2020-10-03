@@ -9,7 +9,7 @@ import PricesSlider from '../components/slider/prices-slider';
 // theme
 import Theme from '../theme';
 // ui
-import { Section, SectionTitle } from '../ui';
+import { Section, PageTitle } from '../ui';
 // ////////////////////////////////////////////////
 
 const makeSortedByOrderArrayFromObject = R.compose(
@@ -44,13 +44,14 @@ const ShopPage = () => {
   return (
     <Layout title="Shop">
       <Section py={50}>
-        <SectionTitle
+        <PageTitle
           fontSize={45}
           textAlign="center"
+          fontFamily="Caveat"
           color={Theme.colors.congoBrown}
         >
           Правдивий шоколад від какаобоба до плитки
-        </SectionTitle>
+        </PageTitle>
         {mappedCategories.map(({ order, title, chocolates }) => (
           <PricesSlider
             mt={50}

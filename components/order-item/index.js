@@ -24,33 +24,66 @@ const OrderItem = ({ orderItem }) => {
   const [activeSize, setActiveSize] = useState('small');
   const [totalPrice, setTotalPrice] = useState(R.path([activeSize], prices));
   const activeWeight = R.prop(activeSize, weight);
-  const quantity = R.propOr('gr', 'quantity', weight);
+  const getActiveSizeBtnColor = btn =>
+    R.equals(btn, activeSize) ? Theme.colors.mediumWood : Theme.colors.transparentBlue;
 
   return (
-    <Section>
+    <Section width="45%">
       <Article>
-        <ArticleTitle>{title}</ArticleTitle>
-        <Text>{description}</Text>
+        <ArticleTitle fontSize={25}>{title}</ArticleTitle>
+        <Text my={20} fontSize={14} opacity="0.54" lineHeight={1.54}>
+          {description}
+        </Text>
       </Article>
       <Box>
         <Flex>
-          <Text>Size: {activeSize}</Text>
-          <Text>
-            Weight: {activeWeight} {quantity}
-          </Text>
+          <Flex mr={40}>
+            <Text color={Theme.colors.lightGrey}>Size:</Text>
+            <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
+              {activeSize}
+            </Text>
+          </Flex>
+          <Flex>
+            <Text color={Theme.colors.lightGrey}>Weight:</Text>
+            <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
+              {activeWeight} gr
+            </Text>
+          </Flex>
         </Flex>
-        <Flex>
-          <Button onClick={() => setActiveSize('small')}>MINI</Button>
-          <Button onClick={() => setActiveSize('medium')}>STANDART</Button>
+        <Flex my={20}>
+          <Button
+            mr={20}
+            width={90}
+            height={20}
+            border="1px solid"
+            textTransform="uppercase"
+            onClick={() => setActiveSize('small')}
+            color={getActiveSizeBtnColor('small')}
+            borderColor={getActiveSizeBtnColor('small')}
+          >
+            mini
+          </Button>
+          <Button
+            ml={20}
+            width={90}
+            height={20}
+            border="1px solid"
+            textTransform="uppercase"
+            color={getActiveSizeBtnColor('medium')}
+            onClick={() => setActiveSize('medium')}
+            borderColor={getActiveSizeBtnColor('medium')}
+          >
+            medium
+          </Button>
         </Flex>
       </Box>
       <Flex
         py={20}
-        borderTop="3px solid"
-        borderBottom="3px solid"
+        borderTop="1px solid"
+        borderBottom="1px solid"
         borderColor={Theme.colors.transparentBlue}
       >
-        <Text>$ {totalPrice}</Text>
+        <Text fontSize={30}>₴ {totalPrice}</Text>
       </Flex>
       <Button onClick={() => console.log('say hi')}>Add to cart</Button>
     </Section>

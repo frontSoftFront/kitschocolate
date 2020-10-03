@@ -5,7 +5,8 @@ import {
   fontSize,
   textAlign,
   fontWeight,
-  lineHeight
+  lineHeight,
+  fontFamily
 } from 'styled-system';
 // //////////////////////////////////////////////////
 
@@ -15,6 +16,7 @@ export const PageTitle = styled.h1`
   ${fontSize}
   ${textAlign}
   ${lineHeight}
+  ${fontFamily}
   ${fontWeight}
 `;
 
