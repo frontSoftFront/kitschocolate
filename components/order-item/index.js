@@ -25,12 +25,14 @@ const OrderItem = ({ orderItem }) => {
   const [totalPrice, setTotalPrice] = useState(R.path([activeSize], prices));
   const activeWeight = R.prop(activeSize, weight);
   const getActiveSizeBtnColor = btn =>
-    R.equals(btn, activeSize) ? Theme.colors.mediumWood : Theme.colors.transparentBlue;
+    R.equals(btn, activeSize)
+      ? Theme.colors.mediumWood
+      : Theme.colors.transparentBlue;
 
   return (
-    <Section width="45%">
+    <Section width="45%" my="auto">
       <Article>
-        <ArticleTitle fontSize={25}>{title}</ArticleTitle>
+        <ArticleTitle fontSize={25} fontWeight={500}>{title}</ArticleTitle>
         <Text my={20} fontSize={14} opacity="0.54" lineHeight={1.54}>
           {description}
         </Text>
@@ -85,7 +87,18 @@ const OrderItem = ({ orderItem }) => {
       >
         <Text fontSize={30}>₴ {totalPrice}</Text>
       </Flex>
-      <Button onClick={() => console.log('say hi')}>Add to cart</Button>
+      <Button
+        mt={20}
+        width={170}
+        height={50}
+        fontSize={14}
+        fontWeight={500}
+        textTransform="uppercase"
+        color={Theme.colors.white}
+        background={Theme.colors.mediumWood}
+      >
+        Add to cart
+      </Button>
     </Section>
   );
 };

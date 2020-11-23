@@ -6,6 +6,7 @@ import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../../../components/layout';
 import OrderItem from '../../../components/order-item';
+import OrderImage from '../../../components/order-image';
 // theme
 import Theme from '../../../theme';
 // ui
@@ -22,7 +23,8 @@ const ShopPage = () => {
     R.path(['firebase', 'data', 'chocolates', id], state)
   );
   if (R.not(isLoaded(data))) return <div>Loading...</div>;
-  const { title } = data;
+  const { title, imageUrl } = data;
+  const extraImages = [imageUrl, imageUrl, imageUrl, imageUrl];
 
   return (
     <Layout title={title}>
@@ -36,7 +38,7 @@ const ShopPage = () => {
           Магазин / {title}
         </PageTitle>
         <Flex mt={50} justifyContent="space-between">
-          <Flex />
+          <OrderImage imageUrl={imageUrl} extraImages={extraImages} />
           <OrderItem orderItem={data} />
         </Flex>
       </Section>

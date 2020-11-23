@@ -1,5 +1,6 @@
 export default {
   colors: {
+    white: '#fff',
     quincy: '#62554a',
     lightGrey: '#a9a9a9',
     woodyBrown: '#4c3434',
