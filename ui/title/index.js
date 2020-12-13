@@ -27,6 +27,7 @@ export const SectionTitle = styled.h2`
   ${textAlign}
   ${lineHeight}
   ${fontWeight}
+  ${fontFamily}
 `;
 
 export const ArticleTitle = styled.h3`

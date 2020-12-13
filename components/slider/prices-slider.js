@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import Slider from 'react-slick';
 import React, { useRef } from 'react';
-import { useRouter } from 'next/router';
 // components
 import Icon from '../../icons';
 // theme
@@ -12,9 +11,9 @@ import { Img, Box, Text, Flex } from '../../ui';
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
-const PricesSlider = ({ mt, list, categoryTitle }) => {
+const PricesSlider = ({ mt, list, router, categoryTitle }) => {
+  const { push } = router;
   const slider = useRef(null);
-  const { push } = useRouter();
   const next = () => slider.current.slickNext();
   const prev = () => slider.current.slickPrev();
   const handleGoToDetailPage = id => {
@@ -46,7 +45,12 @@ const PricesSlider = ({ mt, list, categoryTitle }) => {
       </Flex>
       <Slider ref={slider} {...priceSettings}>
         {list.map(({ id, price, title, imageUrl }, index) => (
-          <Box px={20} key={index} onClick={() => handleGoToDetailPage(id)}>
+          <Box
+            px={20}
+            key={index}
+            cursor="pointer"
+            onClick={() => handleGoToDetailPage(id)}
+          >
             <Img width="100%" height="100%" src={imageUrl} maxHeight={400} />
             <Box mx="auto" mt={40} width="90%">
               <Text

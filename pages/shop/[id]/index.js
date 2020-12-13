@@ -1,34 +1,28 @@
 import React from 'react';
 import * as R from 'ramda';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../../../components/layout';
 import OrderItem from '../../../components/order-item';
 import OrderImage from '../../../components/order-image';
+import CustomerReviews from '../../../components/customer-reviews';
 // theme
 import Theme from '../../../theme';
 // ui
 import { Flex, Section, PageTitle } from '../../../ui';
 // ////////////////////////////////////////////////
 
-const ShopPage = () => {
-  // TODO: check how order of collections affects data on useFirebaseConnect
-  const {
-    query: { id }
-  } = useRouter();
-  useFirebaseConnect(`chocolates/${id}`);
-  const data = useSelector(state =>
-    R.path(['firebase', 'data', 'chocolates', id], state)
-  );
-  if (R.not(isLoaded(data))) return <div>Loading...</div>;
-  const { title, imageUrl } = data;
-  const extraImages = [imageUrl, imageUrl, imageUrl, imageUrl];
+const Content = ({ data }) => {
+  const { title, imageUrl, extraImages } = data;
 
   return (
-    <Layout title={title}>
-      <Section py={50}>
+    <>
+      <Section
+        py={50}
+        borderBottom="2px solid"
+        borderColor={Theme.colors.quincy}
+      >
         <PageTitle
           fontSize={45}
           textAlign="center"
@@ -42,6 +36,28 @@ const ShopPage = () => {
           <OrderItem orderItem={data} />
         </Flex>
       </Section>
+      <CustomerReviews />
+    </>
+  );
+};
+
+const ShopPage = ({ router }) => {
+  // TODO: check how order of collections affects data on useFirebaseConnect
+  const {
+    query: { id }
+  } = router;
+  useFirebaseConnect(`chocolates/${id}`);
+  const data = useSelector(state =>
+    R.path(['firebase', 'data', 'chocolates', id], state)
+  );
+
+  return (
+    <Layout
+      router={router}
+      title={R.path(['title'], data)}
+      loading={R.not(isLoaded(data))}
+    >
+      <Content data={data} />
     </Layout>
   );
 };

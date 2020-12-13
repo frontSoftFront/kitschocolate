@@ -8,4 +8,5 @@ export const Img = styled.img`
   ${height}
   ${maxWidth}
   ${maxHeight}
+  cursor: ${({ cursor }) => cursor};
 `;

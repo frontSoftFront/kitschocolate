@@ -1,12 +1,4 @@
-import * as R from 'ramda';
-import Link from 'next/link';
 import React, { useState } from 'react';
-// constants
-import * as C from '../../constants';
-// icons
-import Icon from '../../icons';
-// theme
-import Theme from '../../theme';
 // ui
 import { Img, Flex } from '../../ui';
 // //////////////////////////////////////////////////
@@ -29,6 +21,7 @@ const OrderImage = ({ imageUrl, extraImages }) => {
             key={index}
             width="100%"
             height="20%"
+            cursor="pointer"
             onClick={() => setActiveImage(img)}
           />
         ))}

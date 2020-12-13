@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { space, width, height } from 'styled-system';
+import { space, width, height  } from 'styled-system';
 // //////////////////////////////////////////////////
 
 export const Article = styled.div`

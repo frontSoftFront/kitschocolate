@@ -22,16 +22,15 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-const RecipePage = () => {
+const RecipePage = ({ router }) => {
   useFirebaseConnect('recipe');
   const data = useSelector(state =>
     R.path(['firebase', 'data', 'recipe'], state)
   );
   const loading = R.isNil(data);
-  if (loading) return <div>Loading...</div>;
 
   return (
-    <Layout title="Recipe">
+    <Layout router={router} title="Recipe" loading={loading}>
       <Box mt={100}>Recipe Page</Box>
     </Layout>
   );

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {
   color,
   space,
+  width,
   opacity,
   fontSize,
   textAlign,
@@ -14,6 +15,7 @@ import {
 export const Text = styled.div`
   ${space}
   ${color}
+  ${width}
   ${opacity}
   ${fontSize}
   ${textAlign}
