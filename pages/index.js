@@ -1,7 +1,7 @@
 import React from 'react';
 import * as R from 'ramda';
 import { useSelector } from 'react-redux';
-import { useFirebaseConnect, isLoaded } from 'react-redux-firebase';
+import { useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../components/layout';
 import PricesSlider from '../components/slider/prices-slider';
