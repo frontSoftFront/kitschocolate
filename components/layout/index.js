@@ -1,16 +1,27 @@
 import React from 'react';
 import * as R from 'ramda';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 // components
 import Header from '../header';
 import Footer from '../footer';
 // ui
-import { PageWrapper } from '../../ui';
+import { Img, Flex, PageWrapper } from '../../ui';
 // //////////////////////////////////////////////////
 
-const Layout = ({ title, children }) => {
-  const { push, route } = useRouter();
+const Loader = () => (
+  <Flex
+    width="100vw"
+    height="100vh"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Img src="/loader.gif" />
+  </Flex>
+);
+
+const Layout = ({ title, router, loading, children }) => {
+  if (loading) return <Loader />;
+  const { push, route } = router;
   const activeNavItem = R.equals(route);
   const handleGoToHomePage = () => push('/');
 

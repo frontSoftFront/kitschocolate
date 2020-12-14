@@ -1,9 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
 import { useStore } from 'react-redux';
+import { useRouter } from 'next/router';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { createFirestoreInstance } from 'redux-firestore'; // If you need it
+import { createFirestoreInstance } from 'redux-firestore';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 // firebase
 import firebase from '../firebase/client-app';
@@ -15,6 +16,7 @@ import GlobalStyles from '../ui/global-styles';
 
 const WrappedApp = ({ Component, pageProps }) => {
   const store = useStore();
+  const router = useRouter();
   const rrfConfig = {
     userProfile: 'users'
     // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
@@ -26,6 +28,7 @@ const WrappedApp = ({ Component, pageProps }) => {
     createFirestoreInstance,
     dispatch: store.dispatch
   };
+
   return (
     <>
       <Head>
@@ -38,7 +41,7 @@ const WrappedApp = ({ Component, pageProps }) => {
       </Head>
       <GlobalStyles />
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <Component {...pageProps} />
+        <Component {...pageProps} router={router} />
       </ReactReduxFirebaseProvider>
     </>
   );

@@ -12,7 +12,7 @@ import {
 } from 'styled-system';
 // //////////////////////////////////////////////////
 
-export const Button = styled.div`
+export const Button = styled.button`
   ${space}
   ${width}
   ${color}

@@ -10,6 +10,7 @@ import {
   maxHeight,
   borderTop,
   borderLeft,
+  background,
   borderColor,
   borderRight,
   borderBottom,
@@ -27,9 +28,12 @@ export const Box = styled.div`
   ${maxWidth}
   ${maxHeight}
   ${borderTop}
+  ${background}
   ${borderLeft}
   ${borderRight}
   ${borderBottom}
   ${borderRadius}
   ${borderColor}
+
+  cursor: ${({ cursor }) => cursor};
 `;

@@ -23,13 +23,7 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-const HomePage = () => {
-  useFirebaseConnect('home');
-  const data = useSelector(state =>
-    R.path(['firebase', 'data', 'home'], state)
-  );
-  const loading = R.isNil(data);
-  if (loading) return <div>Loading...</div>;
+const Content = ({ data, router }) => {
   const { images, recurringOrders } = data;
   const { section1, holidaySet } = images;
   const { left, right } = section1;
@@ -37,7 +31,7 @@ const HomePage = () => {
   const recurringOrderList = R.values(recurringOrders);
 
   return (
-    <Layout title="Home">
+    <>
       <Box py={50} borderBottom="2px solid" borderColor={Theme.colors.quincy}>
         <Flex justifyContent="space-between">
           <Section
@@ -121,9 +115,23 @@ const HomePage = () => {
           Найчастіше замовляють
         </SectionTitle>
         <Box mt={50}>
-          <PricesSlider list={recurringOrderList} />
+          <PricesSlider router={router} list={recurringOrderList} />
         </Box>
       </Section>
+    </>
+  );
+};
+
+const HomePage = ({ router }) => {
+  useFirebaseConnect('home');
+  const data = useSelector(state =>
+    R.path(['firebase', 'data', 'home'], state)
+  );
+  const loading = R.isNil(data);
+
+  return (
+    <Layout title="Home" router={router} loading={loading}>
+      <Content data={data} router={router} />
     </Layout>
   );
 };
