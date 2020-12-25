@@ -10,5 +10,11 @@ export { StyledLink } from './link';
 export { Section } from './section';
 export { IconWrapper } from './icon';
 export { PageWrapper } from './wrappers';
-export { PageTitle, SectionTitle, ArticleTitle } from './title';
+export { AnimatedBox } from './animations';
+export {
+  PageTitle,
+  SectionTitle,
+  ArticleTitle,
+  PageTitleComponent
+} from './title';
 // //////////////////////////////////////////////////

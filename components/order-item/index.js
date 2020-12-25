@@ -1,6 +1,7 @@
 import * as R from 'ramda';
-import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// icons
+import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
@@ -32,6 +33,11 @@ const OrderItem = ({ orderItem }) => {
     R.equals(btn, activeSize)
       ? Theme.colors.mediumWood
       : Theme.colors.transparentBlue;
+  useEffect(() => {
+    setQuantity(1);
+    setActiveSize('small');
+    setTotalPrice(initialPrice);
+  }, [orderItem]);
 
   return (
     <Section width="45%" my="auto">

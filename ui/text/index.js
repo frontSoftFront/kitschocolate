@@ -22,6 +22,8 @@ export const Text = styled.div`
   ${lineHeight}
   ${fontFamily}
   ${fontWeight}
+
+  cursor: ${({ cursor }) => cursor};
   word-break: ${({ wordBreak }) => wordBreak};
   text-decoration: ${({ textDecoration }) => textDecoration};
 `;

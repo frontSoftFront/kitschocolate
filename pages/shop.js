@@ -25,6 +25,7 @@ const Content = ({ router, categories, chocolateList }) => {
         R.map(({ id }) => R.path([id], chocolateList)),
         makeSortedByOrderArrayFromObject
       )(chocolates);
+
       return R.assoc('chocolates', mappedChocolates, category);
     }),
     makeSortedByOrderArrayFromObject
@@ -40,13 +41,14 @@ const Content = ({ router, categories, chocolateList }) => {
       >
         Правдивий шоколад від какаобоба до плитки
       </PageTitle>
-      {mappedCategories.map(({ order, title, chocolates }) => (
+      {mappedCategories.map(({ order, title, chocolates, categoryName }) => (
         <PricesSlider
           mt={50}
           key={order}
           router={router}
           list={chocolates}
           categoryTitle={title}
+          categoryName={categoryName}
         />
       ))}
     </Section>

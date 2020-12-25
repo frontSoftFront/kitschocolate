@@ -11,7 +11,7 @@ import { Img, Box, Text, Flex } from '../../ui';
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
-const PricesSlider = ({ mt, list, router, categoryTitle }) => {
+const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
   const { push } = router;
   const slider = useRef(null);
   const next = () => slider.current.slickNext();
@@ -32,8 +32,10 @@ const PricesSlider = ({ mt, list, router, categoryTitle }) => {
           <Text
             fontSize={25}
             lineHeight={1.2}
+            cursor="pointer"
             textDecoration="underline"
             color={Theme.colors.quincy}
+            onClick={() => push(`/category/${categoryName}`)}
           >
             {categoryTitle}
           </Text>
