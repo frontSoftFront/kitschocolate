@@ -6,6 +6,7 @@ import {
   height,
   border,
   display,
+  opacity,
   maxWidth,
   maxHeight,
   borderTop,
@@ -24,6 +25,7 @@ export const Box = styled.div`
   ${order}
   ${height}
   ${border}
+  ${opacity}
   ${display}
   ${maxWidth}
   ${maxHeight}

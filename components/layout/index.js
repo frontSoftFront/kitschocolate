@@ -28,7 +28,7 @@ const Layout = ({ title, router, loading, children }) => {
   return (
     <PageWrapper mx="auto" maxWidth={1400} px={[25, 25, 50, 75]}>
       <Head>
-        <title>{title}</title>
+        <title>{R.or(title, 'kitschocolate')}</title>
       </Head>
       <Header
         activeNavItem={activeNavItem}

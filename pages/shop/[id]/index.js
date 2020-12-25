@@ -14,7 +14,7 @@ import { Flex, Section, PageTitle } from '../../../ui';
 // ////////////////////////////////////////////////
 
 const Content = ({ data }) => {
-  const { title, imageUrl, extraImages } = data;
+  const { title, extraImages } = data;
 
   return (
     <>
@@ -32,7 +32,7 @@ const Content = ({ data }) => {
           Магазин / {title}
         </PageTitle>
         <Flex mt={50} justifyContent="space-between">
-          <OrderImage imageUrl={imageUrl} extraImages={extraImages} />
+          <OrderImage extraImages={extraImages} />
           <OrderItem orderItem={data} />
         </Flex>
       </Section>

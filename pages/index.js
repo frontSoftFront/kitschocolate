@@ -19,7 +19,8 @@ import {
   Article,
   PageTitle,
   SectionTitle,
-  ArticleTitle
+  ArticleTitle,
+  PageTitleComponent
 } from '../ui';
 // ////////////////////////////////////////////////
 
@@ -40,17 +41,11 @@ const Content = ({ data, router }) => {
             flexDirection="column"
             justifyContent="space-between"
           >
-            <PageTitle
+            <PageTitleComponent
               mt={20}
               mr={10}
-              fontSize={40}
-              lineHeight={1.33}
-              fontWeight="bold"
-              textAlign="center"
-              color={Theme.colors.woodyBrown}
-            >
-              Welcome to Kit’s Chocolate
-            </PageTitle>
+              text="Welcome to Kit’s Chocolate"
+            />
             <Button
               my={20}
               width={300}

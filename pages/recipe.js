@@ -8,18 +8,7 @@ import Layout from '../components/layout';
 import Theme from '../theme';
 // ui
 // TODO: remove if don`t used
-import {
-  Img,
-  Box,
-  Flex,
-  Text,
-  Button,
-  Section,
-  Article,
-  PageTitle,
-  SectionTitle,
-  ArticleTitle
-} from '../ui';
+import { Box } from '../ui';
 // ////////////////////////////////////////////////
 
 const RecipePage = ({ router }) => {

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import * as R from 'ramda';
+import React, { useState, useEffect } from 'react';
 // ui
 import { Img, Flex } from '../../ui';
 // //////////////////////////////////////////////////
 
-const OrderImage = ({ imageUrl, extraImages }) => {
-  const [activeImage, setActiveImage] = useState(imageUrl);
+const OrderImage = ({ extraImages }) => {
+  const initialImage = R.head(extraImages);
+  const [activeImage, setActiveImage] = useState(initialImage);
+  useEffect(() => setActiveImage(initialImage), [extraImages]);
 
   return (
     <Flex width="45%">
