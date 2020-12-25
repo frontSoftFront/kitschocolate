@@ -72,7 +72,6 @@ const Content = ({ data, title, categoryName }) => {
         >
           Магазин / {title}
         </PageTitle>
-        {/* <CategorySlider category={category} /> */}
         <Flex my={20} ml="auto" width="100" justifyContent="flex-end">
           <Icon w={40} h={40} iconName="arrow" handleClick={handlePrev} />
           <Icon
@@ -87,10 +86,7 @@ const Content = ({ data, title, categoryName }) => {
           animationName={animationName}
           animationProps="0.6s cubic-bezier(.77,0.000,.175,1.000) both"
         >
-          <Flex
-            justifyContent="space-between"
-            style={{ transition: 'all .7s ease-out' }}
-          >
+          <Flex justifyContent="space-between">
             <OrderImage extraImages={orderItem.extraImages} />
             <OrderItem category orderItem={orderItem} />
           </Flex>
