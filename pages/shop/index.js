@@ -4,12 +4,12 @@ import * as R from 'ramda';
 import { useSelector } from 'react-redux';
 import { useFirebaseConnect } from 'react-redux-firebase';
 // components
-import Layout from '../components/layout';
-import PricesSlider from '../components/slider/prices-slider';
+import Layout from '../../components/layout';
+import PricesSlider from '../../components/slider/prices-slider';
 // theme
-import Theme from '../theme';
+import Theme from '../../theme';
 // ui
-import { Section, PageTitle } from '../ui';
+import { Section, PageTitle } from '../../ui';
 // ////////////////////////////////////////////////
 
 const makeSortedByOrderArrayFromObject = R.compose(

@@ -1,7 +1,5 @@
 import * as R from 'ramda';
 import React, { useState, useEffect } from 'react';
-// icons
-import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
@@ -15,10 +13,15 @@ import {
   Section,
   ArticleTitle
 } from '../../ui';
+// store
+import actions from '../../store/actions';
+// hooks
+import { useActions } from '../../hooks';
 // //////////////////////////////////////////////////
 
 const OrderItem = ({ orderItem }) => {
-  const { title, weight, prices, description } = orderItem;
+  const addItemToBasket = useActions(actions.basketActions.addItemToBasket);
+  const { id, title, weight, prices, imageUrl, description } = orderItem;
   const [quantity, setQuantity] = useState(1);
   const [activeSize, setActiveSize] = useState('small');
   const initialPrice = R.path([activeSize], prices);
@@ -33,6 +36,17 @@ const OrderItem = ({ orderItem }) => {
     R.equals(btn, activeSize)
       ? Theme.colors.mediumWood
       : Theme.colors.transparentBlue;
+  const handleAddItemToBasket = () => {
+    const data = {
+      id,
+      title,
+      quantity,
+      imageUrl,
+      activeSize,
+      price: totalPrice
+    };
+    addItemToBasket(data);
+  };
   useEffect(() => {
     setQuantity(1);
     setActiveSize('small');
@@ -152,9 +166,11 @@ const OrderItem = ({ orderItem }) => {
         width={170}
         height={50}
         fontSize={14}
+        type="button"
         fontWeight={500}
         textTransform="uppercase"
         color={Theme.colors.white}
+        onClick={handleAddItemToBasket}
         background={Theme.colors.mediumWood}
       >
         Add to cart

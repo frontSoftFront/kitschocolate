@@ -1,6 +1,9 @@
 import * as R from 'ramda';
-import Link from 'next/link';
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { useSelector } from 'react-redux';
+// components
+import Portal from '../portal';
 // constants
 import * as C from '../../constants';
 // icons
@@ -8,9 +11,9 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Flex, Text, StyledLink } from '../../ui';
+import { Box, Flex, StyledLink } from '../../ui';
 // feature header
-import { Nav, NavItem } from './ui';
+import { Nav, Counter, NavItem } from './ui';
 // //////////////////////////////////////////////////
 
 const navItems = [
@@ -36,67 +39,77 @@ const navItems = [
   }
 ];
 
-const languages = ['ua', 'ru', 'en'];
+const Basket = () => {
+  const [open, setOpen] = useState(false);
+  const basketList = useSelector(state => state.basket.basketList);
+  if (R.isEmpty(basketList)) {
+    return (
+      <Box ml={50} width={51}>
+        <Icon w={27} h={27} iconName="basket" />
+      </Box>
+    );
+  }
 
-const Header = ({ activeNavItem, handleGoToHomePage }) => {
-  const [activeLanguage, setActiveLanguage] = useState('ua');
+  let basketCount = R.compose(
+    R.sum,
+    R.values,
+    R.map(R.prop('quantity'))
+  )(basketList);
+
+  if (R.gt(basketCount, 100)) basketCount = 100;
 
   return (
-    <header>
-      <Flex
-        py={15}
-        alignItems="center"
-        borderBottom="1px solid"
-        justifyContent="space-between"
-        borderColor={Theme.colors.lighterGrey}
-      >
-        <Icon iconName="logo" handleClick={handleGoToHomePage} />
-        <Flex>
-          {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
-            <StyledLink mr={30} key={index} href={link} target="_blank">
-              <Icon iconName={icon} />
-            </StyledLink>
-          ))}
-        </Flex>
-        <Flex>
-          <Flex>
-            {languages.map((item, index) => (
-              <Text
-                mr={10}
-                key={index}
-                textTransform="uppercase"
-                color={Theme.colors.quincy}
-                onClick={() => setActiveLanguage(item)}
-                opacity={R.equals(item, activeLanguage) ? 1 : 0.5}
-              >
-                {item}
-              </Text>
-            ))}
-          </Flex>
-          <Icon ml={50} iconName="basket" />
-        </Flex>
+    <>
+      <Flex ml={50} onClick={() => setOpen(true)}>
+        <Icon w={27} h={27} iconName="basket" />
+        <Counter>{basketCount}</Counter>
       </Flex>
-      <Nav
-        mt={40}
-        mx="auto"
-        width={750}
-        maxWidth="90%"
-        justifyContent="space-between"
-      >
-        {navItems.map(({ link, title }, index) => (
-          <Link key={index} href={link}>
-            <NavItem
-              fontSize={[14, 14, 16]}
-              textTransform="uppercase"
-              active={activeNavItem(link)}
-            >
-              {title}
-            </NavItem>
-          </Link>
-        ))}
-      </Nav>
-    </header>
+      {
+        open && <Portal selector="#modal"><div className='modal-wrapper'>sss</div></Portal>
+      }
+    </>
   );
 };
+
+const Header = ({ activeNavItem, handleGoToHomePage }) => (
+  <header>
+    <Flex
+      py={15}
+      alignItems="center"
+      borderBottom="1px solid"
+      justifyContent="space-between"
+      borderColor={Theme.colors.lighterGrey}
+    >
+      <Icon iconName="logo" handleClick={handleGoToHomePage} />
+      <Flex>
+        {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
+          <StyledLink mr={30} key={index} href={link} target="_blank">
+            <Icon iconName={icon} />
+          </StyledLink>
+        ))}
+      </Flex>
+      <Basket />
+    </Flex>
+    <Nav
+      mt={40}
+      mx="auto"
+      width={750}
+      maxWidth="90%"
+      justifyContent="space-between"
+    >
+      {navItems.map(({ link, title }, index) => (
+        <Link key={index} href={link}>
+          <NavItem
+            fontSize={[14, 14, 16]}
+            textTransform="uppercase"
+            active={activeNavItem(link)}
+          >
+            {title}
+          </NavItem>
+        </Link>
+      ))}
+    </Nav>
+  </header>
+);
 
 export default Header;

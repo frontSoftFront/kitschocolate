@@ -1,5 +1,6 @@
 const colors = {
   white: '#fff',
+  pink: '#ef456a',
   quincy: '#62554a',
   lightBlue: '#e1e8ee',
   lightGrey: '#a9a9a9',

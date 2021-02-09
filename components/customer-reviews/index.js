@@ -1,9 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
-// constants
-import * as C from '../../constants';
-// icons
-import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
