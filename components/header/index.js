@@ -11,7 +11,7 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Box, Flex, StyledLink } from '../../ui';
+import { Box, Flex, Img, StyledLink } from '../../ui';
 // feature header
 import { Nav, Counter, NavItem } from './ui';
 // //////////////////////////////////////////////////
@@ -41,33 +41,51 @@ const navItems = [
 
 const Basket = () => {
   const [open, setOpen] = useState(false);
-  const basketList = useSelector(state => state.basket.basketList);
-  if (R.isEmpty(basketList)) {
-    return (
-      <Box ml={50} width={51}>
-        <Icon w={27} h={27} iconName="basket" />
-      </Box>
-    );
-  }
-
+  const basketList = useSelector(state => R.values(state.basket.basketList));
   let basketCount = R.compose(
     R.sum,
-    R.values,
     R.map(R.prop('quantity'))
   )(basketList);
-
   if (R.gt(basketCount, 100)) basketCount = 100;
+  const showCount = R.gt(basketCount, 0);
 
   return (
-    <>
-      <Flex ml={50} onClick={() => setOpen(true)}>
+    <Box>
+      <Flex ml={50} width={51} onClick={() => setOpen(true)}>
         <Icon w={27} h={27} iconName="basket" />
-        <Counter>{basketCount}</Counter>
+        {showCount && <Counter>{basketCount}</Counter>}
       </Flex>
-      {
-        open && <Portal selector="#modal"><div className='modal-wrapper'>sss</div></Portal>
-      }
-    </>
+      {open && (
+        <Box
+          px={20}
+          width={400}
+          maxWidth="100vw"
+          border="1px solid"
+          borderRadius="4px"
+        >
+          <Box mt={20}>Basket</Box>
+          {basketList.map(({ id, title, quantity, imageUrl }) => (
+            <Flex
+              py={20}
+              key={id}
+              alignItems="center"
+              borderBottom="1px solid black"
+              justifyContent="space-between"
+            >
+              <Img width={60} height={80} src={imageUrl} />
+              <Box pl={20} width="calc(100% - 60px)">
+                <Box>{title}</Box>
+                <Flex justifyContent="space-between">
+                  <Box>{quantity}</Box>
+                  <Box>{quantity}</Box>
+                  <Box>{quantity}</Box>
+                </Flex>
+              </Box>
+            </Flex>
+          ))}
+        </Box>
+      )}
+    </Box>
   );
 };
 
