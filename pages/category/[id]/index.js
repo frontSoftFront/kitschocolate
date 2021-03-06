@@ -19,7 +19,7 @@ const Content = ({ data, title, categoryName }) => {
   const { shop, chocolates } = data;
   const categoryChocolatesPath = ['categories', categoryName, 'chocolates'];
   const category = R.compose(
-    R.map(({ id }) => R.path([id], chocolates)),
+    R.map(id => R.path([id], chocolates)),
     R.sortBy(R.prop('order')),
     R.values,
     R.path(categoryChocolatesPath)
@@ -64,14 +64,7 @@ const Content = ({ data, title, categoryName }) => {
         borderBottom="2px solid"
         borderColor={Theme.colors.quincy}
       >
-        <PageTitle
-          fontSize={45}
-          textAlign="center"
-          fontFamily="Caveat"
-          color={Theme.colors.congoBrown}
-        >
-          Магазин / {title}
-        </PageTitle>
+        <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
         <Flex my={20} ml="auto" width="100" justifyContent="flex-end">
           <Icon w={40} h={40} iconName="arrow" handleClick={handlePrev} />
           <Icon

@@ -1,10 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
+import 'react-toggle/style.css';
 import { useStore } from 'react-redux';
 import { useRouter } from 'next/router';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { createFirestoreInstance } from 'redux-firestore';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 // firebase
 import firebase from '../firebase/client-app';
@@ -25,7 +25,6 @@ const WrappedApp = ({ Component, pageProps }) => {
   const rrfProps = {
     firebase,
     config: rrfConfig,
-    createFirestoreInstance,
     dispatch: store.dispatch
   };
 
@@ -33,11 +32,11 @@ const WrappedApp = ({ Component, pageProps }) => {
     <>
       <Head>
         <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Caveat&family=Montserrat:wght@300;400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Caveat&family=Montserrat:wght@300;400;500&display=swap"
         />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <GlobalStyles />
       <ReactReduxFirebaseProvider {...rrfProps}>

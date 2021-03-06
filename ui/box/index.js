@@ -38,4 +38,5 @@ export const Box = styled.div`
   ${borderColor}
 
   cursor: ${({ cursor }) => cursor};
+  transition: ${({ transition }) => transition};
 `;

@@ -19,17 +19,19 @@ import {
   Article,
   PageTitle,
   SectionTitle,
-  ArticleTitle,
-  PageTitleComponent
+  ArticleTitle
 } from '../ui';
 // ////////////////////////////////////////////////
 
-const Content = ({ data, router }) => {
+const Content = ({ data, router, chocolates }) => {
   const { images, recurringOrders } = data;
   const { section1, holidaySet } = images;
   const { left, right } = section1;
-  const holidaySetList = R.values(holidaySet);
-  const recurringOrderList = R.values(recurringOrders);
+
+  const recurringOrderList = R.map(
+    id => R.path([id], chocolates),
+    recurringOrders
+  );
 
   return (
     <>
@@ -41,11 +43,9 @@ const Content = ({ data, router }) => {
             flexDirection="column"
             justifyContent="space-between"
           >
-            <PageTitleComponent
-              mt={20}
-              mr={10}
-              text="Welcome to Kit’s Chocolate"
-            />
+            <PageTitle {...Theme.styles.mainPageTitle} mt={20} mr={10}>
+              Welcome to Kit’s Chocolate
+            </PageTitle>
             <Button
               my={20}
               width={300}
@@ -99,7 +99,7 @@ const Content = ({ data, router }) => {
             Недивлячись на цей непростий час, ми вирішили, що таким чином дамо змогу привітати один одного дистанційно, яскраво і шоколадно. Ми розробили 3 набори: 
           </Text>
         </Article>
-        <HolidaySetSlider list={holidaySetList} />
+        <HolidaySetSlider list={holidaySet} />
       </Section>
       <Section py={50}>
         <SectionTitle
@@ -118,15 +118,18 @@ const Content = ({ data, router }) => {
 };
 
 const HomePage = ({ router }) => {
-  useFirebaseConnect('home');
-  const data = useSelector(state =>
-    R.path(['firebase', 'data', 'home'], state)
+  useFirebaseConnect(['home', 'chocolates']);
+  const home = useSelector(state =>
+    R.pathOr({}, ['firebase', 'data', 'home'], state)
   );
-  const loading = R.isNil(data);
+  const chocolates = useSelector(state =>
+    R.pathOr({}, ['firebase', 'data', 'chocolates'], state)
+  );
+  const loading = R.or(R.isEmpty(home), R.isEmpty(chocolates));
 
   return (
     <Layout title="Home" router={router} loading={loading}>
-      <Content data={data} router={router} />
+      <Content data={home} router={router} chocolates={chocolates} />
     </Layout>
   );
 };

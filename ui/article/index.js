@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { space, width, height } from 'styled-system';
+import { color, space, width, height } from 'styled-system';
 // //////////////////////////////////////////////////
 
-export const Article = styled.div`
+export const Article = styled.article`
   ${space}
   ${width}
+  ${color}
   ${height}
 `;

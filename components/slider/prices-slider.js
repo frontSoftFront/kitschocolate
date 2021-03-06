@@ -46,35 +46,41 @@ const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
         </Flex>
       </Flex>
       <Slider ref={slider} {...priceSettings}>
-        {list.map(({ id, price, title, imageUrl }, index) => (
-          <Box
-            px={20}
-            key={index}
-            cursor="pointer"
-            onClick={() => handleGoToDetailPage(id)}
-          >
-            <Img width="100%" height="100%" src={imageUrl} maxHeight={400} />
-            <Box mx="auto" mt={40} width="90%">
-              <Text
-                fontSize={18}
-                fontWeight={600}
-                textAlign="center"
-                color={Theme.colors.congoBrown}
-              >
-                {title}
-              </Text>
-              <Text
-                mt={10}
-                fontSize={18}
-                fontWeight="bold"
-                textAlign="center"
-                color={Theme.colors.congoBrown}
-              >
-                {price} грн
-              </Text>
+        {list.map((item, index) => {
+          const { id, price, title, imgUrl } = item;
+
+          if (R.isNil(id)) return <div />;
+
+          return (
+            <Box
+              px={20}
+              key={index}
+              cursor="pointer"
+              onClick={() => handleGoToDetailPage(id)}
+            >
+              <Img width="100%" height="100%" src={imgUrl} maxHeight={400} />
+              <Box mx="auto" mt={40} width="90%">
+                <Text
+                  fontSize={18}
+                  fontWeight={600}
+                  textAlign="center"
+                  color={Theme.colors.congoBrown}
+                >
+                  {title}
+                </Text>
+                <Text
+                  mt={10}
+                  fontSize={18}
+                  fontWeight="bold"
+                  textAlign="center"
+                  color={Theme.colors.congoBrown}
+                >
+                  {price} грн
+                </Text>
+              </Box>
             </Box>
-          </Box>
-        ))}
+          );
+        })}
       </Slider>
     </Box>
   );
