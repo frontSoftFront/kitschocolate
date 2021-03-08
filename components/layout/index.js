@@ -22,6 +22,7 @@ const Loader = () => (
 const Layout = ({ title, router, loading, children }) => {
   if (loading) return <Loader />;
   const { push, route } = router;
+
   const activeNavItem = R.equals(route);
   const handleGoToHomePage = () => push('/');
 

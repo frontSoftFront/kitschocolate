@@ -20,9 +20,9 @@ const HolidaySetSlider = ({ list }) => {
         <Icon ml={20} iconName="styledArrow" handleClick={next} />
       </Flex>
       <Slider ref={slider} {...holidaySetSettings}>
-        {list.map(({ id, imageUrl }) => (
+        {list.map((imageUrl, index) => (
           <Img
-            key={id}
+            key={index}
             width="100%"
             height="40vw"
             src={imageUrl}

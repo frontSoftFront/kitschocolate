@@ -1,7 +1,5 @@
 import * as R from 'ramda';
 import React, { useState, useEffect } from 'react';
-// icons
-import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
@@ -17,17 +15,18 @@ import {
 } from '../../ui';
 // //////////////////////////////////////////////////
 
+const weight = { small: 100, medium: 200 };
+
 const OrderItem = ({ orderItem }) => {
-  const { title, weight, prices, description } = orderItem;
+  const { price, title, description } = orderItem;
   const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(price);
   const [activeSize, setActiveSize] = useState('small');
-  const initialPrice = R.path([activeSize], prices);
-  const [totalPrice, setTotalPrice] = useState(initialPrice);
   const activeWeight = R.prop(activeSize, weight);
   const handleChangeQuantity = value => {
     if (R.or(R.gt(value, 100), R.lt(value, 0))) return;
     setQuantity(value);
-    setTotalPrice(R.multiply(initialPrice, value));
+    setTotalPrice(R.multiply(price, value));
   };
   const getActiveSizeBtnColor = btn =>
     R.equals(btn, activeSize)
@@ -35,8 +34,8 @@ const OrderItem = ({ orderItem }) => {
       : Theme.colors.transparentBlue;
   useEffect(() => {
     setQuantity(1);
+    setTotalPrice(price);
     setActiveSize('small');
-    setTotalPrice(initialPrice);
   }, [orderItem]);
 
   return (
@@ -148,14 +147,11 @@ const OrderItem = ({ orderItem }) => {
         </Flex>
       </Flex>
       <Button
+        {...Theme.styles.actionButton}
         mt={20}
         width={170}
         height={50}
-        fontSize={14}
-        fontWeight={500}
         textTransform="uppercase"
-        color={Theme.colors.white}
-        background={Theme.colors.mediumWood}
       >
         Add to cart
       </Button>

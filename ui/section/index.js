@@ -3,7 +3,9 @@ import {
   space,
   width,
   height,
+  maxWidth,
   alignItems,
+  borderLeft,
   borderColor,
   borderBottom,
   flexDirection,
@@ -11,11 +13,13 @@ import {
 } from 'styled-system';
 // //////////////////////////////////////////////////
 
-export const Section = styled.div`
+export const Section = styled.section`
   ${space}
   ${width}
   ${height}
+  ${maxWidth}
   ${alignItems}
+  ${borderLeft}
   ${borderBottom}
   ${borderColor}
   ${flexDirection}

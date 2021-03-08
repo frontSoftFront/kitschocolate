@@ -1,4 +1,3 @@
-import is from 'is_js';
 import React from 'react';
 import * as R from 'ramda';
 import { useSelector } from 'react-redux';
@@ -21,10 +20,11 @@ const Content = ({ router, categories, chocolateList }) => {
   const mappedCategories = R.compose(
     R.map(category => {
       const { chocolates } = category;
-      const mappedChocolates = R.compose(
-        R.map(({ id }) => R.path([id], chocolateList)),
-        makeSortedByOrderArrayFromObject
-      )(chocolates);
+
+      const mappedChocolates = R.map(
+        id => R.path([id], chocolateList),
+        chocolates
+      );
 
       return R.assoc('chocolates', mappedChocolates, category);
     }),
@@ -33,18 +33,13 @@ const Content = ({ router, categories, chocolateList }) => {
 
   return (
     <Section py={50}>
-      <PageTitle
-        fontSize={45}
-        textAlign="center"
-        fontFamily="Caveat"
-        color={Theme.colors.congoBrown}
-      >
+      <PageTitle {...Theme.styles.pageTitle}>
         Правдивий шоколад від какаобоба до плитки
       </PageTitle>
-      {mappedCategories.map(({ order, title, chocolates, categoryName }) => (
+      {mappedCategories.map(({ title, chocolates, categoryName }, index) => (
         <PricesSlider
           mt={50}
-          key={order}
+          key={index}
           router={router}
           list={chocolates}
           categoryTitle={title}
@@ -57,14 +52,14 @@ const Content = ({ router, categories, chocolateList }) => {
 
 const ShopPage = ({ router }) => {
   // TODO: check how order of collections affects data on useFirebaseConnect
-  useFirebaseConnect(['chocolates', 'shop']);
+  useFirebaseConnect(['shop', 'chocolates']);
   const categories = useSelector(state =>
-    R.path(['firebase', 'data', 'shop', 'categories'], state)
+    R.pathOr({}, ['firebase', 'data', 'shop', 'categories'], state)
   );
   const chocolateList = useSelector(state =>
-    R.path(['firebase', 'data', 'chocolates'], state)
+    R.pathOr({}, ['firebase', 'data', 'chocolates'], state)
   );
-  const loading = is.any.null(categories, chocolateList);
+  const loading = R.or(R.isEmpty(categories), R.isEmpty(chocolateList));
 
   return (
     <Layout router={router} title="Shop" loading={loading}>
