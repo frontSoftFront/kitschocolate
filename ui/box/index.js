@@ -1,12 +1,17 @@
 import styled from 'styled-components';
 import {
+  top,
+  left,
+  right,
   space,
   width,
   order,
+  bottom,
   height,
   border,
   display,
   opacity,
+  minWidth,
   maxWidth,
   maxHeight,
   borderTop,
@@ -27,6 +32,7 @@ export const Box = styled.div`
   ${border}
   ${opacity}
   ${display}
+  ${minWidth}
   ${maxWidth}
   ${maxHeight}
   ${borderTop}
@@ -39,4 +45,13 @@ export const Box = styled.div`
 
   cursor: ${({ cursor }) => cursor};
   transition: ${({ transition }) => transition};
+`;
+
+export const RelativeBox = styled(Box)`
+  ${top}
+  ${left}
+  ${right}
+  ${bottom}
+
+  position: relative;
 `;

@@ -1,7 +1,4 @@
-import React from 'react';
 import * as R from 'ramda';
-import { useSelector } from 'react-redux';
-import { useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../components/layout';
 import PricesSlider from '../components/slider/prices-slider';
@@ -117,18 +114,17 @@ const Content = ({ data, router, chocolates }) => {
   );
 };
 
-const HomePage = ({ router }) => {
-  useFirebaseConnect(['home', 'chocolates']);
-  const home = useSelector(state =>
-    R.pathOr({}, ['firebase', 'data', 'home'], state)
-  );
-  const chocolates = useSelector(state =>
-    R.pathOr({}, ['firebase', 'data', 'chocolates'], state)
-  );
-  const loading = R.or(R.isEmpty(home), R.isEmpty(chocolates));
+const HomePage = ({ router, firebaseData }) => {
+  const home = R.pathOr({}, ['data', 'home'], firebaseData);
+  const chocolates = R.pathOr({}, ['data', 'chocolates'], firebaseData);
 
   return (
-    <Layout title="Home" router={router} loading={loading}>
+    <Layout
+      title="Home"
+      router={router}
+      firebaseData={firebaseData}
+      collections={['home', 'chocolates']}
+    >
       <Content data={home} router={router} chocolates={chocolates} />
     </Layout>
   );

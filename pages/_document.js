@@ -1,5 +1,5 @@
 import { ServerStyleSheet } from 'styled-components';
-import Document, { Head, Main, NextScript } from 'next/document';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 // //////////////////////////////////////////////////
 
 export default class MyDocument extends Document {
@@ -14,13 +14,14 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <html>
+      <Html>
         <Head>{this.props.styleTags}</Head>
         <body>
           <Main />
+          <div id="basket" />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

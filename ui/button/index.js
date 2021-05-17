@@ -22,6 +22,7 @@ export const Button = styled.button`
   ${fontSize}
   ${background}
   ${borderColor}
+
   display: flex;
   cursor: pointer;
   align-items: center;
