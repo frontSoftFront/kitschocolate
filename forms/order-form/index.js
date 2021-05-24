@@ -20,79 +20,44 @@ import { Label } from '../ui';
 import { FieldGroup, FieldComponent } from '..';
 // //////////////////////////////////////////////////
 
-// TODO: remove after implement basket logic
-const OrderComposition = () => (
+const OrderComposition = ({ orderComposition }) => (
   <Section>
     <SectionTitle {...Theme.styles.formSectionTitle}>
       Склад замовлення
     </SectionTitle>
-    <Flex
-      py={15}
-      alignItems="center"
-      borderBottom="1px solid"
-      borderColor={Theme.colors.lightGrey}
-    >
-      <Img
-        height={70}
-        src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F2.png?alt=media&token=d2a4a7f5-683b-405b-8f7f-57e5e6196be4"
-      />
-      <Article ml={15} height="max-content">
-        <ArticleTitle
-          fontSize={14}
-          fontWeight="bold"
-          color={Theme.colors.congoBrown}
+    {orderComposition.map(
+      ({ id, title, imgUrl, price, quantity, subtotal }) => (
+        <Flex
+          py={15}
+          key={id}
+          alignItems="center"
+          borderBottom="1px solid"
+          borderColor={Theme.colors.lightGrey}
         >
-          Молочний шоколад з кокосом
-        </ArticleTitle>
-        <Text mt={10} fontWeight={500}>78 грн</Text>
-      </Article>
-    </Flex>
-    <Flex
-      py={15}
-      alignItems="center"
-      borderBottom="1px solid"
-      borderColor={Theme.colors.lightGrey}
-    >
-      <Img
-        height={70}
-        src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F1.png?alt=media&token=e14f1b3b-9aa0-4fab-b551-80b35d2b933d"
-      />
-      <Article ml={15} height="max-content">
-        <ArticleTitle
-          fontSize={14}
-          fontWeight="bold"
-          color={Theme.colors.congoBrown}
-        >
-          Молочний шоколад з кокосом
-        </ArticleTitle>
-        <Text mt={10} fontWeight={500}>
-          78 грн
-        </Text>
-      </Article>
-    </Flex>
-    <Flex
-      py={15}
-      alignItems="center"
-      borderBottom="1px solid"
-      borderColor={Theme.colors.lightGrey}
-    >
-      <Img
-        height={70}
-        src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F4.png?alt=media&token=a957ad50-51b4-43b0-a9ed-4f0fd1eb41ac"
-      />
-      <Article ml={15} height="max-content">
-        <ArticleTitle
-          fontSize={14}
-          fontWeight="bold"
-          color={Theme.colors.congoBrown}
-        >
-          Молочний шоколад з кокосом
-        </ArticleTitle>
-        <Text mt={10} fontWeight={500}>
-          78 грн
-        </Text>
-      </Article>
-    </Flex>
+          <Img height={70} src={imgUrl} />
+          <Article ml={15} height="max-content">
+            <ArticleTitle
+              fontSize={14}
+              fontWeight="bold"
+              color={Theme.colors.congoBrown}
+            >
+              {title}
+            </ArticleTitle>
+            <Flex justifyContent="space-between">
+              <Text mt={10} fontWeight={500}>
+                {price} грн
+              </Text>
+              <Text mt={10} fontWeight={500}>
+                {quantity} шт.
+              </Text>
+              <Text mt={10} fontWeight={500}>
+                {subtotal} грн
+              </Text>
+            </Flex>
+          </Article>
+        </Flex>
+      )
+    )}
   </Section>
 );
 
@@ -202,10 +167,10 @@ const PaymentTypes = ({ paymentType }) => (
               За підтримкою WayForPay
             </Text>
             <Flex mt={15} height={20} justifyContent="space-between">
-              <Img src="./master-card.svg" width="21%" height="100%" />
-              <Img src="./visa.svg" width="21%" height="100%" />
-              <Img src="./apple-pay.svg" width="21%" height="100%" />
-              <Img src="./google-pay.svg" width="21%" height="100%" />
+              <Img width="21%" height="100%" src="../../master-card.svg" />
+              <Img width="21%" height="100%" src="../../visa.svg" />
+              <Img width="21%" height="100%" src="../../apple-pay.svg" />
+              <Img width="21%" height="100%" src="../../google-pay.svg" />
             </Flex>
           </Article>
         </Box>
@@ -248,7 +213,19 @@ const PaymentTypes = ({ paymentType }) => (
   </Box>
 );
 
-const OrderForm = () => {
+const OrderForm = ({ order }) => {
+  const orderComposition = R.values(order);
+  const total = R.compose(
+    R.sum,
+    R.values,
+    R.map(R.prop('subtotal'))
+  )(orderComposition);
+  const totalQuantity = R.compose(
+    R.sum,
+    R.values,
+    R.map(R.prop('quantity'))
+  )(orderComposition);
+
   return (
     <Box>
       <Formik
@@ -322,7 +299,7 @@ const OrderForm = () => {
                 borderLeft="1px solid"
                 borderColor={Theme.colors.lightGrey}
               >
-                <OrderComposition />
+                <OrderComposition orderComposition={orderComposition} />
                 <Section mt={50}>
                   <SectionTitle {...Theme.styles.formSectionTitle}>
                     Разом до сплати
@@ -337,9 +314,9 @@ const OrderForm = () => {
                       justifyContent="space-between"
                     >
                       <Text color={Theme.colors.lightSlateGrey}>
-                        3 товарів на суму
+                        {totalQuantity} товарів на суму
                       </Text>
-                      <Text fontWeight={500}>234 грн</Text>
+                      <Text fontWeight={500}>{total} грн</Text>
                     </Flex>
                     <Flex
                       py={15}
@@ -365,7 +342,7 @@ const OrderForm = () => {
                       fontWeight="bold"
                       color={Theme.colors.mainBlack}
                     >
-                      284 грн
+                      {R.add(total, 50)} грн
                     </Text>
                   </Flex>
                   <Button

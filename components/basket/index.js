@@ -1,6 +1,5 @@
 import * as R from 'ramda';
 import Link from 'next/link';
-import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect } from 'react';
 import { useFirebase } from 'react-redux-firebase';
 // actions
@@ -14,15 +13,7 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import {
-  Img,
-  Box,
-  Flex,
-  Text,
-  Input,
-  Button,
-  StyledLink,
-} from '../../ui';
+import { Img, Box, Flex, Text, Input, Button, StyledLink } from '../../ui';
 // basket
 import { ModalWrapper } from './ui';
 // //////////////////////////////////////////////////
@@ -146,84 +137,8 @@ const BasketItem = ({
   </Flex>
 );
 
-// const OrderComposition = () => (
-//   <Section>
-//     <SectionTitle {...Theme.styles.formSectionTitle}>
-//       Склад замовлення
-//     </SectionTitle>
-//     <Flex
-//       py={15}
-//       alignItems="center"
-//       borderBottom="1px solid"
-//       borderColor={Theme.colors.lightGrey}
-//     >
-// <Img
-//   height={70}
-//   src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F2.png?alt=media&token=d2a4a7f5-683b-405b-8f7f-57e5e6196be4"
-// />
-// <Article ml={15} height="max-content">
-//   <ArticleTitle
-//     fontSize={14}
-//     fontWeight="bold"
-//     color={Theme.colors.congoBrown}
-//   >
-//     Молочний шоколад з кокосом
-//   </ArticleTitle>
-//   <Text mt={10} fontWeight={500}>78 грн</Text>
-// </Article>
-//     </Flex>
-//     <Flex
-//       py={15}
-//       alignItems="center"
-//       borderBottom="1px solid"
-//       borderColor={Theme.colors.lightGrey}
-//     >
-//       <Img
-//         height={70}
-//         src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F1.png?alt=media&token=e14f1b3b-9aa0-4fab-b551-80b35d2b933d"
-//       />
-//       <Article ml={15} height="max-content">
-//         <ArticleTitle
-//           fontSize={14}
-//           fontWeight="bold"
-//           color={Theme.colors.congoBrown}
-//         >
-//           Молочний шоколад з кокосом
-//         </ArticleTitle>
-//         <Text mt={10} fontWeight={500}>
-//           78 грн
-//         </Text>
-//       </Article>
-//     </Flex>
-//     <Flex
-//       py={15}
-//       alignItems="center"
-//       borderBottom="1px solid"
-//       borderColor={Theme.colors.lightGrey}
-//     >
-//       <Img
-//         height={70}
-//         src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F4.png?alt=media&token=a957ad50-51b4-43b0-a9ed-4f0fd1eb41ac"
-//       />
-//       <Article ml={15} height="max-content">
-//         <ArticleTitle
-//           fontSize={14}
-//           fontWeight="bold"
-//           color={Theme.colors.congoBrown}
-//         >
-//           Молочний шоколад з кокосом
-//         </ArticleTitle>
-//         <Text mt={10} fontWeight={500}>
-//           78 грн
-//         </Text>
-//       </Article>
-//     </Flex>
-//   </Section>
-// );
-
 const Basket = ({ router, basketList, handleCloseBasket }) => {
-  const firebse = useFirebase();
-  console.log('Basket', firebse)
+  const firebase = useFirebase();
   const setGlobalBasketList = useActions(actions.setBasketList);
   const [localBasket, setLocalBasket] = useState(basketList);
   const total = R.compose(
@@ -242,12 +157,18 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
 
     setLocalBasket(newLocalBasket);
   };
-  const handleGoToOrder = () => {
-    setLocalBasket({});
-    handleCloseBasket();
-    const id = uuidv4();
-    // firebse.update(`orders.1`, localBasket);
-    router.push(`/checkout`);
+  const handleGoToOrder = async () => {
+    const newDatabaseRouteRef = firebase
+      .database()
+      .ref()
+      .child('orders')
+      .push();
+    const id = newDatabaseRouteRef.key;
+    await newDatabaseRouteRef.set(localBasket).then(() => {
+      router.push(`/checkout/${id}`);
+      setLocalBasket({});
+      handleCloseBasket();
+    });
   };
 
   useEffect(() => {
@@ -259,8 +180,10 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
     <ModalWrapper>
       <Box
         p={30}
-        maxWidth={1000}
         width="90vw"
+        maxWidth={1000}
+        maxHeight="90vh"
+        overflowY="auto"
         borderRadius="4px"
         background={Theme.colors.white}
         boxShadow="0 1px 3px rgb(0 0 0 / 30%)"

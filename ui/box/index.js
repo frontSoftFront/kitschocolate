@@ -13,6 +13,7 @@ import {
   opacity,
   minWidth,
   maxWidth,
+  overflowY,
   maxHeight,
   borderTop,
   borderLeft,
@@ -34,6 +35,7 @@ export const Box = styled.div`
   ${display}
   ${minWidth}
   ${maxWidth}
+  ${overflowY}
   ${maxHeight}
   ${borderTop}
   ${background}

@@ -81,7 +81,7 @@ const Content = ({ data, router, chocolates }) => {
           textAlign="center"
           color={Theme.colors.congoBrown}
         >
-          З’явився новий  шоколад
+          З’явився новий шоколад
         </SectionTitle>
         <Article my={50}>
           <ArticleTitle fontSize={25} color={Theme.colors.congoBrown}>
@@ -93,7 +93,9 @@ const Content = ({ data, router, chocolates }) => {
             fontWeight={300}
             color={Theme.colors.congoBrown}
           >
-            Недивлячись на цей непростий час, ми вирішили, що таким чином дамо змогу привітати один одного дистанційно, яскраво і шоколадно. Ми розробили 3 набори: 
+            Недивлячись на цей непростий час, ми вирішили, що таким чином дамо
+            змогу привітати один одного дистанційно, яскраво і шоколадно. Ми
+            розробили 3 набори:
           </Text>
         </Article>
         <HolidaySetSlider list={holidaySet} />
