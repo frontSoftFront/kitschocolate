@@ -1,18 +1,4 @@
 import styled from 'styled-components';
-import {
-  space,
-  width,
-  color,
-  fontSize,
-  maxWidth,
-  alignItems,
-  flexDirection,
-  justifyContent
-} from 'styled-system';
-// theme
-import Theme from '../../theme';
-// ui
-import { StyledLink } from '../../ui';
 // //////////////////////////////////////////////////
 
 export const ModalWrapper = styled.div`
