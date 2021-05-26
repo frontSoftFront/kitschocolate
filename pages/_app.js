@@ -1,10 +1,12 @@
-import React from 'react';
+import * as R from 'ramda';
 import Head from 'next/head';
 import 'react-toggle/style.css';
-import { useStore } from 'react-redux';
 import { useRouter } from 'next/router';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { useStore, useSelector } from 'react-redux';
+import { createFirestoreInstance } from 'redux-firestore';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 // firebase
 import firebase from '../firebase/client-app';
@@ -25,8 +27,15 @@ const WrappedApp = ({ Component, pageProps }) => {
   const rrfProps = {
     firebase,
     config: rrfConfig,
+    createFirestoreInstance,
     dispatch: store.dispatch
   };
+  const firebaseData = useSelector(
+    R.compose(
+      R.pick(['data', 'requested']),
+      R.pathOr({}, ['firebase'])
+    )
+  );
 
   return (
     <>
@@ -40,7 +49,7 @@ const WrappedApp = ({ Component, pageProps }) => {
       </Head>
       <GlobalStyles />
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <Component {...pageProps} router={router} />
+        <Component {...pageProps} router={router} firebaseData={firebaseData} />
       </ReactReduxFirebaseProvider>
     </>
   );

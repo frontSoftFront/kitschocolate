@@ -4,6 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 export default createGlobalStyle`
   body {
     font-size: 14px;
+    overflow: hidden;
     font-family: Montserrat;
 
     a {
@@ -12,6 +13,12 @@ export default createGlobalStyle`
 
     h2 {
       font-family: Caveat;
+    }
+
+    #__next {
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
     }
 
   }

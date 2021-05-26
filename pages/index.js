@@ -1,7 +1,4 @@
-import React from 'react';
 import * as R from 'ramda';
-import { useSelector } from 'react-redux';
-import { useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Layout from '../components/layout';
 import PricesSlider from '../components/slider/prices-slider';
@@ -84,7 +81,7 @@ const Content = ({ data, router, chocolates }) => {
           textAlign="center"
           color={Theme.colors.congoBrown}
         >
-          З’явився новий  шоколад
+          З’явився новий шоколад
         </SectionTitle>
         <Article my={50}>
           <ArticleTitle fontSize={25} color={Theme.colors.congoBrown}>
@@ -96,7 +93,9 @@ const Content = ({ data, router, chocolates }) => {
             fontWeight={300}
             color={Theme.colors.congoBrown}
           >
-            Недивлячись на цей непростий час, ми вирішили, що таким чином дамо змогу привітати один одного дистанційно, яскраво і шоколадно. Ми розробили 3 набори: 
+            Недивлячись на цей непростий час, ми вирішили, що таким чином дамо
+            змогу привітати один одного дистанційно, яскраво і шоколадно. Ми
+            розробили 3 набори:
           </Text>
         </Article>
         <HolidaySetSlider list={holidaySet} />
@@ -117,18 +116,17 @@ const Content = ({ data, router, chocolates }) => {
   );
 };
 
-const HomePage = ({ router }) => {
-  useFirebaseConnect(['home', 'chocolates']);
-  const home = useSelector(state =>
-    R.pathOr({}, ['firebase', 'data', 'home'], state)
-  );
-  const chocolates = useSelector(state =>
-    R.pathOr({}, ['firebase', 'data', 'chocolates'], state)
-  );
-  const loading = R.or(R.isEmpty(home), R.isEmpty(chocolates));
+const HomePage = ({ router, firebaseData }) => {
+  const home = R.pathOr({}, ['data', 'home'], firebaseData);
+  const chocolates = R.pathOr({}, ['data', 'chocolates'], firebaseData);
 
   return (
-    <Layout title="Home" router={router} loading={loading}>
+    <Layout
+      title="Home"
+      router={router}
+      firebaseData={firebaseData}
+      collections={['home', 'chocolates']}
+    >
       <Content data={home} router={router} chocolates={chocolates} />
     </Layout>
   );

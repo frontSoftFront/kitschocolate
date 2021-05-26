@@ -1,7 +1,5 @@
 import * as R from 'ramda';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
+import { useState } from 'react';
 // components
 import Layout from '../../../components/layout';
 import OrderItem from '../../../components/order-item';
@@ -90,17 +88,21 @@ const Content = ({ data, title, categoryName }) => {
   );
 };
 
-const CategoryPage = ({ router }) => {
-  // TODO: check how order of collections affects data on useFirebaseConnect
+const CategoryPage = ({ router, firebaseData }) => {
   const {
     query: { id }
   } = router;
-  useFirebaseConnect(['chocolates', `shop/categories/${id}`]);
-  const data = useSelector(state => R.path(['firebase', 'data'], state));
+
+  const data = R.path(['data'], firebaseData);
   const title = R.path(['shop', 'categories', id, 'title'], data);
 
   return (
-    <Layout title={title} router={router} loading={R.not(isLoaded(data.shop))}>
+    <Layout
+      title={title}
+      router={router}
+      firebaseData={firebaseData}
+      collections={['shop', 'chocolates']}
+    >
       <Content data={data} title={title} categoryName={id} />
     </Layout>
   );

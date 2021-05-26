@@ -8,8 +8,13 @@ import Theme from '../theme';
 import { Section, PageTitle } from '../ui';
 // ////////////////////////////////////////////////
 
-const OrderPage = ({ router }) => (
-  <Layout router={router} loading={false} title="Оформлення замовлення">
+const CheckoutPage = ({ router, firebaseData }) => (
+  <Layout
+    router={router}
+    firebaseData={firebaseData}
+    collections={['chocolates']}
+    title="Оформлення замовлення"
+  >
     <Section py={50} maxWidth={1100}>
       <PageTitle {...Theme.styles.pageTitle} mb={50}>
         Оформлення замовлення
@@ -19,4 +24,4 @@ const OrderPage = ({ router }) => (
   </Layout>
 );
 
-export default OrderPage;
+export default CheckoutPage;

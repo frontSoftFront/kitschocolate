@@ -1,5 +1,11 @@
 import * as R from 'ramda';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+// actions
+import actions from '../../store/actions';
+// helpers
+import { showToastifyMessage } from '../../helpers';
+// hooks
+import { useActions } from '../../hooks/use-actions';
 // theme
 import Theme from '../../theme';
 // ui
@@ -18,7 +24,8 @@ import {
 const weight = { small: 100, medium: 200 };
 
 const OrderItem = ({ orderItem }) => {
-  const { price, title, description } = orderItem;
+  const { id, imgUrl, price, title, description } = orderItem;
+
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(price);
   const [activeSize, setActiveSize] = useState('small');
@@ -37,6 +44,14 @@ const OrderItem = ({ orderItem }) => {
     setTotalPrice(price);
     setActiveSize('small');
   }, [orderItem]);
+  const addItemToBasket = useActions(actions.addItemToBasket);
+  const handleAddItemToBasket = () => {
+    if (R.equals(quantity, 0)) return;
+
+    handleChangeQuantity(1);
+    showToastifyMessage('success');
+    addItemToBasket({ id, title, price, imgUrl, quantity });
+  };
 
   return (
     <Section width="45%" my="auto">
@@ -152,6 +167,7 @@ const OrderItem = ({ orderItem }) => {
         width={170}
         height={50}
         textTransform="uppercase"
+        onClick={handleAddItemToBasket}
       >
         Add to cart
       </Button>

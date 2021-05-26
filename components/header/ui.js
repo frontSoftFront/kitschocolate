@@ -50,3 +50,19 @@ export const NavItem = styled(StyledLink)`
     font-weight: ${({ active }) => (active ? 'bold' : 'normal')};
   }
 `;
+
+export const BasketCount = styled.div`
+  width: 20px;
+  right: 10px;
+  height: 20px;
+  bottom: 10px;
+  display: flex;
+  font-size: 10px;
+  border-radius: 50%;
+  position: relative;
+  align-items: center;
+  background: #ef456a;
+  justify-content: center;
+  color: ${Theme.colors.white};
+  box-shadow: 0 0 5px rgb(0 0 0 / 28%);
+`;

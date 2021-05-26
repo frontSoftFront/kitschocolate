@@ -1,9 +1,13 @@
 import React from 'react';
 import * as R from 'ramda';
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
+import { useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Header from '../header';
 import Footer from '../footer';
+// helpers
+import * as H from '../../helpers';
 // ui
 import { Img, Flex, PageWrapper } from '../../ui';
 // //////////////////////////////////////////////////
@@ -19,8 +23,20 @@ const Loader = () => (
   </Flex>
 );
 
-const Layout = ({ title, router, loading, children }) => {
-  if (loading) return <Loader />;
+const Layout = ({ title, router, children, collections, firebaseData }) => {
+  const requested = R.pathOr({}, ['requested'], firebaseData);
+  const collectionsToConnect = R.filter(
+    item => R.not(R.path([item], requested)),
+    R.or(collections, [])
+  );
+  const loading = H.isNotEmpty(collectionsToConnect);
+
+  if (loading) {
+    useFirebaseConnect(collectionsToConnect);
+
+    return <Loader />;
+  }
+
   const { push, route } = router;
 
   const activeNavItem = R.equals(route);
@@ -32,6 +48,7 @@ const Layout = ({ title, router, loading, children }) => {
         <title>{R.or(title, 'kitschocolate')}</title>
       </Head>
       <Header
+        router={router}
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}
       />
@@ -40,6 +57,7 @@ const Layout = ({ title, router, loading, children }) => {
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}
       />
+      <ToastContainer />
     </PageWrapper>
   );
 };

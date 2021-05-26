@@ -5,6 +5,7 @@ import {
   width,
   opacity,
   fontSize,
+  maxWidth,
   textAlign,
   lineHeight,
   fontFamily,
@@ -18,6 +19,7 @@ export const Text = styled.div`
   ${width}
   ${opacity}
   ${fontSize}
+  ${maxWidth}
   ${textAlign}
   ${lineHeight}
   ${fontFamily}
@@ -26,4 +28,8 @@ export const Text = styled.div`
   cursor: ${({ cursor }) => cursor};
   word-break: ${({ wordBreak }) => wordBreak};
   text-decoration: ${({ textDecoration }) => textDecoration};
+  overflow: ${({ withEllipsis }) => (withEllipsis ? 'hidden' : 'initial')};
+  white-space: ${({ withEllipsis }) => (withEllipsis ? 'nowrap' : 'initial')};
+  text-overflow: ${({ withEllipsis }) =>
+    withEllipsis ? 'ellipsis' : 'initial'};
 `;
