@@ -5,6 +5,7 @@ import {
   right,
   space,
   width,
+  color,
   order,
   bottom,
   height,
@@ -29,6 +30,7 @@ export const Box = styled.div`
   ${space}
   ${width}
   ${order}
+  ${color}
   ${height}
   ${border}
   ${opacity}
@@ -56,4 +58,26 @@ export const RelativeBox = styled(Box)`
   ${bottom}
 
   position: relative;
+`;
+
+export const FixedBox = styled.div`
+  ${top}
+  ${left}
+  ${right}
+  ${space}
+  ${width}
+  ${bottom}
+
+  position: fixed;
+`;
+
+export const AbsoluteBox = styled.div`
+  ${top}
+  ${left}
+  ${right}
+  ${space}
+  ${width}
+  ${bottom}
+
+  position: absolute;
 `;

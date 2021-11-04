@@ -26,9 +26,9 @@ export default {
       color: colors.woodyBrown
     },
     pageTitle: {
-      fontSize: 45,
       textAlign: 'center',
       fontFamily: 'Caveat',
+      fontSize: [25, 35, 45],
       color: colors.congoBrown
     },
     formSectionTitle: {

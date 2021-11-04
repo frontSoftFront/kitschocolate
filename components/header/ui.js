@@ -61,8 +61,16 @@ export const BasketCount = styled.div`
   border-radius: 50%;
   position: relative;
   align-items: center;
-  background: #ef456a;
   justify-content: center;
   color: ${Theme.colors.white};
   box-shadow: 0 0 5px rgb(0 0 0 / 28%);
+  background: ${Theme.colors.mediumWood};
+`;
+
+export const StyledHeader = styled.header`
+  top: 0;
+  left: 0;
+  z-index: 100;
+  position: sticky;
+  background: ${Theme.colors.white};
 `;

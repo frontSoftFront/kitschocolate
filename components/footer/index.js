@@ -9,7 +9,7 @@ import Theme from '../../theme';
 // ui
 import { Box, Flex, Text, StyledLink } from '../../ui';
 // feature footer
-import { Nav, NavItem } from './ui';
+import { Nav, NavItem, StyledFooter } from './ui';
 // //////////////////////////////////////////////////
 
 const navItems = [
@@ -40,40 +40,69 @@ const navItems = [
   }
 ];
 
-const Footer = ({ activeNavItem, handleGoToHomePage }) => (
-  <footer>
-    <Icon
-      w={105}
-      h={137}
-      mx="auto"
-      iconName="logo"
-      handleClick={handleGoToHomePage}
-    />
-    <Flex
-      py={50}
-      mt={50}
-      alignItems="center"
-      borderTop="2px solid"
-      flexDirection="column"
-      borderColor={Theme.colors.quincy}
-    >
-      <Flex width="max-content">
-        <Nav gridGap="10px 150px" gridTemplateColumns="1fr 1fr">
-          {navItems.map(({ link, order, title }, index) => (
-            <Link key={index} href={link}>
-              <NavItem
-                order={order}
-                fontSize={18}
-                fontWeight={500}
-                color={Theme.colors.quincy}
-                opacity={activeNavItem(link) ? 1 : 0.5}
-              >
-                {title}
-              </NavItem>
-            </Link>
-          ))}
-        </Nav>
-        <Box ml={150}>
+const getNavItemStyles = {
+  fontSize: 18,
+  fontWeight: 500,
+  display: 'block',
+  color: Theme.colors.quincy
+};
+
+const Footer = ({ activeNavItem, handleGoToHomePage }) => {
+  const getOpacity = link => (activeNavItem(link) ? 1 : 0.5);
+
+  return (
+    <StyledFooter>
+      <Icon
+        iconName="logo"
+        width="max-content"
+        handleClick={handleGoToHomePage}
+      />
+      <Nav>
+        <div>
+          <Link href={C.ROUTE_HOME_PAGE}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_HOME_PAGE)}
+            >
+              Home
+            </NavItem>
+          </Link>
+          <Link href={C.ROUTE_HOME_PAGE}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_RECIPE_PAGE)}
+            >
+              Recipe
+            </NavItem>
+          </Link>
+          <Link href={C.ROUTE_HOME_PAGE}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_ABOUT_PAGE)}
+            >
+              About
+            </NavItem>
+          </Link>
+        </div>
+        <div>
+          <Link href={C.ROUTE_HOME_PAGE}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_PARTNERSHIP_PAGE)}
+            >
+              Partnership
+            </NavItem>
+          </Link>
+          <Link href={C.ROUTE_HOME_PAGE}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_PATH_SHOP)}
+            >
+              Shop
+            </NavItem>
+          </Link>
+        </div>
+        <div>
           <Text opacity={0.5} fontSize={18}>
             Contact Us
           </Text>
@@ -83,20 +112,22 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => (
           <Text opacity={0.5} fontSize={18} color={Theme.colors.quincy}>
             kit’s_chocolate@gmail.com
           </Text>
-        </Box>
-      </Flex>
-      <Flex my={50} width={200} justifyContent="space-between">
-        {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
-          <StyledLink key={index} href={link} target="_blank">
-            <Icon iconName={icon} />
-          </StyledLink>
-        ))}
-      </Flex>
-      <Text opacity={0.5} fontSize={18} color={Theme.colors.quincy}>
-        kit’schocolate.com © 2019
-      </Text>
-    </Flex>
-  </footer>
-);
+        </div>
+      </Nav>
+      <Box>
+        <Flex mb={30} width={200} justifyContent="space-between">
+          {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
+            <StyledLink key={index} href={link} target="_blank">
+              <Icon iconName={icon} />
+            </StyledLink>
+          ))}
+        </Flex>
+        <Text opacity={0.5} fontSize={18} color={Theme.colors.quincy}>
+          kit’schocolate.com © 2019
+        </Text>
+      </Box>
+    </StyledFooter>
+  );
+};
 
 export default Footer;

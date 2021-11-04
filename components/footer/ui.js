@@ -1,17 +1,29 @@
 import styled from 'styled-components';
-import { order, gridGap, gridTemplateColumns } from 'styled-system';
+// theme
+import Theme from '../../theme';
 // ui
 import { StyledLink } from '../../ui';
 // //////////////////////////////////////////////////
 
 export const Nav = styled.nav`
-  ${gridGap}
-  ${gridTemplateColumns}
-  display: ${({ display }) => display || 'grid'};
+  display: flex;
+  max-width: 630px;
+  width: calc(100% - 380px);
+  justify-content: space-between;
+`;
+
+export const StyledFooter = styled.footer`
+  display: flex;
+  padding: 50px 0;
+  margin-top: 50px;
+  align-items: center;
+  border-top: 2px solid;
+  justify-content: space-around;
+  border-color: ${Theme.colors.quincy};
 `;
 
 export const NavItem = styled(StyledLink)`
-  ${order}
+  display: block;
 
   &: hover {
     opacity: 1;

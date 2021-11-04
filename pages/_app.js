@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import 'react-toggle/style.css';
 import { useRouter } from 'next/router';

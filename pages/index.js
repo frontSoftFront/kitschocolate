@@ -32,7 +32,7 @@ const Content = ({ data, router, chocolates }) => {
 
   return (
     <>
-      <Box py={50} borderBottom="2px solid" borderColor={Theme.colors.quincy}>
+      <Box py={50}>
         <Flex justifyContent="space-between">
           <Section
             display="flex"
@@ -71,11 +71,7 @@ const Content = ({ data, router, chocolates }) => {
           />
         </Flex>
       </Box>
-      <Section
-        py={50}
-        borderBottom="2px solid"
-        borderColor={Theme.colors.quincy}
-      >
+      <Section py={50}>
         <SectionTitle
           fontSize={45}
           textAlign="center"

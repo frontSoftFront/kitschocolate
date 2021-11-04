@@ -19,6 +19,7 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <div id="basket" />
+          <div id="menu" />
           <NextScript />
         </body>
       </Html>

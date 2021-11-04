@@ -2,13 +2,18 @@ import * as R from 'ramda';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useFirebaseConnect } from 'react-redux-firebase';
 // components
+import Menu from '../menu';
 import Portal from '../portal';
 import Basket from '../basket';
+import ToggleIcon from '../menu/toggle-icon';
 // constants
 import * as C from '../../constants';
 // helpers
 import * as H from '../../helpers';
+// hooks
+import { useWindowSize } from '../../hooks/use-window-size';
 // icons
 import Icon from '../../icons';
 // theme
@@ -16,38 +21,21 @@ import Theme from '../../theme';
 // ui
 import { Flex, StyledLink } from '../../ui';
 // feature header
-import { Nav, NavItem, BasketCount } from './ui';
+import { Nav, NavItem, BasketCount, StyledHeader } from './ui';
 // //////////////////////////////////////////////////
-
-const navItems = [
-  {
-    title: 'Home',
-    link: C.ROUTE_HOME_PAGE
-  },
-  {
-    title: 'About',
-    link: C.ROUTE_ABOUT_PAGE
-  },
-  {
-    title: 'Shop',
-    link: C.ROUTE_PATH_SHOP
-  },
-  {
-    title: 'Recipe',
-    link: C.ROUTE_RECIPE_PAGE
-  },
-  {
-    title: 'Partnership',
-    link: C.ROUTE_PARTNERSHIP_PAGE
-  }
-];
 
 const BasketIcon = ({ router }) => {
   const [basketOpened, setBasketOpened] = useState(false);
-  const handleCloseBasket = () => setBasketOpened(false);
+  const handleCloseBasket = () => {
+    setBasketOpened(false);
+    document.getElementsByTagName('body')[0].style.overflow = 'initial';
+  };
   const basketList = useSelector(state => state.basket.basketList);
   const handleOpenBasket = () => {
-    if (H.isNotNilAndNotEmpty(basketList)) setBasketOpened(true);
+    if (H.isNotNilAndNotEmpty(basketList)) {
+      setBasketOpened(true);
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    }
   };
   let count = R.compose(
     R.sum,
@@ -58,7 +46,7 @@ const BasketIcon = ({ router }) => {
 
   return (
     <>
-      <Flex>
+      <Flex mb={10}>
         <Icon iconName="basket" handleClick={handleOpenBasket} />
         {R.gt(count, 0) && <BasketCount>{count}</BasketCount>}
       </Flex>
@@ -75,45 +63,119 @@ const BasketIcon = ({ router }) => {
   );
 };
 
-const Header = ({ router, activeNavItem, handleGoToHomePage }) => (
-  <header>
+const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
+  <StyledHeader>
     <Flex
       py={15}
-      alignItems="center"
+      alignItems="flex-end"
       borderBottom="1px solid"
       justifyContent="space-between"
       borderColor={Theme.colors.lighterGrey}
     >
       <Icon iconName="logo" handleClick={handleGoToHomePage} />
-      <Flex>
-        {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
-          <StyledLink mr={30} key={index} href={link} target="_blank">
-            <Icon iconName={icon} />
-          </StyledLink>
+      <Nav
+        mb={10}
+        mx="auto"
+        maxWidth={750}
+        width="calc(100% - 180px)"
+        justifyContent="space-between"
+      >
+        {C.NAV_ITEMS.map(({ link, title }, index) => (
+          <Link key={index} href={link}>
+            <NavItem
+              fontSize={[14, 14, 16]}
+              textTransform="uppercase"
+              active={activeNavItem(link)}
+            >
+              {title}
+            </NavItem>
+          </Link>
         ))}
-      </Flex>
+      </Nav>
       <BasketIcon router={router} />
     </Flex>
-    <Nav
-      mt={40}
-      mx="auto"
-      width={750}
-      maxWidth="90%"
-      justifyContent="space-between"
-    >
-      {navItems.map(({ link, title }, index) => (
-        <Link key={index} href={link}>
-          <NavItem
-            fontSize={[14, 14, 16]}
-            textTransform="uppercase"
-            active={activeNavItem(link)}
-          >
-            {title}
-          </NavItem>
-        </Link>
-      ))}
-    </Nav>
-  </header>
+  </StyledHeader>
 );
+
+const MobileHeader = ({
+  router,
+  mounted,
+  menuOpened,
+  firebaseData,
+  animationName,
+  activeNavItem,
+  handleToggleMenu,
+  handleGoToHomePage
+}) => {
+  if (R.not(R.path(['requested', 'shop'], firebaseData))) {
+    useFirebaseConnect('shop');
+  }
+
+  return (
+    <header>
+      <Flex py={15} alignItems="center" justifyContent="space-between">
+        <ToggleIcon menuOpened={menuOpened} action={handleToggleMenu} />
+        <Icon h={50} iconName="logo" handleClick={handleGoToHomePage} />
+        <Flex>
+          <BasketIcon router={router} />
+          <Flex ml={25}>
+            {mounted && (
+              <Portal selector="#menu">
+                <Menu
+                  router={router}
+                  data={firebaseData.data}
+                  activeNavItem={activeNavItem}
+                  animationName={animationName}
+                  handleToggleMenu={handleToggleMenu}
+                />
+              </Portal>
+            )}
+          </Flex>
+        </Flex>
+      </Flex>
+    </header>
+  );
+};
+
+const Header = ({
+  router,
+  firebaseData,
+  activeNavItem,
+  handleGoToHomePage
+}) => {
+  const { width } = useWindowSize();
+
+  const [mounted, setMounted] = useState(false);
+  const [menuOpened, toggleMenu] = useState(false);
+  const [animationName, setAnimationName] = useState('');
+  const handleToggleMenu = () => {
+    if (menuOpened) {
+      setAnimationName('slide-left');
+
+      toggleMenu(false);
+      setTimeout(() => setMounted(false), 400);
+    } else {
+      toggleMenu(true);
+      setMounted(true);
+      setAnimationName('slide-right');
+    }
+  };
+
+  const headerProps = {
+    router,
+    mounted,
+    toggleMenu,
+    menuOpened,
+    firebaseData,
+    animationName,
+    activeNavItem,
+    handleToggleMenu,
+    handleGoToHomePage
+  };
+
+  if (R.lt(width, 500)) return <MobileHeader {...headerProps} />;
+
+  return <DesktopHeader {...headerProps} />;
+};
 
 export default Header;

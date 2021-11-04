@@ -14,5 +14,6 @@ export const Flex = styled(Box)`
   ${alignItems}
   ${flexDirection}
   ${justifyContent}
+
   display: ${({ display }) => display || 'flex'};
 `;

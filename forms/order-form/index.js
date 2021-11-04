@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
+// helpers
+import { isNilOrEmpty } from '../../helpers';
 // theme
 import Theme from '../../theme';
 // ui
@@ -213,6 +215,38 @@ const PaymentTypes = ({ paymentType }) => (
   </Box>
 );
 
+const getClientFields = R.pick([
+  'call',
+  'email',
+  'lastName',
+  'warehouse',
+  'firstName',
+  'phoneNumber',
+  'paymentType',
+  'shippingCity'
+]);
+
+const defaultValues = {
+  email: '',
+  call: true,
+  lastName: '',
+  comments: '',
+  warehouse: '',
+  firstName: '',
+  phoneNumber: '',
+  shippingCity: '',
+  paymentType: 'cash',
+  loadedWarehouse: false
+};
+
+const getInitialValues = () => {
+  const clientFields = localStorage.getItem('clientFields');
+
+  if (isNilOrEmpty(clientFields)) return defaultValues;
+
+  return R.merge(defaultValues, JSON.parse(clientFields));
+};
+
 const OrderForm = ({ order }) => {
   const orderComposition = R.values(order);
   const total = R.compose(
@@ -225,26 +259,17 @@ const OrderForm = ({ order }) => {
     R.values,
     R.map(R.prop('quantity'))
   )(orderComposition);
+  const initialValues = getInitialValues();
 
   return (
     <Box>
       <Formik
-        validationSchema={validationSchema}
+        initialValues={initialValues}
         onSubmit={values => {
           console.log(values);
           alert('success');
-        }}
-        initialValues={{
-          email: '',
-          call: true,
-          lastName: '',
-          comments: '',
-          warehouse: '',
-          firstName: '',
-          phoneNumber: '',
-          shippingCity: '',
-          paymentType: 'cash',
-          loadedWarehouse: false
+          const clientFields = JSON.stringify(getClientFields(values));
+          localStorage.setItem('clientFields', clientFields);
         }}
       >
         {({ values }) => (
