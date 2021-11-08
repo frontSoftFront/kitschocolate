@@ -8,8 +8,8 @@ export { Article } from './article';
 export { StyledLink } from './link';
 export { Section } from './section';
 export { IconWrapper } from './icon';
-export { PageWrapper } from './wrappers';
 export { AnimatedBox } from './animations';
+export { PageWrapper, ModalWrapper } from './wrappers';
 export { PageTitle, SectionTitle, ArticleTitle } from './title';
 export { Box, FixedBox, AbsoluteBox, RelativeBox } from './box';
 // //////////////////////////////////////////////////

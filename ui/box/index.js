@@ -13,11 +13,14 @@ import {
   display,
   opacity,
   minWidth,
+  fontSize,
   maxWidth,
   overflowY,
   maxHeight,
+  boxShadow,
   borderTop,
   borderLeft,
+  fontWeight,
   background,
   borderColor,
   borderRight,
@@ -37,9 +40,12 @@ export const Box = styled.div`
   ${display}
   ${minWidth}
   ${maxWidth}
+  ${fontSize}
+  ${boxShadow}
   ${overflowY}
   ${maxHeight}
   ${borderTop}
+  ${fontWeight}
   ${background}
   ${borderLeft}
   ${borderRight}

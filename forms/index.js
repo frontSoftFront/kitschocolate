@@ -22,6 +22,10 @@ const TextField = ({ form, field, ...props }) => (
   <Input {...form} {...field} {...props} />
 );
 
+const NumberField = ({ form, field, ...props }) => (
+  <Input {...form} {...field} {...props} type="number" />
+);
+
 const TextAreaField = ({ form, field, ...props }) => (
   <TextArea {...form} {...field} {...props} />
 );
@@ -181,9 +185,48 @@ const WarehouseField = ({ form, field }) => {
   );
 };
 
+const SelectImages = ({ form, field }) => {
+  const {
+    values,
+    errors,
+    touched,
+    imgUrls,
+    setFieldValue,
+    setFieldTouched
+  } = form;
+
+  const shippingCity = R.path(['shippingCity', 'value'], values);
+  const disabled = isNilOrEmpty(shippingCity);
+  const fieldName = field.name;
+  const borderColor = renderBorderColor({ errors, touched, id: fieldName });
+  const selectStyles = {
+    control: styles => ({
+      ...styles,
+      borderColor,
+      fontSize: 12,
+      borderRadius: 'none'
+    })
+  };
+
+  return (
+    <Select
+      isClearable
+      name={fieldName}
+      options={imgUrls}
+      disabled={disabled}
+      inputId={fieldName}
+      styles={selectStyles}
+      value={values.warehouse}
+      onBlur={() => setFieldTouched(field.name, true)}
+      onChange={value => setFieldValue(field.name, value)}
+    />
+  );
+};
+
 export const FieldComponent = ({ id, name, value, type = 'text' }) => {
   const fieldTypes = {
     text: <Field id={id} name={id} component={TextField} />,
+    number: <Field id={id} name={id} component={NumberField} />,
     toggle: <Field id={id} name={id} component={ToggleField} />,
     textarea: <Field id={id} name={id} component={TextAreaField} />,
     warehouse: <Field id={id} name={id} component={WarehouseField} />,
@@ -194,8 +237,8 @@ export const FieldComponent = ({ id, name, value, type = 'text' }) => {
   return fieldTypes[type];
 };
 
-export const FieldGroup = ({ id, type, label }) => (
-  <Box mt={15}>
+export const FieldGroup = ({ mr, id, type, label, width }) => (
+  <Box mt={15} mr={mr} width={width}>
     <Label htmlFor={id}>{label}</Label>
     <InputWrapper>
       <FieldComponent id={id} type={type} />

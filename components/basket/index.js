@@ -13,9 +13,16 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Img, Box, Flex, Text, Input, Button, StyledLink } from '../../ui';
-// basket
-import { ModalWrapper } from './ui';
+import {
+  Img,
+  Box,
+  Flex,
+  Text,
+  Input,
+  Button,
+  StyledLink,
+  ModalWrapper
+} from '../../ui';
 // //////////////////////////////////////////////////
 
 const BasketItem = ({

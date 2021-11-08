@@ -1,6 +1,4 @@
 import * as R from 'ramda';
-// components
-import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
@@ -10,6 +8,8 @@ import { Img, Box, Text, Flex, Button } from '../../ui';
 const ItemComponent = ({
   px,
   item,
+  handleEditItem,
+  handleRemoveItem,
   handleGoToDetailPage,
   handleAddItemToBasket,
   itemType = 'chocolate',
@@ -75,6 +75,26 @@ const ItemComponent = ({
           >
             <Img mr="5px" width={15} height={15} src="./clock.svg" />
             {cookingTime} хв
+          </Flex>
+        )}
+        {R.equals(itemType, 'configurable') && (
+          <Flex mt={20} justifyContent="space-between">
+            <Button
+              {...Theme.styles.actionButton}
+              height={40}
+              width="45%"
+              onClick={() => handleEditItem(item)}
+            >
+              Edit
+            </Button>
+            <Button
+              {...Theme.styles.actionButton}
+              height={40}
+              width="45%"
+              onClick={() => handleRemoveItem(item)}
+            >
+              Remove
+            </Button>
           </Flex>
         )}
       </Box>

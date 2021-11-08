@@ -14,7 +14,7 @@ const makeSortedByOrderArrayFromObject = R.compose(
   R.values
 );
 
-const Content = ({ router, recipes, chocolateList }) => {
+const Content = ({ router, recipes }) => {
   const handleGoToDetailPage = id => router.push(`recipes/${id}`);
 
   return (
@@ -27,7 +27,7 @@ const Content = ({ router, recipes, chocolateList }) => {
       >
         {recipes.map((item, index) => (
           <ItemComponent
-            px={0}
+            px="0px"
             key={index}
             item={item}
             itemType="recipe"

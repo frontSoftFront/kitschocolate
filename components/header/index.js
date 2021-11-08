@@ -51,7 +51,7 @@ const BasketIcon = ({ router }) => {
         {R.gt(count, 0) && <BasketCount>{count}</BasketCount>}
       </Flex>
       {basketOpened && (
-        <Portal selector="#basket">
+        <Portal selector="#modal">
           <Basket
             router={router}
             basketList={basketList}
