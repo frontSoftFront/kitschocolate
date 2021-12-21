@@ -1,4 +1,6 @@
 import * as R from 'ramda';
+// components
+import ImageComponent from '../image';
 // theme
 import Theme from '../../theme';
 // ui
@@ -19,13 +21,14 @@ const ItemComponent = ({
 
   return (
     <Box cursor="pointer" px={R.or(px, 20)}>
-      <Img
+      <ImageComponent
+        width={300}
         src={imgUrl}
-        {...imgSize}
-        maxHeight={400}
+        height={400}
+        placeholder="blur"
         onClick={() => handleGoToDetailPage(id)}
       />
-      <Box mx="auto" mt={40} width="90%">
+      <Box mx="auto" mt={20} width="90%">
         <Text
           fontWeight={600}
           textAlign="center"
@@ -78,24 +81,38 @@ const ItemComponent = ({
           </Flex>
         )}
         {R.equals(itemType, 'configurable') && (
-          <Flex mt={20} justifyContent="space-between">
-            <Button
-              {...Theme.styles.actionButton}
-              height={40}
-              width="45%"
-              onClick={() => handleEditItem(item)}
+          <>
+            <Text
+              mt={10}
+              p="5px"
+              mx="auto"
+              fontWeight="bold"
+              width="max-content"
+              background="#D2C8D1"
+              fontSize={[16, 16, 18]}
+              color={Theme.colors.congoBrown}
             >
-              Edit
-            </Button>
-            <Button
-              {...Theme.styles.actionButton}
-              height={40}
-              width="45%"
-              onClick={() => handleRemoveItem(item)}
-            >
-              Remove
-            </Button>
-          </Flex>
+              {price} грн
+            </Text>
+            <Flex mt={20} justifyContent="space-between">
+              <Button
+                {...Theme.styles.actionButton}
+                height={40}
+                width="45%"
+                onClick={() => handleEditItem(item)}
+              >
+                Edit
+              </Button>
+              <Button
+                {...Theme.styles.actionButton}
+                height={40}
+                width="45%"
+                onClick={() => handleRemoveItem(item)}
+              >
+                Remove
+              </Button>
+            </Flex>
+          </>
         )}
       </Box>
     </Box>

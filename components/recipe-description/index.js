@@ -118,7 +118,7 @@ const RecipeDescription = props => {
                 <Flex>
                   <Text color={Theme.colors.lightGrey}>Weight:</Text>
                   <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
-                    {activeWeight} gr
+                    {R.multiply(activeWeight, quantity)} gr
                   </Text>
                 </Flex>
                 <Flex>

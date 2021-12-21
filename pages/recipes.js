@@ -2,11 +2,10 @@ import * as R from 'ramda';
 // components
 import Layout from '../components/layout';
 import ItemComponent from '../components/item';
-import PricesSlider from '../components/slider/prices-slider';
 // theme
 import Theme from '../theme';
 // ui
-import { Flex, Section, Grid, PageTitle } from '../ui';
+import { Section, Grid, PageTitle } from '../ui';
 // ////////////////////////////////////////////////
 
 const makeSortedByOrderArrayFromObject = R.compose(
@@ -19,7 +18,9 @@ const Content = ({ router, recipes }) => {
 
   return (
     <Section pt={[30, 40, 50]}>
-      <PageTitle mb={50} {...Theme.styles.pageTitle}>Рецепти</PageTitle>
+      <PageTitle mb={50} {...Theme.styles.pageTitle}>
+        Рецепти
+      </PageTitle>
       <Grid
         mt={50}
         gridGap="20px"
@@ -41,7 +42,6 @@ const Content = ({ router, recipes }) => {
 };
 
 const RecipesPage = ({ router, firebaseData }) => {
-  const chocolateList = R.pathOr({}, ['data', 'chocolates'], firebaseData);
   const recipes = R.compose(
     makeSortedByOrderArrayFromObject,
     R.pathOr({}, ['data', 'recipes'])
@@ -51,14 +51,10 @@ const RecipesPage = ({ router, firebaseData }) => {
     <Layout
       title="Recipes"
       router={router}
+      collections={['recipes']}
       firebaseData={firebaseData}
-      collections={['recipes', 'chocolates', 'ingredients']}
     >
-      <Content
-        router={router}
-        recipes={recipes}
-        chocolateList={chocolateList}
-      />
+      <Content router={router} recipes={recipes} />
     </Layout>
   );
 };

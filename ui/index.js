@@ -1,6 +1,7 @@
 export { Img } from './img';
 export { Flex } from './flex';
 export { Grid } from './grid';
+export { Span } from './span';
 export { Text } from './text';
 export { Input } from './input';
 export { Button } from './button';

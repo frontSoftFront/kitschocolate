@@ -1,27 +1,78 @@
 import * as R from 'ramda';
 import { useState } from 'react';
+import Select from 'react-select';
+import { useDispatch } from 'react-redux';
+import { useDropzone } from 'react-dropzone';
+import Dropzone from 'react-dropzone-uploader';
+import { useFirebase, actionTypes } from 'react-redux-firebase';
 // components
 import Portal from '../components/portal';
 import Layout from '../components/layout';
-import AddItem from '../components/add-item';
 import ItemComponent from '../components/item';
+import ImageComponent from '../components/image';
+// forms
+import ItemForm from '../forms/item-form';
+// helpers
+import {
+  notEquals,
+  isNotNilAndNotEmpty,
+  showToastifyMessage
+} from '../helpers';
+// icons
+import Icon from '../icons';
 // theme
 import Theme from '../theme';
 // ui
-import { Box, Grid, Flex, Button } from '../ui';
+import { Box, Text, Grid, Flex, Button, ModalWrapper } from '../ui';
 // ////////////////////////////////////////////////
+
+const Standard = ({ filter }) => {
+  const getUploadParams = () => {
+    return {
+      url: `https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/uploadFile?type=${filter}`
+    };
+  };
+
+  const handleChangeStatus = (props, status) => {
+    if (status === 'headers_received') {
+      showToastifyMessage(`${props.meta.name} uploaded!`);
+    } else if (status === 'aborted') {
+      showToastifyMessage(`${props.meta.name}, upload failed...`, 'error');
+    } else if (R.equals(status, 'removed')) {
+      debugger;
+    }
+  };
+
+  const handleSubmit = (files, allFiles) => {
+    debugger;
+    console.log(files.map(f => f.meta));
+    allFiles.forEach(f => f.remove());
+  };
+
+  return (
+    <Dropzone
+      getUploadParams={getUploadParams}
+      onChangeStatus={handleChangeStatus}
+      onSubmit={handleSubmit}
+      styles={{ dropzone: { minHeight: 200, maxHeight: 250 } }}
+    />
+  );
+};
 
 const tabs = [
   {
     title: 'Шоколадки',
-    collection: ['chocolates']
+    formType: 'chocolate',
+    collection: 'chocolates'
   },
   {
     title: 'Рецепти',
-    collection: ['recipes']
+    formType: 'recipe',
+    collection: 'recipes'
   },
   {
     title: 'Питання - Відповіді',
+    formType: 'questionsAnswers',
     collection: ['questions-answers', 'customer-questions']
   },
   {
@@ -34,9 +85,55 @@ const tabs = [
   }
 ];
 
+const ImagesComponent = ({ images, filter, setFilter }) => {
+  const filterOptions = [
+    { value: 'chocolates', label: 'Chocolates' },
+    { value: 'recipes', label: 'Recipes' },
+    { value: 'ingredients', label: 'Ingredients' }
+  ];
+  const filteredImages = R.pathOr([], [filter], images);
+  const imagesTypeIngredients = R.equals(filter, 'ingredients');
+  const imageHeight = imagesTypeIngredients ? 50 : 270;
+  const gridTemplateColumns = imagesTypeIngredients
+    ? 'repeat(auto-fill, minmax(50px, 1fr))'
+    : 'repeat(auto-fill, minmax(200px, 1fr))';
+
+  return (
+    <>
+      <Box width={300}>
+        <Select
+          options={filterOptions}
+          defaultValue={filterOptions[0]}
+          onChange={({ value }) => setFilter(value)}
+        />
+      </Box>
+      <Grid pt={20} gridGap="20px" gridTemplateColumns={gridTemplateColumns}>
+        {filteredImages.map((src, index) => (
+          <ImageComponent
+            src={src}
+            key={index}
+            width="100%"
+            placeholder="blur"
+            height={imageHeight}
+          />
+        ))}
+      </Grid>
+    </>
+  );
+};
+
 const Content = ({ router, firebaseData }) => {
+  const firebase = useFirebase();
+  const dispatch = useDispatch();
+
   const [opened, setOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [initialValues, setInitialValues] = useState({});
+  const [imagesFilter, setImagesFilter] = useState('chocolates');
+
+  const formType = R.path([activeTab, 'formType'], tabs);
+  const images = R.path(['data', 'images'], firebaseData);
+  const collection = R.path([activeTab, 'collection'], tabs);
   const chocolates = R.compose(
     R.sortBy(R.prop('order')),
     R.values,
@@ -47,11 +144,76 @@ const Content = ({ router, firebaseData }) => {
     R.values,
     R.pathOr([], ['data', 'recipes'])
   )(firebaseData);
-  const handleRemoveItem = item => {
-    console.log('item', item);
+  const optionsForSelect = R.merge(images, {
+    recipeOptions: recipes,
+    chocolateOptions: chocolates
+  });
+
+  const handleRemoveItem = async ({ id }) => {
+    const ref = firebase.database().ref(`${collection}/${id}`);
+    await ref
+      .remove()
+      .then(() => {
+        showToastifyMessage('removed');
+        dispatch({
+          type: actionTypes.REMOVE,
+          path: `${collection}.${id}`
+        });
+      })
+      .catch(() => showToastifyMessage(collection, 'error'));
+  };
+  const handleClose = () => {
+    setOpened(false);
+    setInitialValues({});
   };
   const handleEditItem = item => {
-    console.log('item', item);
+    setOpened(true);
+    setInitialValues(item);
+  };
+  const submitAction = async values => {
+    const imgUrl = R.or(
+      R.prop('imgUrl', values),
+      R.head(R.pathOr([], ['extraImages'], values))
+    );
+    const isEditMode = isNotNilAndNotEmpty(values.id);
+    if (isEditMode) {
+      const ref = firebase.database().ref(`${collection}/${values.id}`);
+      const data = R.assoc('imgUrl', imgUrl, values);
+
+      await ref
+        .update(data)
+        .then(() => {
+          handleClose();
+          showToastifyMessage('success');
+          dispatch({
+            data,
+            type: actionTypes.SET,
+            path: `${collection}.${values.id}`
+          });
+        })
+        .catch(() => showToastifyMessage(collection, 'error'));
+    } else {
+      const ref = firebase
+        .database()
+        .ref()
+        .child(collection)
+        .push();
+      const id = ref.key;
+      const data = R.merge(values, { id, imgUrl });
+
+      await ref
+        .set(data)
+        .then(() => {
+          handleClose();
+          showToastifyMessage('success');
+          dispatch({
+            data,
+            type: actionTypes.SET,
+            path: `${collection}.${id}`
+          });
+        })
+        .catch(() => showToastifyMessage(collection, 'error'));
+    }
   };
 
   return (
@@ -87,6 +249,7 @@ const Content = ({ router, firebaseData }) => {
         </Button>
       </Flex>
       <Grid
+        pt={10}
         gridGap="20px"
         gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
       >
@@ -117,18 +280,57 @@ const Content = ({ router, firebaseData }) => {
             />
           ))}
       </Grid>
+      {R.equals(activeTab, 4) && (
+        <ImagesComponent
+          images={images}
+          filter={imagesFilter}
+          setFilter={setImagesFilter}
+        />
+      )}
       {opened && (
         <Portal selector="#modal">
-          <AddItem
-            handleClose={() => setOpened(false)}
-          />
+          <ModalWrapper>
+            <Box
+              p={30}
+              width="90vw"
+              maxWidth={1000}
+              maxHeight="90vh"
+              overflowY="auto"
+              borderRadius="4px"
+              background={Theme.colors.white}
+              boxShadow="0 1px 3px rgb(0 0 0 / 30%)"
+            >
+              <Flex mb={20} alignItems="center" justifyContent="space-between">
+                <Text fontSize={25}>Add Item</Text>
+                <Icon
+                  width="25px"
+                  height="25px"
+                  iconName="close"
+                  handleClick={() => {
+                    setOpened(false);
+                    setInitialValues({});
+                  }}
+                />
+              </Flex>
+              {R.equals(activeTab, 4) && <Standard filter={imagesFilter} />}
+              {notEquals(activeTab, 4) && (
+                <ItemForm
+                  formType={formType}
+                  submitAction={submitAction}
+                  initialValues={initialValues}
+                  setInitialValues={setInitialValues}
+                  optionsForSelect={optionsForSelect}
+                />
+              )}
+            </Box>
+          </ModalWrapper>
         </Portal>
       )}
     </>
   );
 };
 
-const AboutPage = ({ router, firebaseData }) => (
+const ConstructorPage = ({ router, firebaseData }) => (
   <Layout
     title="About"
     router={router}
@@ -139,11 +341,12 @@ const AboutPage = ({ router, firebaseData }) => (
       'questions-answers',
       'customer-questions',
       'home',
-      'orders'
+      'orders',
+      'images'
     ]}
   >
     <Content router={router} firebaseData={firebaseData} />
   </Layout>
 );
 
-export default AboutPage;
+export default ConstructorPage;
