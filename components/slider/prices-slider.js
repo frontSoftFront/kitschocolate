@@ -1,9 +1,11 @@
+import is from 'is_js';
 import * as R from 'ramda';
 import Slider from 'react-slick';
 import React, { useRef } from 'react';
 // actions
 import actions from '../../store/actions';
 // components
+import Icon from '../../icons';
 import ItemComponent from '../item';
 // helpers
 import { showToastifyMessage } from '../../helpers';
@@ -17,10 +19,24 @@ import { Box, Text, Flex } from '../../ui';
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
-const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
+const PricesSlider = ({
+  mt,
+  list,
+  router,
+  categoryId,
+  categoryTitle,
+  handleEditItem,
+  handleRemoveItem,
+  hideActionButton
+}) => {
   const { push } = router;
 
   const slider = useRef(null);
+  const sliderSettings = R.assoc(
+    'infinite',
+    R.gt(R.length(4, list)),
+    priceSettings
+  );
   const addItemToBasket = useActions(actions.addItemToBasket);
   const handleAddItemToBasket = ({ id, title, price, imgUrl }) => {
     showToastifyMessage('success');
@@ -38,7 +54,7 @@ const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
 
   return (
     <Box mt={mt}>
-      <Flex px={20} mb={20} alignItems="center" justifyContent="space-between">
+      <Flex px={20} mb={20} alignItems="center">
         {categoryTitle && (
           <Text
             lineHeight={1.2}
@@ -46,13 +62,31 @@ const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
             fontSize={[18, 20, 25]}
             textDecoration="underline"
             color={Theme.colors.quincy}
-            onClick={() => push(`/category/${categoryName}`)}
+            onClick={() => push(`/category/${categoryId}`)}
           >
             {categoryTitle}
           </Text>
         )}
+        {is.function(handleEditItem) && (
+          <Icon
+            ml={15}
+            w={18}
+            h={18}
+            iconName="pencil"
+            handleClick={() => handleEditItem()}
+          />
+        )}
+        {is.function(handleRemoveItem) && (
+          <Icon
+            ml={15}
+            width={18}
+            height={18}
+            iconName="trash"
+            handleClick={handleRemoveItem}
+          />
+        )}
       </Flex>
-      <Slider ref={slider} {...priceSettings}>
+      <Slider ref={slider} {...sliderSettings}>
         {list.map((item, index) => {
           if (R.isNil(item.id)) return <div />;
 
@@ -60,6 +94,7 @@ const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
             <ItemComponent
               key={index}
               item={item}
+              hideActionButton={hideActionButton}
               handleGoToDetailPage={handleGoToDetailPage}
               handleAddItemToBasket={handleAddItemToBasket}
             />

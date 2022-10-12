@@ -76,6 +76,7 @@ export const holidaySetSettings = {
 
 export const priceSettings = {
   ...defaultSettings,
+  infinite: true,
   slidesToShow: 4,
   prevArrow: <PrevArrow />,
   nextArrow: <NextArrow />,

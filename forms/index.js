@@ -84,15 +84,18 @@ const SearchCityField = ({ form, field }) => {
       borderRadius: 'none'
     })
   };
+
   const handleOnInputChange = (value, { action }) => {
     if (R.equals(action, 'set-value')) {
       const newValues = R.merge(values, {
         warehouse: null,
         loadedWarehouse: false
       });
+
       setValues(newValues);
     }
   };
+
   const handleChange = value => {
     if (isNilOrEmpty(value)) {
       const newValues = R.merge(values, {
@@ -115,8 +118,9 @@ const SearchCityField = ({ form, field }) => {
       styles={selectStyles}
       onChange={handleChange}
       onInputChange={handleOnInputChange}
-      loadOptions={setDebounce(getCityOptions, 1000)}
+      loadOptions={setDebounce(getCityOptions, 400)}
       onBlur={() => setFieldTouched(fieldName, true)}
+      defaultValue={R.pathOr({}, [fieldName], values)}
     />
   );
 };
@@ -225,36 +229,6 @@ const SelectImages = ({ form, field }) => {
     />
   );
 };
-
-const some = {
-  control: styles => ({ ...styles, backgroundColor: 'white' }),
-  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    return {
-      ...styles,
-      background:
-        'url("https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fhome%2Frecurring_orders%2F3.png?alt=media&token=5e409de0-e8d5-48d8-bc13-5eeecad2856a")'
-    };
-  }
-};
-// multiValue: (styles, { data }) => {
-//   const color = chroma(data.color);
-//   return {
-//     ...styles,
-//     backgroundColor: color.alpha(0.1).css(),
-//   };
-// },
-// multiValueLabel: (styles, { data }) => ({
-//   ...styles,
-//   color: data.color,
-// }),
-// multiValueRemove: (styles, { data }) => ({
-//   ...styles,
-//   color: data.color,
-//   ':hover': {
-//     backgroundColor: data.color,
-//     color: 'white',
-//   },
-// }),
 
 const ReactSelect = ({
   form,

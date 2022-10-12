@@ -171,7 +171,9 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
       .child('orders')
       .push();
     const id = newDatabaseRouteRef.key;
-    await newDatabaseRouteRef.set(localBasket).then(() => {
+    const date = new Date().toLocaleDateString();
+    const data = { date, items: localBasket, status: 'PENDING' };
+    await newDatabaseRouteRef.set(data).then(() => {
       router.push(`/checkout/${id}`);
       setLocalBasket({});
       handleCloseBasket();

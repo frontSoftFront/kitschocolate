@@ -1,30 +1,175 @@
 import * as R from 'ramda';
 import { useState } from 'react';
 import Select from 'react-select';
-import { useDispatch } from 'react-redux';
-import { useDropzone } from 'react-dropzone';
 import Dropzone from 'react-dropzone-uploader';
-import { useFirebase, actionTypes } from 'react-redux-firebase';
 // components
 import Portal from '../components/portal';
 import Layout from '../components/layout';
 import ItemComponent from '../components/item';
 import ImageComponent from '../components/image';
+import PricesSlider from '../components/slider/prices-slider';
 // forms
 import ItemForm from '../forms/item-form';
 // helpers
 import {
   notEquals,
+  notContains,
   isNotNilAndNotEmpty,
   showToastifyMessage
 } from '../helpers';
+// hooks
+import { useConstructorActions } from '../hooks/use-constructor-actions';
 // icons
 import Icon from '../icons';
+// pages
+import { QuestionAnswers } from './questions-answers';
 // theme
 import Theme from '../theme';
 // ui
 import { Box, Text, Grid, Flex, Button, ModalWrapper } from '../ui';
 // ////////////////////////////////////////////////
+
+const makeSortedByOrderArrayFromObject = R.compose(
+  R.sortBy(R.prop('order')),
+  R.values
+);
+
+const OrderDescription = ({
+  call,
+  email,
+  comments,
+  lastName,
+  firstName,
+  warehouse,
+  paymentType,
+  phoneNumber,
+  shippingCity
+}) => (
+  <Box p="7px 10px">
+    <Box fontWeight="bold">Order Description</Box>
+    <Box mt="7px">
+      {shippingCity.label}, {warehouse.value}
+    </Box>
+    <Box mt="7px">
+      {lastName} {firstName}, {phoneNumber}, {email}
+    </Box>
+    {isNotNilAndNotEmpty(comments) && <Box mt="7px">{comments}</Box>}
+    <Box mt="7px">
+      Payment Type: {paymentType}, {call ? 'call' : 'not call'}
+    </Box>
+  </Box>
+);
+
+const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
+  const [openedOrders, setOpenedOrders] = useState([]);
+
+  const handleCompleteOrder = order =>
+    handleChangeOrderStatus(R.assoc('status', 'COMPLETED', order));
+  const handleDeliverOrder = order =>
+    handleChangeOrderStatus(R.assoc('status', 'DELIVERED', order));
+  const handlePendingOrder = order =>
+    handleChangeOrderStatus(R.assoc('status', 'PENDING', order));
+
+  return (
+    <>
+      {R.keys(orders).map((orderId, index) => {
+        const order = R.pathOr({}, [orderId], orders);
+
+        const { date, status, items, orderDescription = {} } = R.pathOr(
+          {},
+          [orderId],
+          orders
+        );
+
+        const openedOrder = R.contains(orderId, openedOrders);
+        const total = R.compose(
+          R.sum,
+          R.values,
+          R.map(R.prop('subtotal'))
+        )(R.or(items, []));
+
+        return (
+          <div key={index}>
+            <Flex my={10} alignItems="center">
+              <Text>Date: {date}</Text>
+              <Text mx={10}>Status: {status}</Text>
+              <Text mr={10}>Total: {total}</Text>
+              {R.not(openedOrder) && (
+                <Icon
+                  iconName="arrowDown"
+                  handleClick={() => setOpenedOrders(R.append(orderId))}
+                />
+              )}
+              {openedOrder && (
+                <Icon
+                  iconName="arrowUp"
+                  handleClick={() =>
+                    setOpenedOrders(R.filter(notEquals(orderId)))}
+                />
+              )}
+              {notEquals(status, 'PENDING') && (
+                <Button
+                  {...Theme.styles.actionButton}
+                  ml={10}
+                  height={20}
+                  width={100}
+                  onClick={() => handlePendingOrder({ ...order, orderId })}
+                >
+                  PENDING
+                </Button>
+              )}
+              {notEquals(status, 'COMPLETED') && (
+                <Button
+                  {...Theme.styles.actionButton}
+                  ml={10}
+                  height={20}
+                  width={100}
+                  onClick={() => handleCompleteOrder({ ...order, orderId })}
+                >
+                  COMPLETE
+                </Button>
+              )}
+              {notEquals(status, 'DELIVERED') && (
+                <Button
+                  {...Theme.styles.actionButton}
+                  ml={10}
+                  height={20}
+                  width={100}
+                  onClick={() => handleDeliverOrder({ ...order, orderId })}
+                >
+                  DELIVERED
+                </Button>
+              )}
+              <Icon
+                w={20}
+                h={20}
+                ml={10}
+                iconName="trash"
+                height="max-content"
+                handleClick={() => handleRemoveItem({ id: orderId })}
+              />
+            </Flex>
+            {openedOrder && (
+              <>
+                {isNotNilAndNotEmpty(orderDescription) && (
+                  <OrderDescription {...orderDescription} />
+                )}
+                <Box m="7px 10px" fontWeight="bold">
+                  Items:
+                </Box>
+                {R.values(items).map(({ id, title, quantity }) => (
+                  <Text p="7px 10px" key={id}>
+                    {title} - {quantity}
+                  </Text>
+                ))}
+              </>
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+};
 
 const Standard = ({ filter }) => {
   const getUploadParams = () => {
@@ -33,28 +178,24 @@ const Standard = ({ filter }) => {
     };
   };
 
-  const handleChangeStatus = (props, status) => {
+  const handleChangeStatus = ({ meta }, status) => {
     if (status === 'headers_received') {
-      showToastifyMessage(`${props.meta.name} uploaded!`);
+      showToastifyMessage(`${meta.name} uploaded!`);
     } else if (status === 'aborted') {
-      showToastifyMessage(`${props.meta.name}, upload failed...`, 'error');
+      showToastifyMessage(`${meta.name}, upload failed...`, 'error');
     } else if (R.equals(status, 'removed')) {
-      debugger;
+      showToastifyMessage(`${meta.name}, removed...`);
     }
-  };
-
-  const handleSubmit = (files, allFiles) => {
-    debugger;
-    console.log(files.map(f => f.meta));
-    allFiles.forEach(f => f.remove());
   };
 
   return (
     <Dropzone
       getUploadParams={getUploadParams}
       onChangeStatus={handleChangeStatus}
-      onSubmit={handleSubmit}
-      styles={{ dropzone: { minHeight: 200, maxHeight: 250 } }}
+      styles={{
+        dropzone: { minHeight: 200, maxHeight: 250 },
+        submitButtonContainerStyle: { display: 'none' }
+      }}
     />
   );
 };
@@ -73,15 +214,21 @@ const tabs = [
   {
     title: 'Питання - Відповіді',
     formType: 'questionsAnswers',
-    collection: ['questions-answers', 'customer-questions']
+    collection: 'questions-answers'
   },
   {
     title: 'Замовлення',
-    collection: ['orders']
+    collection: 'orders'
+  },
+  {
+    title: 'Магазин',
+    formType: 'category',
+    collection: 'shop/categories',
+    submitActionName: 'handleSendCategoryToApi'
   },
   {
     title: 'Images',
-    collection: ['orders']
+    collection: 'images'
   }
 ];
 
@@ -122,17 +269,64 @@ const ImagesComponent = ({ images, filter, setFilter }) => {
   );
 };
 
-const Content = ({ router, firebaseData }) => {
-  const firebase = useFirebase();
-  const dispatch = useDispatch();
+const CategoriesComponent = props => {
+  const {
+    router,
+    categories,
+    chocolateList,
+    handleEditItem,
+    handleRemoveItem
+  } = props;
 
+  const mappedCategories = R.compose(
+    R.map(category => {
+      const { chocolates } = category;
+
+      const mappedChocolates = R.map(
+        id => R.path([id], chocolateList),
+        chocolates
+      );
+
+      return R.assoc('mappedChocolates', mappedChocolates, category);
+    }),
+    makeSortedByOrderArrayFromObject
+  )(categories);
+
+  return (
+    <div>
+      {mappedCategories.map((category, index) => {
+        const { id, title, categoryName, mappedChocolates } = category;
+
+        return (
+          <PricesSlider
+            key={index}
+            categoryId={id}
+            router={router}
+            hideActionButton
+            mt={[30, 40, 50]}
+            categoryTitle={title}
+            list={mappedChocolates}
+            categoryName={categoryName}
+            handleEditItem={() => handleEditItem(category)}
+            handleRemoveItem={() => handleRemoveItem(category)}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+const Content = ({ router, firebaseData }) => {
   const [opened, setOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [initialValues, setInitialValues] = useState({});
   const [imagesFilter, setImagesFilter] = useState('chocolates');
 
   const formType = R.path([activeTab, 'formType'], tabs);
-  const images = R.path(['data', 'images'], firebaseData);
+  const images = R.map(
+    R.values,
+    R.pathOr([], ['data', 'images'], firebaseData)
+  );
   const collection = R.path([activeTab, 'collection'], tabs);
   const chocolates = R.compose(
     R.sortBy(R.prop('order')),
@@ -145,23 +339,9 @@ const Content = ({ router, firebaseData }) => {
     R.pathOr([], ['data', 'recipes'])
   )(firebaseData);
   const optionsForSelect = R.merge(images, {
-    recipeOptions: recipes,
-    chocolateOptions: chocolates
+    recipeOptions: R.values(recipes),
+    chocolateOptions: R.values(chocolates)
   });
-
-  const handleRemoveItem = async ({ id }) => {
-    const ref = firebase.database().ref(`${collection}/${id}`);
-    await ref
-      .remove()
-      .then(() => {
-        showToastifyMessage('removed');
-        dispatch({
-          type: actionTypes.REMOVE,
-          path: `${collection}.${id}`
-        });
-      })
-      .catch(() => showToastifyMessage(collection, 'error'));
-  };
   const handleClose = () => {
     setOpened(false);
     setInitialValues({});
@@ -170,51 +350,16 @@ const Content = ({ router, firebaseData }) => {
     setOpened(true);
     setInitialValues(item);
   };
-  const submitAction = async values => {
-    const imgUrl = R.or(
-      R.prop('imgUrl', values),
-      R.head(R.pathOr([], ['extraImages'], values))
-    );
-    const isEditMode = isNotNilAndNotEmpty(values.id);
-    if (isEditMode) {
-      const ref = firebase.database().ref(`${collection}/${values.id}`);
-      const data = R.assoc('imgUrl', imgUrl, values);
+  const constructorActions = useConstructorActions({
+    collection,
+    handleCloseModal: handleClose
+  });
 
-      await ref
-        .update(data)
-        .then(() => {
-          handleClose();
-          showToastifyMessage('success');
-          dispatch({
-            data,
-            type: actionTypes.SET,
-            path: `${collection}.${values.id}`
-          });
-        })
-        .catch(() => showToastifyMessage(collection, 'error'));
-    } else {
-      const ref = firebase
-        .database()
-        .ref()
-        .child(collection)
-        .push();
-      const id = ref.key;
-      const data = R.merge(values, { id, imgUrl });
-
-      await ref
-        .set(data)
-        .then(() => {
-          handleClose();
-          showToastifyMessage('success');
-          dispatch({
-            data,
-            type: actionTypes.SET,
-            path: `${collection}.${id}`
-          });
-        })
-        .catch(() => showToastifyMessage(collection, 'error'));
-    }
-  };
+  const {
+    handleRemoveItem,
+    handleChangeOrderStatus,
+    handleSendItemByCollectionToApi
+  } = constructorActions;
 
   return (
     <>
@@ -238,15 +383,17 @@ const Content = ({ router, firebaseData }) => {
             {title}
           </Box>
         ))}
-        <Button
-          {...Theme.styles.actionButton}
-          ml="auto"
-          height={39}
-          width={150}
-          onClick={() => setOpened(true)}
-        >
-          Add
-        </Button>
+        {notEquals(activeTab, 3) && (
+          <Button
+            {...Theme.styles.actionButton}
+            ml="auto"
+            height={39}
+            width={150}
+            onClick={() => setOpened(true)}
+          >
+            Add
+          </Button>
+        )}
       </Flex>
       <Grid
         pt={10}
@@ -280,7 +427,34 @@ const Content = ({ router, firebaseData }) => {
             />
           ))}
       </Grid>
+      {R.equals(activeTab, 2) && (
+        <QuestionAnswers
+          firebaseData={firebaseData}
+          handleEditItem={handleEditItem}
+          handleRemoveItem={handleRemoveItem}
+        />
+      )}
+      {R.equals(activeTab, 3) && (
+        <Orders
+          handleRemoveItem={handleRemoveItem}
+          handleChangeOrderStatus={handleChangeOrderStatus}
+          orders={R.pathOr([], ['data', 'orders'], firebaseData)}
+        />
+      )}
       {R.equals(activeTab, 4) && (
+        <CategoriesComponent
+          router={router}
+          handleEditItem={handleEditItem}
+          handleRemoveItem={handleRemoveItem}
+          chocolateList={R.pathOr({}, ['data', 'chocolates'], firebaseData)}
+          categories={R.pathOr(
+            [],
+            ['data', 'shop', 'categories'],
+            firebaseData
+          )}
+        />
+      )}
+      {R.equals(activeTab, 5) && (
         <ImagesComponent
           images={images}
           filter={imagesFilter}
@@ -295,10 +469,10 @@ const Content = ({ router, firebaseData }) => {
               width="90vw"
               maxWidth={1000}
               maxHeight="90vh"
-              overflowY="auto"
               borderRadius="4px"
               background={Theme.colors.white}
               boxShadow="0 1px 3px rgb(0 0 0 / 30%)"
+              overflowY={notContains(activeTab, [2, 4]) ? 'auto' : 'unset'}
             >
               <Flex mb={20} alignItems="center" justifyContent="space-between">
                 <Text fontSize={25}>Add Item</Text>
@@ -312,16 +486,16 @@ const Content = ({ router, firebaseData }) => {
                   }}
                 />
               </Flex>
-              {R.equals(activeTab, 4) && <Standard filter={imagesFilter} />}
-              {notEquals(activeTab, 4) && (
+              {notEquals(activeTab, 5) && (
                 <ItemForm
                   formType={formType}
-                  submitAction={submitAction}
                   initialValues={initialValues}
                   setInitialValues={setInitialValues}
                   optionsForSelect={optionsForSelect}
+                  submitAction={handleSendItemByCollectionToApi}
                 />
               )}
+              {R.equals(activeTab, 5) && <Standard filter={imagesFilter} />}
             </Box>
           </ModalWrapper>
         </Portal>
@@ -342,7 +516,8 @@ const ConstructorPage = ({ router, firebaseData }) => (
       'customer-questions',
       'home',
       'orders',
-      'images'
+      'images',
+      'shop'
     ]}
   >
     <Content router={router} firebaseData={firebaseData} />

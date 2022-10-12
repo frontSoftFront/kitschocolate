@@ -13,6 +13,7 @@ import { FieldGroup } from '..';
 import {
   fieldsMap,
   recipeFields,
+  categoryFields,
   chocolateFields,
   questionAnswerFields
 } from './field-settings';
@@ -21,6 +22,7 @@ import {
 const getFormikOptions = (formType = 'chocolate') => {
   const formTypes = {
     recipe: recipeFields,
+    category: categoryFields,
     chocolate: chocolateFields,
     questionsAnswers: questionAnswerFields
   };
@@ -54,24 +56,25 @@ const getFormikOptions = (formType = 'chocolate') => {
     R.pick(keys)
   )(fieldsMap);
 
-  return { fields, defaultValues };
+  const validationSchemaObject = R.map(
+    () => Yup.string().required('required'),
+    defaultValues
+  );
+
+  return { fields, defaultValues, validationSchemaObject };
 };
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Field is Required'),
-  price: Yup.string().required('Field is Required'),
-  quantity: Yup.string().required('Field is Required'),
-  description: Yup.string().required('Field is Required')
-});
-
-const getOptions = ({ options }, optionsForSelect) => {
+const getOptions = ({ options, useLabelAsTitle }, optionsForSelect) => {
   if (is.array(options)) return options;
 
   return R.map(
     item => ({
       value: R.pathOr(item, ['id'], item),
       title: R.pathOr(item, ['title'], item),
-      label: R.pathOr(item, ['imgUrl'], item)
+      label:
+        useLabelAsTitle === true
+          ? R.pathOr(item, ['title'], item)
+          : R.pathOr(item, ['imgUrl'], item)
     }),
     R.pathOr([], [options], optionsForSelect)
   );
@@ -83,13 +86,15 @@ const ItemForm = ({
   initialValues,
   optionsForSelect
 }) => {
-  const { fields, defaultValues } = getFormikOptions(formType);
+  const { fields, defaultValues, validationSchemaObject } = getFormikOptions(
+    formType
+  );
 
   return (
     <Formik
       {...getFormikOptions()}
-      // validationSchema={validationSchema}
       onSubmit={values => submitAction(values)}
+      validationSchema={Yup.object().shape(validationSchemaObject)}
       initialValues={R.merge(defaultValues, R.or(initialValues, {}))}
     >
       {({ values }) => (
@@ -114,6 +119,7 @@ const ItemForm = ({
               mt={25}
               height={50}
               width={300}
+              type="submit"
             >
               Add
             </Button>

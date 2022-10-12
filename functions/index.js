@@ -24,18 +24,14 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
         message: 'Not allowed!'
       });
     }
-    const busboy = new Busboy({ headers: req.headers });
+
     let uploadData = null;
+    const type = req?.query?.type || 'chocolates';
+    const busboy = new Busboy({ headers: req.headers });
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
       const filepath = path.join(os.tmpdir(), filename);
-      const type = req?.query?.type;
-      // const filepath =
-      //   type !== null && type !== undefined
-      //     ? `/images/${type}/${getFileName}`
-      //     : getFileName;
-      console.log('filepath', filepath);
-      uploadData = { file: filepath, type: mimetype };
+      uploadData = { filename, file: filepath, type: mimetype };
       file.pipe(fs.createWriteStream(filepath));
     });
 
@@ -44,6 +40,7 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
       return bucket
         .upload(uploadData.file, {
           uploadType: 'media',
+          destination: `images/${type}/${uploadData.filename}`,
           metadata: {
             metadata: {
               contentType: uploadData.type
@@ -51,6 +48,10 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
           }
         })
         .then(() => {
+          // eslint-disable-next-line
+          const url = `https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2F${type}%2F${uploadData.filename}?alt=media`;
+          const imagesRef = admin.database().ref(`images/${type}`);
+          imagesRef.push(url);
           return res.status(200).json({
             message: 'it worked!'
           });

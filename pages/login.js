@@ -1,4 +1,3 @@
-import { useState } from 'react';
 // forms
 import AuthForm from '../forms/auth-form';
 // theme

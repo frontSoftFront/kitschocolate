@@ -54,6 +54,7 @@ export const Box = styled.div`
   ${borderColor}
 
   cursor: ${({ cursor }) => cursor};
+  word-break: ${({ wordBreak }) => wordBreak};
   transition: ${({ transition }) => transition};
 `;
 

@@ -15,6 +15,7 @@ const ItemComponent = ({
   handleGoToDetailPage,
   handleAddItemToBasket,
   itemType = 'chocolate',
+  hideActionButton = false,
   imgSize = { height: '100%', width: '100%' }
 }) => {
   const { id, price, title, imgUrl, cookingTime } = item;
@@ -39,7 +40,7 @@ const ItemComponent = ({
         >
           {title}
         </Text>
-        {R.equals(itemType, 'chocolate') && (
+        {R.and(R.equals(itemType, 'chocolate'), R.not(hideActionButton)) && (
           <>
             <Text
               mt={10}

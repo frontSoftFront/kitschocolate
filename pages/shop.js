@@ -33,16 +33,19 @@ const Content = ({ router, categories, chocolateList }) => {
       <PageTitle {...Theme.styles.pageTitle}>
         Правдивий шоколад від какаобоба до плитки
       </PageTitle>
-      {mappedCategories.map(({ title, chocolates, categoryName }, index) => (
-        <PricesSlider
-          key={index}
-          router={router}
-          mt={[30, 40, 50]}
-          list={chocolates}
-          categoryTitle={title}
-          categoryName={categoryName}
-        />
-      ))}
+      {mappedCategories.map(
+        ({ id, title, chocolates, categoryName }, index) => (
+          <PricesSlider
+            key={index}
+            categoryId={id}
+            router={router}
+            mt={[30, 40, 50]}
+            list={chocolates}
+            categoryTitle={title}
+            categoryName={categoryName}
+          />
+        )
+      )}
     </Section>
   );
 };

@@ -29,9 +29,9 @@ const Ingredient = props => {
   const {
     id,
     type,
-    unit,
     title,
     quantity,
+    unit = 'gr.',
     recipeQuantity,
     handleGoToOrder,
     handleAddItemToBasket

@@ -149,6 +149,11 @@ export const fieldsMap = {
     type: 'reactSelect',
     options: [{ value: 1, label: 1 }, { value: 2, label: 2 }]
   },
+  order: {
+    id: 'order',
+    label: 'Order',
+    type: 'number'
+  },
   cookingTime: {
     type: 'number',
     id: 'cookingTime',
@@ -219,7 +224,7 @@ export const fieldsMap = {
         id: 'quantity',
         type: 'number',
         label: 'Quantity',
-        wrapperStyles: { mr: 20, width: 250 }
+        wrapperStyles: { width: 250 }
       }
     ]
   },
@@ -234,6 +239,19 @@ export const fieldsMap = {
         width: 'calc(100% - 40px)'
       }
     ]
+  },
+  chocolates: {
+    isMulti: true,
+    id: 'chocolates',
+    label: 'Chocolates',
+    type: 'reactSelect',
+    useLabelAsTitle: true,
+    options: 'chocolateOptions'
+  },
+  categoryName: {
+    type: 'text',
+    id: 'categoryName',
+    label: 'Category Name'
   }
 };
 
@@ -348,6 +366,37 @@ export const questionAnswerFields = [
     key: 'answer',
     wrapperStyles: {
       width: 'calc(50% - 100px)'
+    }
+  }
+];
+
+export const categoryFields = [
+  {
+    key: 'title',
+    wrapperStyles: {
+      mr: 20,
+      width: 180
+    }
+  },
+  {
+    key: 'categoryName',
+    wrapperStyles: {
+      mr: 20,
+      width: 180
+    }
+  },
+  {
+    key: 'order',
+    wrapperStyles: {
+      mr: 20,
+      width: 180
+    }
+  },
+  {
+    key: 'chocolates',
+    wrapperStyles: {
+      mr: 20,
+      width: 300
     }
   }
 ];

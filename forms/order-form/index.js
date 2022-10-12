@@ -1,8 +1,10 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { useFirebase, actionTypes } from 'react-redux-firebase';
 // helpers
-import { isNilOrEmpty } from '../../helpers';
+import { isNilOrEmpty, showToastifyMessage } from '../../helpers';
 // theme
 import Theme from '../../theme';
 // ui
@@ -247,8 +249,11 @@ const getInitialValues = () => {
   return R.merge(defaultValues, JSON.parse(clientFields));
 };
 
-const OrderForm = ({ order }) => {
-  const orderComposition = R.values(order);
+const OrderForm = ({ order, orderId }) => {
+  const firebase = useFirebase();
+  const dispatch = useDispatch();
+
+  const orderComposition = R.values(order.items);
   const total = R.compose(
     R.sum,
     R.values,
@@ -265,11 +270,26 @@ const OrderForm = ({ order }) => {
     <Box>
       <Formik
         initialValues={initialValues}
-        onSubmit={values => {
-          console.log(values);
-          alert('success');
+        validationSchema={validationSchema}
+        onSubmit={async values => {
           const clientFields = JSON.stringify(getClientFields(values));
           localStorage.setItem('clientFields', clientFields);
+          const ref = firebase.database().ref(`orders/${orderId}`);
+          const data = R.merge(order, {
+            status: 'COMPLETED',
+            orderDescription: values
+          });
+          await ref
+            .update(data)
+            .then(() => {
+              showToastifyMessage('success');
+              dispatch({
+                data,
+                type: actionTypes.SET,
+                path: `orders.${orderId}`
+              });
+            })
+            .catch(() => showToastifyMessage('orders', 'error'));
         }}
       >
         {({ values }) => (

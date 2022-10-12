@@ -1,3 +1,4 @@
+import is from 'is_js';
 import * as R from 'ramda';
 import { useState } from 'react';
 // components
@@ -12,12 +13,20 @@ import Theme from '../theme';
 import { Box, Img, Flex, Section, SectionTitle } from '../ui';
 // ////////////////////////////////////////////////
 
-const QuestionAnswer = ({ answer, question }) => {
+const QuestionAnswer = props => {
   const [opened, setOpened] = useState(false);
+
+  const {
+    id,
+    column,
+    answer,
+    question,
+    handleEditItem,
+    handleRemoveItem
+  } = props;
 
   return (
     <Box
-      width="45%"
       cursor="pointer"
       overflowY="hidden"
       maxHeight={opened ? 400 : 51}
@@ -29,13 +38,35 @@ const QuestionAnswer = ({ answer, question }) => {
         fontSize={16}
         fontWeight={500}
         alignItems="center"
+        wordBreak="break-all"
         borderBottom="1px solid"
         justifyContent="space-between"
         color={Theme.colors.woodyBrown}
         borderColor={Theme.colors.lightBlue}
       >
         {question}
-        <Icon iconName={opened ? 'arrowUp' : 'arrowDown'} />
+        <Flex>
+          <Icon iconName={opened ? 'arrowUp' : 'arrowDown'} />
+          {is.function(handleEditItem) && (
+            <Icon
+              w={16}
+              h={16}
+              ml={10}
+              iconName="pencil"
+              handleClick={() =>
+                handleEditItem({ id, column, answer, question })}
+            />
+          )}
+          {is.function(handleRemoveItem) && (
+            <Icon
+              w={16}
+              h={16}
+              ml={10}
+              iconName="trash"
+              handleClick={() => handleRemoveItem({ id })}
+            />
+          )}
+        </Flex>
       </Flex>
       <Box
         py={10}
@@ -50,62 +81,76 @@ const QuestionAnswer = ({ answer, question }) => {
   );
 };
 
-const Content = ({ firebaseData }) => {
+export const QuestionAnswers = ({
+  firebaseData,
+  handleEditItem,
+  handleRemoveItem
+}) => {
   const columns = R.compose(
     R.values,
     R.groupBy(R.prop('column')),
+    R.values,
     R.pathOr([], ['data', 'questions-answers'])
   )(firebaseData);
 
   return (
-    <>
-      <Section my={50}>
-        <Img
-          width="100%"
-          src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fquestions-answers%2F_MG_4971%201.png?alt=media&token=b516cdfe-95d4-4be3-adcb-7b82c294e644"
-        />
-      </Section>
-      <Section>
-        <SectionTitle
-          mb={50}
-          fontSize={32}
-          fontWeight={500}
-          textAlign="center"
-          fontFamily="Montserrat"
-          color={Theme.colors.woodyBrown}
-        >
-          We answer all questions
-        </SectionTitle>
-        <Flex
-          p={50}
-          borderRadius="16px"
-          background="#F8FBFC"
-          justifyContent="space-between"
-        >
-          {R.map(
-            column =>
-              column.map((item, index) => (
-                <QuestionAnswer key={index} {...item} />
-              )),
-            columns
-          )}
-        </Flex>
-      </Section>
-      <Section my={50} mx="auto" maxWidth={660}>
-        <SectionTitle
-          mb={50}
-          fontSize={32}
-          textAlign="center"
-          fontFamily="Montserrat"
-          color={Theme.colors.woodyBrown}
-        >
-          Do you have any question?
-        </SectionTitle>
-        <CustomerQuestionsForm />
-      </Section>
-    </>
+    <Flex
+      p={50}
+      borderRadius="16px"
+      background="#F8FBFC"
+      justifyContent="space-between"
+    >
+      {columns.map((column, columnIndex) => (
+        <Box width="45%" key={columnIndex}>
+          {R.values(column).map((item, index) => (
+            <QuestionAnswer
+              {...item}
+              key={index}
+              handleEditItem={handleEditItem}
+              handleRemoveItem={handleRemoveItem}
+            />
+          ))}
+        </Box>
+      ))}
+    </Flex>
   );
 };
+
+const Content = ({ firebaseData }) => (
+  <>
+    <Section my={50}>
+      <Img
+        width="100%"
+        src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fquestions-answers%2F_MG_4971%201.png?alt=media&token=b516cdfe-95d4-4be3-adcb-7b82c294e644"
+      />
+    </Section>
+    <Section>
+      <SectionTitle
+        mb={50}
+        fontSize={32}
+        fontWeight={500}
+        textAlign="center"
+        fontFamily="Montserrat"
+        color={Theme.colors.woodyBrown}
+      >
+        We answer all questions
+      </SectionTitle>
+      <QuestionAnswers firebaseData={firebaseData} />
+    </Section>
+    <Section my={50} mx="auto" maxWidth={660}>
+      <SectionTitle
+        mb={50}
+        fontSize={32}
+        textAlign="center"
+        fontFamily="Montserrat"
+        color={Theme.colors.woodyBrown}
+      >
+        Do you have any question?
+      </SectionTitle>
+      <CustomerQuestionsForm />
+    </Section>
+  </>
+);
 
 const QuestionsAnswersPage = ({ router, firebaseData }) => (
   <Layout
