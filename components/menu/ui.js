@@ -1,10 +1,24 @@
 import styled from 'styled-components';
+import {
+  space,
+  width,
+  color,
+  fontSize,
+  maxWidth,
+  alignItems,
+  flexDirection,
+  justifyContent
+} from 'styled-system';
+// theme
+import Theme from '../../theme';
+// ui
+import { StyledLink } from '../../ui';
 // //////////////////////////////////////////////////
 
-export const ModalWrapper = styled.div`
-  top: 0;
+export const MenuWrapper = styled.div`
   left: 0;
   right: 0;
+  top: 84px;
   bottom: 0;
   width: 100vw;
   height: 100vh;

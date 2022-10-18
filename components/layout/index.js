@@ -49,6 +49,7 @@ const Layout = ({ title, router, children, collections, firebaseData }) => {
       </Head>
       <Header
         router={router}
+        firebaseData={firebaseData}
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}
       />

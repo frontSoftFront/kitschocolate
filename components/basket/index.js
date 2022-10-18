@@ -13,9 +13,16 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Img, Box, Flex, Text, Input, Button, StyledLink } from '../../ui';
-// basket
-import { ModalWrapper } from './ui';
+import {
+  Img,
+  Box,
+  Flex,
+  Text,
+  Input,
+  Button,
+  StyledLink,
+  ModalWrapper
+} from '../../ui';
 // //////////////////////////////////////////////////
 
 const BasketItem = ({
@@ -164,7 +171,9 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
       .child('orders')
       .push();
     const id = newDatabaseRouteRef.key;
-    await newDatabaseRouteRef.set(localBasket).then(() => {
+    const date = new Date().toLocaleDateString();
+    const data = { date, items: localBasket, status: 'PENDING' };
+    await newDatabaseRouteRef.set(data).then(() => {
       router.push(`/checkout/${id}`);
       setLocalBasket({});
       handleCloseBasket();

@@ -1,10 +1,19 @@
 import styled from 'styled-components';
-import { space, order, height, border, position } from 'styled-system';
+import {
+  space,
+  order,
+  width,
+  height,
+  border,
+  display,
+  position
+} from 'styled-system';
 // //////////////////////////////////////////////////
 
 export const IconWrapper = styled.div`
   ${space}
   ${order}
+  ${width};
   ${border}
   ${height}
   ${position}
@@ -12,7 +21,6 @@ export const IconWrapper = styled.div`
   opacity: 0.9;
   user-select: none;
   cursor: ${({ cursor }) => cursor || 'pointer'};
-  width: ${({ width }) => width || 'max-content'};
 
   &:hover {
     opacity: 1;

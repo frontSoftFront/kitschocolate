@@ -29,20 +29,23 @@ const Content = ({ router, categories, chocolateList }) => {
   )(categories);
 
   return (
-    <Section py={50}>
+    <Section py={[30, 40, 50]}>
       <PageTitle {...Theme.styles.pageTitle}>
         Правдивий шоколад від какаобоба до плитки
       </PageTitle>
-      {mappedCategories.map(({ title, chocolates, categoryName }, index) => (
-        <PricesSlider
-          mt={50}
-          key={index}
-          router={router}
-          list={chocolates}
-          categoryTitle={title}
-          categoryName={categoryName}
-        />
-      ))}
+      {mappedCategories.map(
+        ({ id, title, chocolates, categoryName }, index) => (
+          <PricesSlider
+            key={index}
+            categoryId={id}
+            router={router}
+            mt={[30, 40, 50]}
+            list={chocolates}
+            categoryTitle={title}
+            categoryName={categoryName}
+          />
+        )
+      )}
     </Section>
   );
 };

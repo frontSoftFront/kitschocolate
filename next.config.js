@@ -7,5 +7,8 @@ module.exports = {
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
     FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID
+  },
+  images: {
+    domains: ['firebasestorage.googleapis.com']
   }
 };

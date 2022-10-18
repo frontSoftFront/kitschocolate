@@ -24,5 +24,6 @@ export const Section = styled.section`
   ${borderColor}
   ${flexDirection}
   ${justifyContent}
+
   display: ${({ display }) => display};
 `;

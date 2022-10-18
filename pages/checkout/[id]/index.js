@@ -23,7 +23,10 @@ const CheckoutPage = ({ router, firebaseData }) => {
         <PageTitle {...Theme.styles.pageTitle} mb={50}>
           Оформлення замовлення
         </PageTitle>
-        <OrderForm order={R.path(['data', 'orders', id], firebaseData)} />
+        <OrderForm
+          orderId={id}
+          order={R.path(['data', 'orders', id], firebaseData)}
+        />
       </Section>
     </Layout>
   );

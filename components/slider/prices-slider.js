@@ -1,3 +1,4 @@
+import is from 'is_js';
 import * as R from 'ramda';
 import Slider from 'react-slick';
 import React, { useRef } from 'react';
@@ -5,6 +6,7 @@ import React, { useRef } from 'react';
 import actions from '../../store/actions';
 // components
 import Icon from '../../icons';
+import ItemComponent from '../item';
 // helpers
 import { showToastifyMessage } from '../../helpers';
 // hooks
@@ -12,16 +14,29 @@ import { useActions } from '../../hooks/use-actions';
 // theme
 import Theme from '../../theme';
 // ui
-import { Img, Box, Text, Flex, Button } from '../../ui';
+import { Box, Text, Flex } from '../../ui';
 // slider
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
-const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
+const PricesSlider = ({
+  mt,
+  list,
+  router,
+  categoryId,
+  categoryTitle,
+  handleEditItem,
+  handleRemoveItem,
+  hideActionButton
+}) => {
   const { push } = router;
+
   const slider = useRef(null);
-  const next = () => slider.current.slickNext();
-  const prev = () => slider.current.slickPrev();
+  const sliderSettings = R.assoc(
+    'infinite',
+    R.gt(R.length(4, list)),
+    priceSettings
+  );
   const addItemToBasket = useActions(actions.addItemToBasket);
   const handleAddItemToBasket = ({ id, title, price, imgUrl }) => {
     showToastifyMessage('success');
@@ -33,74 +48,56 @@ const PricesSlider = ({ mt, list, router, categoryName, categoryTitle }) => {
       slider
     );
     if (swiped) return;
+
     push(`/shop/${id}`);
   };
 
   return (
     <Box mt={mt}>
-      <Flex px={20} mb={20} alignItems="center" justifyContent="space-between">
+      <Flex px={20} mb={20} alignItems="center">
         {categoryTitle && (
           <Text
-            fontSize={25}
             lineHeight={1.2}
             cursor="pointer"
+            fontSize={[18, 20, 25]}
             textDecoration="underline"
             color={Theme.colors.quincy}
-            onClick={() => push(`/category/${categoryName}`)}
+            onClick={() => push(`/category/${categoryId}`)}
           >
             {categoryTitle}
           </Text>
         )}
-        <Flex ml="auto" width="max-content">
-          <Icon iconName="arrow" handleClick={prev} />
-          <Icon ml={20} iconName="styledArrow" handleClick={next} />
-        </Flex>
+        {is.function(handleEditItem) && (
+          <Icon
+            ml={15}
+            w={18}
+            h={18}
+            iconName="pencil"
+            handleClick={() => handleEditItem()}
+          />
+        )}
+        {is.function(handleRemoveItem) && (
+          <Icon
+            ml={15}
+            width={18}
+            height={18}
+            iconName="trash"
+            handleClick={handleRemoveItem}
+          />
+        )}
       </Flex>
-      <Slider ref={slider} {...priceSettings}>
+      <Slider ref={slider} {...sliderSettings}>
         {list.map((item, index) => {
-          const { id, price, title, imgUrl } = item;
-
-          if (R.isNil(id)) return <div />;
+          if (R.isNil(item.id)) return <div />;
 
           return (
-            <Box px={20} key={index} cursor="pointer">
-              <Img
-                width="100%"
-                height="100%"
-                src={imgUrl}
-                maxHeight={400}
-                onClick={() => handleGoToDetailPage(id)}
-              />
-              <Box mx="auto" mt={40} width="90%">
-                <Text
-                  fontSize={18}
-                  fontWeight={600}
-                  textAlign="center"
-                  color={Theme.colors.congoBrown}
-                >
-                  {title}
-                </Text>
-                <Text
-                  mt={10}
-                  fontSize={18}
-                  fontWeight="bold"
-                  textAlign="center"
-                  color={Theme.colors.congoBrown}
-                >
-                  {price} грн
-                </Text>
-                <Button
-                  {...Theme.styles.actionButton}
-                  height={40}
-                  width="100%"
-                  m="20px auto 0 auto"
-                  onClick={() => handleAddItemToBasket(item)}
-                >
-                  <Img mr="7px" width={15} height={15} src="./shopping-cart.svg" />
-                  Add to card
-                </Button>
-              </Box>
-            </Box>
+            <ItemComponent
+              key={index}
+              item={item}
+              hideActionButton={hideActionButton}
+              handleGoToDetailPage={handleGoToDetailPage}
+              handleAddItemToBasket={handleAddItemToBasket}
+            />
           );
         })}
       </Slider>

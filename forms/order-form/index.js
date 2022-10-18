@@ -1,6 +1,10 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { useFirebase, actionTypes } from 'react-redux-firebase';
+// helpers
+import { isNilOrEmpty, showToastifyMessage } from '../../helpers';
 // theme
 import Theme from '../../theme';
 // ui
@@ -213,8 +217,43 @@ const PaymentTypes = ({ paymentType }) => (
   </Box>
 );
 
-const OrderForm = ({ order }) => {
-  const orderComposition = R.values(order);
+const getClientFields = R.pick([
+  'call',
+  'email',
+  'lastName',
+  'warehouse',
+  'firstName',
+  'phoneNumber',
+  'paymentType',
+  'shippingCity'
+]);
+
+const defaultValues = {
+  email: '',
+  call: true,
+  lastName: '',
+  comments: '',
+  warehouse: '',
+  firstName: '',
+  phoneNumber: '',
+  shippingCity: '',
+  paymentType: 'cash',
+  loadedWarehouse: false
+};
+
+const getInitialValues = () => {
+  const clientFields = localStorage.getItem('clientFields');
+
+  if (isNilOrEmpty(clientFields)) return defaultValues;
+
+  return R.merge(defaultValues, JSON.parse(clientFields));
+};
+
+const OrderForm = ({ order, orderId }) => {
+  const firebase = useFirebase();
+  const dispatch = useDispatch();
+
+  const orderComposition = R.values(order.items);
   const total = R.compose(
     R.sum,
     R.values,
@@ -225,26 +264,32 @@ const OrderForm = ({ order }) => {
     R.values,
     R.map(R.prop('quantity'))
   )(orderComposition);
+  const initialValues = getInitialValues();
 
   return (
     <Box>
       <Formik
+        initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={values => {
-          console.log(values);
-          alert('success');
-        }}
-        initialValues={{
-          email: '',
-          call: true,
-          lastName: '',
-          comments: '',
-          warehouse: '',
-          firstName: '',
-          phoneNumber: '',
-          shippingCity: '',
-          paymentType: 'cash',
-          loadedWarehouse: false
+        onSubmit={async values => {
+          const clientFields = JSON.stringify(getClientFields(values));
+          localStorage.setItem('clientFields', clientFields);
+          const ref = firebase.database().ref(`orders/${orderId}`);
+          const data = R.merge(order, {
+            status: 'COMPLETED',
+            orderDescription: values
+          });
+          await ref
+            .update(data)
+            .then(() => {
+              showToastifyMessage('success');
+              dispatch({
+                data,
+                type: actionTypes.SET,
+                path: `orders.${orderId}`
+              });
+            })
+            .catch(() => showToastifyMessage('orders', 'error'));
         }}
       >
         {({ values }) => (

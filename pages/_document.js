@@ -18,7 +18,8 @@ export default class MyDocument extends Document {
         <Head>{this.props.styleTags}</Head>
         <body>
           <Main />
-          <div id="basket" />
+          <div id="modal" />
+          <div id="menu" />
           <NextScript />
         </body>
       </Html>
