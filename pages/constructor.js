@@ -288,7 +288,7 @@ const CategoriesComponent = props => {
     chocolateList,
     handleEditItem,
     handleRemoveItem,
-    handleMarkAsHotCategory
+    handleMarkAsFavoriteCategory
   } = props;
 
   const mappedCategories = R.compose(
@@ -328,8 +328,8 @@ const CategoriesComponent = props => {
             list={mappedChocolates}
             categoryName={categoryName}
             handleEditItem={() => handleEditItem(category)}
-            handleMarkAsHotCategory={handleMarkAsHotCategory}
             handleRemoveItem={() => handleRemoveItem(category)}
+            handleMarkAsFavoriteCategory={handleMarkAsFavoriteCategory}
           />
         );
       })}
@@ -389,8 +389,8 @@ const Content = ({ router, firebaseData }) => {
     handleGetImages,
     handleRemoveItem,
     handleRemoveImage,
-    handleMarkAsHotCategory,
     handleChangeOrderStatus,
+    handleMarkAsFavoriteCategory,
     handleSendItemByCollectionToApi,
     handleCreateQuestionAnswerFromCustomerQuestion
   } = constructorActions;
@@ -489,7 +489,7 @@ const Content = ({ router, firebaseData }) => {
           categories={categories}
           handleEditItem={handleEditItem}
           handleRemoveItem={handleRemoveItem}
-          handleMarkAsHotCategory={handleMarkAsHotCategory}
+          handleMarkAsFavoriteCategory={handleMarkAsFavoriteCategory}
           chocolateList={R.pathOr({}, ['data', 'chocolates'], firebaseData)}
         />
       )}

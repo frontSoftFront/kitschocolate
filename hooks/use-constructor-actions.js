@@ -141,7 +141,7 @@ export const useConstructorActions = ({
   };
 
   // categories
-  const handleMarkAsHotCategory = async id => {
+  const handleMarkAsFavoriteCategory = async id => {
     const ref = firebase.database().ref(`shop/categories`);
     // const favorite = R.path([id, 'favorite'], categories);
     const data = R.map(item => {
@@ -207,7 +207,7 @@ export const useConstructorActions = ({
     handleRemoveItem,
     handleRemoveImage,
     handleChangeOrderStatus,
-    handleMarkAsHotCategory,
+    handleMarkAsFavoriteCategory,
     handleSendItemByCollectionToApi,
     handleCreateQuestionAnswerFromCustomerQuestion
   };

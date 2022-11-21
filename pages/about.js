@@ -8,10 +8,7 @@ import Theme from '../theme';
 // ui
 import {
   Img,
-  Box,
-  Flex,
   Text,
-  Button,
   Section,
   Article,
   PageTitle,
