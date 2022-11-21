@@ -20,6 +20,7 @@ const clientCredentials = {
 // Check that `window` is in scope for the analytics module!
 if (!firebase.apps.length) {
   firebase.initializeApp(clientCredentials);
+  firebase.storage();
   firebase.database();
   firebase.firestore();
   // firebase.functions(); // If you need it

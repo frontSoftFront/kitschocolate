@@ -2,17 +2,16 @@ import is from 'is_js';
 import * as R from 'ramda';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
-// helpers
-import { showToastifyMessage } from '../../helpers';
 // theme
 import Theme from '../../theme';
 // ui
-import { Box, Flex, Button } from '../../ui';
+import { Flex, Button } from '../../ui';
 // forms
 import { FieldGroup } from '..';
 import {
   fieldsMap,
   recipeFields,
+  imagesFields,
   categoryFields,
   chocolateFields,
   questionAnswerFields
@@ -22,6 +21,7 @@ import {
 const getFormikOptions = (formType = 'chocolate') => {
   const formTypes = {
     recipe: recipeFields,
+    images: imagesFields,
     category: categoryFields,
     chocolate: chocolateFields,
     questionsAnswers: questionAnswerFields
@@ -38,8 +38,10 @@ const getFormikOptions = (formType = 'chocolate') => {
   const defaultValues = R.compose(
     R.map(({ type, arrayFields }) => {
       if (R.equals(type, 'toggle')) return false;
+
       if (R.equals(type, 'array')) {
         let fieldArrayInitialValues = R.of('');
+
         if (R.gt(R.length(arrayFields), 1)) {
           fieldArrayInitialValues = R.compose(
             R.of,
@@ -82,9 +84,11 @@ const getOptions = ({ options, useLabelAsTitle }, optionsForSelect) => {
 
 const ItemForm = ({
   formType,
+  uploadUrl,
   submitAction,
   initialValues,
-  optionsForSelect
+  optionsForSelect,
+  useSubmitBtn = true
 }) => {
   const { fields, defaultValues, validationSchemaObject } = getFormikOptions(
     formType
@@ -106,13 +110,15 @@ const ItemForm = ({
                 {...item.wrapperStyles}
                 key={index}
                 values={values}
+                uploadUrl={uploadUrl}
                 options={getOptions(item, optionsForSelect)}
                 setOptionsForArray={field =>
-                  getOptions(field, optionsForSelect)}
+                  getOptions(field, optionsForSelect)
+                }
               />
             ))}
           </Flex>
-          <Flex>
+          {useSubmitBtn && (
             <Button
               {...Theme.styles.actionButton}
               ml="auto"
@@ -121,9 +127,9 @@ const ItemForm = ({
               width={300}
               type="submit"
             >
-              Add
+              Submit
             </Button>
-          </Flex>
+          )}
         </Form>
       )}
     </Formik>

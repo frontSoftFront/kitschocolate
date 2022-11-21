@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { space } from 'styled-system';
 // //////////////////////////////////////////////////
 
-export const PageWrapper = styled.div`
+export const PageWrapper = styled.main`
   ${space}
   max-width: 1400px;
 `;

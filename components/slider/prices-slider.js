@@ -23,11 +23,13 @@ const PricesSlider = ({
   mt,
   list,
   router,
+  favorite,
   categoryId,
   categoryTitle,
   handleEditItem,
   handleRemoveItem,
-  hideActionButton
+  hideActionButton,
+  handleMarkAsHotCategory
 }) => {
   const { push } = router;
 
@@ -83,6 +85,15 @@ const PricesSlider = ({
             height={18}
             iconName="trash"
             handleClick={handleRemoveItem}
+          />
+        )}
+        {is.function(handleMarkAsHotCategory) && (
+          <Icon
+            ml={15}
+            width={18}
+            height={18}
+            iconName={favorite ? 'heartFilled' : 'heart'}
+            handleClick={() => handleMarkAsHotCategory(categoryId)}
           />
         )}
       </Flex>

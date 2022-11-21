@@ -4,11 +4,17 @@ import Select from 'react-select';
 import Toggle from 'react-toggle';
 import { useState, useEffect } from 'react';
 import AsyncSelect from 'react-select/async';
+import Dropzone from 'react-dropzone-uploader';
 import { Field, FieldArray, ErrorMessage } from 'formik';
 // forms
 import { renderBorderColor } from './helpers';
 // helpers
-import { setDebounce, isNilOrEmpty, isNotNilAndNotEmpty } from '../helpers';
+import {
+  setDebounce,
+  isNilOrEmpty,
+  showToastifyMessage,
+  isNotNilAndNotEmpty
+} from '../helpers';
 // icons
 import Icon from '../icons';
 // ui
@@ -283,6 +289,35 @@ const ReactSelect = ({
   );
 };
 
+const ReactDropZone = ({ uploadUrl }) => {
+  const getUploadParams = () => {
+    return {
+      url: uploadUrl
+    };
+  };
+
+  const handleChangeStatus = ({ meta }, status) => {
+    if (status === 'headers_received') {
+      showToastifyMessage(`${meta.name} uploaded!`);
+    } else if (status === 'aborted') {
+      showToastifyMessage(`${meta.name}, upload failed...`, 'error');
+    } else if (R.equals(status, 'removed')) {
+      showToastifyMessage(`${meta.name}, removed...`);
+    }
+  };
+
+  return (
+    <Dropzone
+      getUploadParams={getUploadParams}
+      onChangeStatus={handleChangeStatus}
+      styles={{
+        dropzone: { minHeight: 200, maxHeight: 250 },
+        submitButtonContainerStyle: { display: 'none' }
+      }}
+    />
+  );
+};
+
 const ArrayField = ({
   push,
   form,
@@ -354,6 +389,7 @@ export const FieldComponent = ({
   value,
   options,
   isMulti,
+  uploadUrl,
   isSearchable,
   type = 'text',
   reactSelectComponents
@@ -365,6 +401,7 @@ export const FieldComponent = ({
     textarea: <Field id={id} name={id} component={TextAreaField} />,
     warehouse: <Field id={id} name={id} component={WarehouseField} />,
     searchCity: <Field id={id} name={id} component={SearchCityField} />,
+    reactDropzone: <Field component={ReactDropZone} uploadUrl={uploadUrl} />,
     radio: <Field id={id} name={name} value={value} component={RadioField} />,
     reactSelect: (
       <Field
@@ -392,6 +429,7 @@ export const FieldGroup = ({
   options,
   display,
   isMulti,
+  uploadUrl,
   setDisplay,
   arrayFields,
   isSearchable,
@@ -428,6 +466,7 @@ export const FieldGroup = ({
           type={type}
           options={options}
           isMulti={isMulti}
+          uploadUrl={uploadUrl}
           arrayFields={arrayFields}
           isSearchable={isSearchable}
           reactSelectComponents={reactSelectComponents}

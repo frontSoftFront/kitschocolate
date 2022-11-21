@@ -74,6 +74,11 @@ const setDisplay = (id, values, fieldType) => {
 };
 
 export const fieldsMap = {
+  images: {
+    id: 'images',
+    label: 'Images',
+    type: 'reactDropzone'
+  },
   active: {
     id: 'active',
     type: 'toggle',
@@ -93,6 +98,18 @@ export const fieldsMap = {
     id: 'quantity',
     type: 'number',
     label: 'Quantity'
+  },
+  unit: {
+    id: 'unit',
+    label: 'unit',
+    type: 'reactSelect',
+    options: [
+      { value: 'г', label: 'г' },
+      { value: 'мл', label: 'мл' },
+      { value: 'шт', label: 'шт' },
+      { value: 'ч.л', label: 'ч.л' },
+      { value: 'ст.л', label: 'ст.л' },
+    ]
   },
   extraImages: {
     isMulti: true,
@@ -224,8 +241,21 @@ export const fieldsMap = {
         id: 'quantity',
         type: 'number',
         label: 'Quantity',
-        wrapperStyles: { width: 250 }
-      }
+        wrapperStyles: { mr: 20, width: 125 }
+      },
+      {
+        id: 'unit',
+        label: 'Unit',
+        type: 'reactSelect',
+        wrapperStyles: { width: 125 },
+        options: [
+          { value: 'г', label: 'г' },
+          { value: 'мл', label: 'мл' },
+          { value: 'шт', label: 'шт' },
+          { value: 'ч.л', label: 'ч.л' },
+          { value: 'ст.л', label: 'ст.л' },
+        ]
+      },
     ]
   },
   direction: {
@@ -254,6 +284,15 @@ export const fieldsMap = {
     label: 'Category Name'
   }
 };
+
+export const imagesFields = [
+  {
+    key: 'images',
+    wrapperStyles: {
+      width: '100%'
+    }
+  }
+];
 
 export const chocolateFields = [
   {

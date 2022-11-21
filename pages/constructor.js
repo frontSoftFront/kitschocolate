@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import { useState } from 'react';
 import Select from 'react-select';
-import Dropzone from 'react-dropzone-uploader';
 // components
 import Portal from '../components/portal';
 import Layout from '../components/layout';
@@ -11,12 +10,7 @@ import PricesSlider from '../components/slider/prices-slider';
 // forms
 import ItemForm from '../forms/item-form';
 // helpers
-import {
-  notEquals,
-  notContains,
-  isNotNilAndNotEmpty,
-  showToastifyMessage
-} from '../helpers';
+import { notEquals, notContains, isNotNilAndNotEmpty } from '../helpers';
 // hooks
 import { useConstructorActions } from '../hooks/use-constructor-actions';
 // icons
@@ -171,34 +165,34 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
   );
 };
 
-const Standard = ({ filter }) => {
-  const getUploadParams = () => {
-    return {
-      url: `https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/uploadFile?type=${filter}`
-    };
-  };
+// const Standard = ({ filter }) => {
+//   const getUploadParams = () => {
+//     return {
+//       url: `https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/uploadFile?type=${filter}`
+//     };
+//   };
 
-  const handleChangeStatus = ({ meta }, status) => {
-    if (status === 'headers_received') {
-      showToastifyMessage(`${meta.name} uploaded!`);
-    } else if (status === 'aborted') {
-      showToastifyMessage(`${meta.name}, upload failed...`, 'error');
-    } else if (R.equals(status, 'removed')) {
-      showToastifyMessage(`${meta.name}, removed...`);
-    }
-  };
+//   const handleChangeStatus = ({ meta }, status) => {
+//     if (status === 'headers_received') {
+//       showToastifyMessage(`${meta.name} uploaded!`);
+//     } else if (status === 'aborted') {
+//       showToastifyMessage(`${meta.name}, upload failed...`, 'error');
+//     } else if (R.equals(status, 'removed')) {
+//       showToastifyMessage(`${meta.name}, removed...`);
+//     }
+//   };
 
-  return (
-    <Dropzone
-      getUploadParams={getUploadParams}
-      onChangeStatus={handleChangeStatus}
-      styles={{
-        dropzone: { minHeight: 200, maxHeight: 250 },
-        submitButtonContainerStyle: { display: 'none' }
-      }}
-    />
-  );
-};
+//   return (
+//     <Dropzone
+//       getUploadParams={getUploadParams}
+//       onChangeStatus={handleChangeStatus}
+//       styles={{
+//         dropzone: { minHeight: 200, maxHeight: 250 },
+//         submitButtonContainerStyle: { display: 'none' }
+//       }}
+//     />
+//   );
+// };
 
 const tabs = [
   {
@@ -228,18 +222,26 @@ const tabs = [
   },
   {
     title: 'Images',
+    formType: 'images',
     collection: 'images'
   }
 ];
 
-const ImagesComponent = ({ images, filter, setFilter }) => {
-  const filterOptions = [
-    { value: 'chocolates', label: 'Chocolates' },
-    { value: 'recipes', label: 'Recipes' },
-    { value: 'ingredients', label: 'Ingredients' }
-  ];
-  const filteredImages = R.pathOr([], [filter], images);
-  const imagesTypeIngredients = R.equals(filter, 'ingredients');
+const filterOptions = [
+  { value: 'chocolates', label: 'Chocolates' },
+  { value: 'recipes', label: 'Recipes' },
+  { value: 'ingredients', label: 'Ingredients' }
+];
+
+const ImagesComponent = ({
+  images,
+  imagesFilter,
+  setImagesFilter,
+  handleRemoveImage
+}) => {
+  const filteredImages = R.values(R.prop(imagesFilter, images));
+  const imagesTypeIngredients = R.equals(imagesFilter, 'ingredients');
+
   const imageHeight = imagesTypeIngredients ? 50 : 270;
   const gridTemplateColumns = imagesTypeIngredients
     ? 'repeat(auto-fill, minmax(50px, 1fr))'
@@ -251,18 +253,28 @@ const ImagesComponent = ({ images, filter, setFilter }) => {
         <Select
           options={filterOptions}
           defaultValue={filterOptions[0]}
-          onChange={({ value }) => setFilter(value)}
+          onChange={({ value }) => setImagesFilter(value)}
         />
       </Box>
       <Grid pt={20} gridGap="20px" gridTemplateColumns={gridTemplateColumns}>
-        {filteredImages.map((src, index) => (
-          <ImageComponent
-            src={src}
-            key={index}
-            width="100%"
-            placeholder="blur"
-            height={imageHeight}
-          />
+        {filteredImages.map(({ id, url, type, filename }) => (
+          <Grid key={id} gridTemplateColumns="1fr 20px">
+            <ImageComponent
+              src={url}
+              width="100%"
+              placeholder="blur"
+              height={imageHeight}
+            />
+            <Icon
+              width={25}
+              height={25}
+              right="25px"
+              iconName="trash"
+              background="white"
+              position="relative"
+              handleClick={() => handleRemoveImage({ id, type, filename })}
+            />
+          </Grid>
         ))}
       </Grid>
     </>
@@ -275,7 +287,8 @@ const CategoriesComponent = props => {
     categories,
     chocolateList,
     handleEditItem,
-    handleRemoveItem
+    handleRemoveItem,
+    handleMarkAsHotCategory
   } = props;
 
   const mappedCategories = R.compose(
@@ -295,7 +308,13 @@ const CategoriesComponent = props => {
   return (
     <div>
       {mappedCategories.map((category, index) => {
-        const { id, title, categoryName, mappedChocolates } = category;
+        const {
+          id,
+          title,
+          favorite,
+          categoryName,
+          mappedChocolates
+        } = category;
 
         return (
           <PricesSlider
@@ -304,10 +323,12 @@ const CategoriesComponent = props => {
             router={router}
             hideActionButton
             mt={[30, 40, 50]}
+            favorite={favorite}
             categoryTitle={title}
             list={mappedChocolates}
             categoryName={categoryName}
             handleEditItem={() => handleEditItem(category)}
+            handleMarkAsHotCategory={handleMarkAsHotCategory}
             handleRemoveItem={() => handleRemoveItem(category)}
           />
         );
@@ -323,25 +344,32 @@ const Content = ({ router, firebaseData }) => {
   const [imagesFilter, setImagesFilter] = useState('chocolates');
 
   const formType = R.path([activeTab, 'formType'], tabs);
+  const collection = R.path([activeTab, 'collection'], tabs);
+
   const images = R.map(
-    R.values,
+    R.compose(
+      R.map(R.prop('url')),
+      R.values
+    ),
     R.pathOr([], ['data', 'images'], firebaseData)
   );
-  const collection = R.path([activeTab, 'collection'], tabs);
   const chocolates = R.compose(
     R.sortBy(R.prop('order')),
     R.values,
     R.pathOr([], ['data', 'chocolates'])
   )(firebaseData);
+  const categories = R.pathOr([], ['data', 'shop', 'categories'], firebaseData);
   const recipes = R.compose(
     R.sortBy(R.prop('order')),
     R.values,
     R.pathOr([], ['data', 'recipes'])
   )(firebaseData);
+
   const optionsForSelect = R.merge(images, {
     recipeOptions: R.values(recipes),
     chocolateOptions: R.values(chocolates)
   });
+
   const handleClose = () => {
     setOpened(false);
     setInitialValues({});
@@ -350,16 +378,30 @@ const Content = ({ router, firebaseData }) => {
     setOpened(true);
     setInitialValues(item);
   };
+
   const constructorActions = useConstructorActions({
     collection,
+    categories,
     handleCloseModal: handleClose
   });
 
   const {
+    handleGetImages,
     handleRemoveItem,
+    handleRemoveImage,
+    handleMarkAsHotCategory,
     handleChangeOrderStatus,
-    handleSendItemByCollectionToApi
+    handleSendItemByCollectionToApi,
+    handleCreateQuestionAnswerFromCustomerQuestion
   } = constructorActions;
+
+  const getSubmitAction = values => {
+    if (R.propEq('collection', 'customer-questions', values)) {
+      handleCreateQuestionAnswerFromCustomerQuestion(values);
+    } else {
+      handleSendItemByCollectionToApi(values);
+    }
+  };
 
   return (
     <>
@@ -383,7 +425,7 @@ const Content = ({ router, firebaseData }) => {
             {title}
           </Box>
         ))}
-        {notEquals(activeTab, 3) && (
+        {notEquals(activeTab, 3) ? (
           <Button
             {...Theme.styles.actionButton}
             ml="auto"
@@ -393,7 +435,7 @@ const Content = ({ router, firebaseData }) => {
           >
             Add
           </Button>
-        )}
+        ) : null}
       </Flex>
       <Grid
         pt={10}
@@ -444,21 +486,19 @@ const Content = ({ router, firebaseData }) => {
       {R.equals(activeTab, 4) && (
         <CategoriesComponent
           router={router}
+          categories={categories}
           handleEditItem={handleEditItem}
           handleRemoveItem={handleRemoveItem}
+          handleMarkAsHotCategory={handleMarkAsHotCategory}
           chocolateList={R.pathOr({}, ['data', 'chocolates'], firebaseData)}
-          categories={R.pathOr(
-            [],
-            ['data', 'shop', 'categories'],
-            firebaseData
-          )}
         />
       )}
       {R.equals(activeTab, 5) && (
         <ImagesComponent
-          images={images}
-          filter={imagesFilter}
-          setFilter={setImagesFilter}
+          imagesFilter={imagesFilter}
+          setImagesFilter={setImagesFilter}
+          handleRemoveImage={handleRemoveImage}
+          images={R.pathOr([], ['data', 'images'], firebaseData)}
         />
       )}
       {opened && (
@@ -483,19 +523,20 @@ const Content = ({ router, firebaseData }) => {
                   handleClick={() => {
                     setOpened(false);
                     setInitialValues({});
+
+                    if (R.equals(activeTab, 5)) handleGetImages();
                   }}
                 />
               </Flex>
-              {notEquals(activeTab, 5) && (
-                <ItemForm
-                  formType={formType}
-                  initialValues={initialValues}
-                  setInitialValues={setInitialValues}
-                  optionsForSelect={optionsForSelect}
-                  submitAction={handleSendItemByCollectionToApi}
-                />
-              )}
-              {R.equals(activeTab, 5) && <Standard filter={imagesFilter} />}
+              <ItemForm
+                formType={formType}
+                initialValues={initialValues}
+                submitAction={getSubmitAction}
+                setInitialValues={setInitialValues}
+                optionsForSelect={optionsForSelect}
+                useSubmitBtn={notEquals(activeTab, 5)}
+                uploadUrl={`https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/uploadFile?type=${imagesFilter}`}
+              />
             </Box>
           </ModalWrapper>
         </Portal>

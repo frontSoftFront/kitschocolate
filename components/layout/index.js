@@ -43,7 +43,7 @@ const Layout = ({ title, router, children, collections, firebaseData }) => {
   const handleGoToHomePage = () => push('/');
 
   return (
-    <PageWrapper mx="auto" maxWidth={1400} px={[25, 25, 50, 75]}>
+    <PageWrapper mx="auto" px={[25, 25, 50, 75]}>
       <Head>
         <title>{R.or(title, 'kitschocolate')}</title>
       </Head>
