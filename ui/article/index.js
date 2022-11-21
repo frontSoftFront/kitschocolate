@@ -1,5 +1,12 @@
 import styled from 'styled-components';
-import { color, space, width, height } from 'styled-system';
+import {
+  color,
+  space,
+  width,
+  height,
+  fontSize,
+  textAlign
+} from 'styled-system';
 // //////////////////////////////////////////////////
 
 export const Article = styled.article`
@@ -7,4 +14,6 @@ export const Article = styled.article`
   ${width}
   ${color}
   ${height}
+  ${fontSize}
+  ${textAlign}
 `;

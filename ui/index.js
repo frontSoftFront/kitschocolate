@@ -11,6 +11,11 @@ export { Section } from './section';
 export { IconWrapper } from './icon';
 export { AnimatedBox } from './animations';
 export { PageWrapper, ModalWrapper } from './wrappers';
-export { PageTitle, SectionTitle, ArticleTitle } from './title';
 export { Box, FixedBox, AbsoluteBox, RelativeBox } from './box';
+export {
+  PageTitle,
+  SectionTitle,
+  ArticleTitle,
+  DescriptionTitle
+} from './title';
 // //////////////////////////////////////////////////

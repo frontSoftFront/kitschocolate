@@ -15,8 +15,7 @@ const ItemComponent = ({
   handleGoToDetailPage,
   handleAddItemToBasket,
   itemType = 'chocolate',
-  hideActionButton = false,
-  imgSize = { height: '100%', width: '100%' }
+  hideActionButton = false
 }) => {
   const { id, price, title, imgUrl, cookingTime } = item;
 

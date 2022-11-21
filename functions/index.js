@@ -50,11 +50,18 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
         .then(() => {
           // eslint-disable-next-line
           const url = `https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2F${type}%2F${uploadData.filename}?alt=media`;
-          const imagesRef = admin.database().ref(`images/${type}`);
-          imagesRef.push(url);
-          return res.status(200).json({
-            message: 'it worked!'
-          });
+          const imagesRef = admin
+            .database()
+            .ref(`images/${type}`)
+            .push();
+          const id = imagesRef.key;
+          imagesRef
+            .set({ id, url, type, filename: uploadData.filename })
+            .then(() => {
+              return res.status(200).json({
+                message: 'it worked!'
+              });
+            });
         })
         .catch(err => {
           res.status(500).json({

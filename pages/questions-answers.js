@@ -5,16 +5,18 @@ import { useState } from 'react';
 import Layout from '../components/layout';
 // forms
 import CustomerQuestionsForm from '../forms/customer-questions-form';
+// helpers
+import { isNotNilAndNotEmpty } from '../helpers';
 // icons
 import Icon from '../icons';
 // theme
 import Theme from '../theme';
 // ui
-import { Box, Img, Flex, Section, SectionTitle } from '../ui';
+import { Box, Img, Text, Flex, Section, SectionTitle } from '../ui';
 // ////////////////////////////////////////////////
 
 const QuestionAnswer = props => {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(R.pathOr(false, ['customer'], props));
 
   const {
     id,
@@ -44,7 +46,9 @@ const QuestionAnswer = props => {
         color={Theme.colors.woodyBrown}
         borderColor={Theme.colors.lightBlue}
       >
-        {question}
+        <Text maxWidth="90%" title={question} withEllipsis>
+          {question}
+        </Text>
         <Flex>
           <Icon iconName={opened ? 'arrowUp' : 'arrowDown'} />
           {is.function(handleEditItem) && (
@@ -54,7 +58,8 @@ const QuestionAnswer = props => {
               ml={10}
               iconName="pencil"
               handleClick={() =>
-                handleEditItem({ id, column, answer, question })}
+                handleEditItem({ id, column, answer, question })
+              }
             />
           )}
           {is.function(handleRemoveItem) && (
@@ -86,6 +91,10 @@ export const QuestionAnswers = ({
   handleEditItem,
   handleRemoveItem
 }) => {
+  const customerQuestions = R.path(
+    ['data', 'customer-questions'],
+    firebaseData
+  );
   const columns = R.compose(
     R.values,
     R.groupBy(R.prop('column')),
@@ -94,25 +103,67 @@ export const QuestionAnswers = ({
   )(firebaseData);
 
   return (
-    <Flex
-      p={50}
-      borderRadius="16px"
-      background="#F8FBFC"
-      justifyContent="space-between"
-    >
-      {columns.map((column, columnIndex) => (
-        <Box width="45%" key={columnIndex}>
-          {R.values(column).map((item, index) => (
-            <QuestionAnswer
-              {...item}
-              key={index}
-              handleEditItem={handleEditItem}
-              handleRemoveItem={handleRemoveItem}
-            />
-          ))}
-        </Box>
-      ))}
-    </Flex>
+    <>
+      <Flex
+        p={50}
+        borderRadius="16px"
+        background="#F8FBFC"
+        justifyContent="space-between"
+      >
+        {columns.map((column, columnIndex) => (
+          <Box width="45%" key={columnIndex}>
+            {R.values(column).map((item, index) => (
+              <QuestionAnswer
+                {...item}
+                key={index}
+                handleEditItem={handleEditItem}
+                handleRemoveItem={handleRemoveItem}
+              />
+            ))}
+          </Box>
+        ))}
+      </Flex>
+      {isNotNilAndNotEmpty(customerQuestions) ? (
+        <>
+          <Text my={20} fontSize={18} textAlign="center" fontWeight="bold">
+            Customer Questions
+          </Text>
+          <Flex
+            p={50}
+            flexWrap="wrap"
+            borderRadius="16px"
+            background="#F8FBFC"
+            justifyContent="space-between"
+          >
+            {R.keys(customerQuestions).map((id, index) => (
+              <Box key={index} width="45%">
+                <QuestionAnswer
+                  {...R.pathOr({}, [id], customerQuestions)}
+                  customer
+                  key={index}
+                  question={R.path([id, 'email'], customerQuestions)}
+                  answer={R.path([id, 'question'], customerQuestions)}
+                  handleEditItem={() =>
+                    handleEditItem({
+                      ...R.pathOr({}, [id], customerQuestions),
+                      id,
+                      collection: 'customer-questions',
+                      question: R.path([id, 'question'], customerQuestions),
+                    })
+                  }
+                  handleRemoveItem={() =>
+                    handleRemoveItem({
+                      id,
+                      collection: 'customer-questions'
+                    })
+                  }
+                />
+              </Box>
+            ))}
+          </Flex>
+        </>
+      ) : null}
+    </>
   );
 };
 

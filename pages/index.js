@@ -20,15 +20,43 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-const Content = ({ data, router, chocolates }) => {
-  const { images, recurringOrders } = data;
+export const FavoriteProducts = ({ shop, router, chocolates }) => {
+  const favoriteChocolates = R.compose(
+    R.map(id => R.prop(id, chocolates)),
+    R.pathOr([], ['chocolates']),
+    R.find(R.propEq('favorite', true)),
+    R.values,
+    R.pathOr([], ['categories'])
+  )(shop);
+
+  return (
+    <Section py={50}>
+      <SectionTitle
+        fontSize={45}
+        textAlign="center"
+        color={Theme.colors.congoBrown}
+      >
+        Найчастіше замовляють
+      </SectionTitle>
+      <Box mt={50}>
+        <PricesSlider router={router} list={favoriteChocolates} />
+      </Box>
+    </Section>
+  );
+};
+
+const Content = ({ shop, data, router, chocolates }) => {
+  const { images } = data;
   const { section1, holidaySet } = images;
   const { left, right } = section1;
 
-  const recurringOrderList = R.map(
-    id => R.path([id], chocolates),
-    recurringOrders
-  );
+  const favoriteChocolates = R.compose(
+    R.map(id => R.prop(id, chocolates)),
+    R.pathOr([], ['chocolates']),
+    R.find(R.propEq('favorite', true)),
+    R.values,
+    R.pathOr([], ['categories'])
+  )(shop);
 
   return (
     <>
@@ -96,24 +124,14 @@ const Content = ({ data, router, chocolates }) => {
         </Article>
         <HolidaySetSlider list={holidaySet} />
       </Section>
-      <Section py={50}>
-        <SectionTitle
-          fontSize={45}
-          textAlign="center"
-          color={Theme.colors.congoBrown}
-        >
-          Найчастіше замовляють
-        </SectionTitle>
-        <Box mt={50}>
-          <PricesSlider router={router} list={recurringOrderList} />
-        </Box>
-      </Section>
+      <FavoriteProducts shop={shop} router={router} chocolates={chocolates} />
     </>
   );
 };
 
 const HomePage = ({ router, firebaseData }) => {
   const home = R.pathOr({}, ['data', 'home'], firebaseData);
+  const shop = R.pathOr({}, ['data', 'shop'], firebaseData);
   const chocolates = R.pathOr({}, ['data', 'chocolates'], firebaseData);
 
   return (
@@ -121,9 +139,14 @@ const HomePage = ({ router, firebaseData }) => {
       title="Home"
       router={router}
       firebaseData={firebaseData}
-      collections={['home', 'chocolates']}
+      collections={['home', 'shop', 'chocolates']}
     >
-      <Content data={home} router={router} chocolates={chocolates} />
+      <Content
+        shop={shop}
+        data={home}
+        router={router}
+        chocolates={chocolates}
+      />
     </Layout>
   );
 };

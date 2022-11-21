@@ -3,6 +3,7 @@ import {
   space,
   width,
   height,
+  flexWrap,
   maxWidth,
   alignItems,
   borderLeft,
@@ -17,6 +18,7 @@ export const Section = styled.section`
   ${space}
   ${width}
   ${height}
+  ${flexWrap}
   ${maxWidth}
   ${alignItems}
   ${borderLeft}
