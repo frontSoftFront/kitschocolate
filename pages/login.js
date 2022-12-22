@@ -6,7 +6,7 @@ import Theme from '../theme';
 import { Box, Section, SectionTitle } from '../ui';
 // ////////////////////////////////////////////////
 
-const PartnershipPage = ({ router }) => (
+const Login = ({ router }) => (
   <Section
     width="100vw"
     height="100vh"
@@ -37,4 +37,4 @@ const PartnershipPage = ({ router }) => (
   </Section>
 );
 
-export default PartnershipPage;
+export default Login;

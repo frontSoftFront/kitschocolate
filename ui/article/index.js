@@ -5,7 +5,8 @@ import {
   width,
   height,
   fontSize,
-  textAlign
+  textAlign,
+  lineHeight
 } from 'styled-system';
 // //////////////////////////////////////////////////
 
@@ -16,4 +17,5 @@ export const Article = styled.article`
   ${height}
   ${fontSize}
   ${textAlign}
+  ${lineHeight}
 `;

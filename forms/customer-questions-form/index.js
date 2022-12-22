@@ -73,7 +73,7 @@ const CustomerQuestionsForm = () => {
             });
         }}
       >
-        {values => (
+        {() => (
           <Form>
             <FieldGroup
               id="email"
