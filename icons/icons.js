@@ -349,3 +349,20 @@ export const heartFilled = () => (
     />
   </svg>
 );
+
+export const checkMark = ({ w, h, color }) => (
+  <svg
+    fill="none"
+    width={w || 17}
+    height={h || 13}
+    viewBox="0 0 17 13"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      fill={color || 'black'}
+      d="M5.70711 9.29289L15 0L16.4142 1.41421L5.70711 12.1213L0 6.41421L1.41421 5L5.70711 9.29289Z"
+    />
+  </svg>
+);

@@ -3,6 +3,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const Busboy = require('busboy');
+const nodemailer = require('nodemailer');
 const cors = require('cors')({ origin: true });
 const functions = require('firebase-functions');
 
@@ -70,5 +71,49 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
         });
     });
     busboy.end(req.rawBody);
+  });
+});
+
+exports.contactUs = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    const { url, name, email, phone, description } = req.body;
+
+    const transporter = nodemailer.createTransport({
+      port: 465,
+      secure: true,
+      host: 'smtp.gmail.com',
+      auth: {
+        pass: 'bqtcpdmfjvyzbcrc',
+        user: 'greedisgood214@gmail.com'
+      }
+    });
+
+    const html = `
+      <h1>Contact Us</h1>
+      <div>
+        <div><b>Full Name</b>: ${name}</div>
+        <div><b>Phone</b>: ${phone}</div>
+        <div><b>Email</b>: ${email}</div>
+        <div><b>Company Url</b>: ${url}</div>
+        <div><b>Description</>: ${description}</div>
+      </div>
+    `;
+
+    const mailOptions = {
+      html,
+      subject: 'Partnership',
+      from: 'Kits Chocolate Website',
+      to: 'greedisgood214@gmail.com'
+    };
+
+    return transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('-----transporter-----', error, info);
+
+        return res.send(error.toString());
+      }
+
+      return res.send('Sended');
+    });
   });
 });

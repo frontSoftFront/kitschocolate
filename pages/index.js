@@ -50,14 +50,6 @@ const Content = ({ shop, data, router, chocolates }) => {
   const { section1, holidaySet } = images;
   const { left, right } = section1;
 
-  const favoriteChocolates = R.compose(
-    R.map(id => R.prop(id, chocolates)),
-    R.pathOr([], ['chocolates']),
-    R.find(R.propEq('favorite', true)),
-    R.values,
-    R.pathOr([], ['categories'])
-  )(shop);
-
   return (
     <>
       <Box py={50}>

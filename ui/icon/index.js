@@ -6,6 +6,7 @@ import {
   right,
   height,
   border,
+  display,
   position,
   background
 } from 'styled-system';
@@ -18,9 +19,9 @@ export const IconWrapper = styled.div`
   ${width};
   ${border}
   ${height}
+  ${display}
   ${position}
   ${background}
-
 
   opacity: 0.9;
   user-select: none;

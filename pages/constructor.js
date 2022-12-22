@@ -370,19 +370,23 @@ const Content = ({ router, firebaseData }) => {
     chocolateOptions: R.values(chocolates)
   });
 
-  const handleClose = () => {
+  const handleCloseModal = () => {
     setOpened(false);
     setInitialValues({});
+    document.getElementsByTagName('body')[0].style.overflow = 'initial';
   };
-  const handleEditItem = item => {
+
+  const handleOpenModal = item => {
+    if (isNotNilAndNotEmpty(item)) setInitialValues(item);
+
     setOpened(true);
-    setInitialValues(item);
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden';
   };
 
   const constructorActions = useConstructorActions({
     collection,
     categories,
-    handleCloseModal: handleClose
+    handleCloseModal
   });
 
   const {
@@ -431,7 +435,7 @@ const Content = ({ router, firebaseData }) => {
             ml="auto"
             height={39}
             width={150}
-            onClick={() => setOpened(true)}
+            onClick={handleOpenModal}
           >
             Add
           </Button>
@@ -449,7 +453,7 @@ const Content = ({ router, firebaseData }) => {
               key={index}
               item={item}
               itemType="configurable"
-              handleEditItem={handleEditItem}
+              handleEditItem={handleOpenModal}
               handleRemoveItem={handleRemoveItem}
               imgSize={{ width: '100%', height: 350 }}
               handleGoToDetailPage={id => router.push(`/shop/${id}`)}
@@ -462,7 +466,7 @@ const Content = ({ router, firebaseData }) => {
               key={index}
               item={item}
               itemType="configurable"
-              handleEditItem={handleEditItem}
+              handleEditItem={handleOpenModal}
               handleRemoveItem={handleRemoveItem}
               imgSize={{ width: '100%', height: 350 }}
               handleGoToDetailPage={id => router.push(`/recipes/${id}`)}
@@ -472,7 +476,7 @@ const Content = ({ router, firebaseData }) => {
       {R.equals(activeTab, 2) && (
         <QuestionAnswers
           firebaseData={firebaseData}
-          handleEditItem={handleEditItem}
+          handleEditItem={handleOpenModal}
           handleRemoveItem={handleRemoveItem}
         />
       )}
@@ -487,7 +491,7 @@ const Content = ({ router, firebaseData }) => {
         <CategoriesComponent
           router={router}
           categories={categories}
-          handleEditItem={handleEditItem}
+          handleEditItem={handleOpenModal}
           handleRemoveItem={handleRemoveItem}
           handleMarkAsFavoriteCategory={handleMarkAsFavoriteCategory}
           chocolateList={R.pathOr({}, ['data', 'chocolates'], firebaseData)}
@@ -521,8 +525,7 @@ const Content = ({ router, firebaseData }) => {
                   height="25px"
                   iconName="close"
                   handleClick={() => {
-                    setOpened(false);
-                    setInitialValues({});
+                    handleCloseModal();
 
                     if (R.equals(activeTab, 5)) handleGetImages();
                   }}

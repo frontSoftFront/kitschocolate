@@ -432,6 +432,7 @@ export const FieldGroup = ({
   uploadUrl,
   setDisplay,
   arrayFields,
+  fieldGroupMT,
   isSearchable,
   setOptionsForArray,
   reactSelectComponents
@@ -454,9 +455,9 @@ export const FieldGroup = ({
 
   return (
     <Box
-      mt={15}
       mr={mr}
       width={width}
+      mt={R.or(fieldGroupMT, 15)}
       display={is.function(setDisplay) ? setDisplay(id, values) : display}
     >
       <Label htmlFor={id}>{label}</Label>

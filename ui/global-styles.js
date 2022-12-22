@@ -5,16 +5,16 @@ export default createGlobalStyle`
   body {
     font-size: 14px;
     font-family: Montserrat;
-
-    a {
-      text-decoration: none;
-    }
-
-    h2 {
-      font-family: Caveat;
-    }
-
   }
+
+  a {
+    text-decoration: none;
+  }
+
+  h2 {
+    font-family: Caveat;
+  }
+
   * {
     border: 0;
     margin: 0;

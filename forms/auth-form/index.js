@@ -30,10 +30,10 @@ const AuthForm = ({ router }) => {
         validationSchema={validationSchema}
         onSubmit={({ loginId, password }) => {
           if (R.and(R.equals(loginId, 'admin'), R.equals(password, 'admin'))) {
-            return router.push('/constructor');
+            router.push('/constructor');
+          } else {
+            showToastifyMessage('bad credentials', 'error');
           }
-
-          showToastifyMessage('bad credentials', 'error');
         }}
       >
         {() => (
@@ -45,6 +45,7 @@ const AuthForm = ({ router }) => {
               mt={25}
               height={50}
               width="100%"
+              type="submit"
             >
               Sign In
             </Button>
