@@ -5,6 +5,7 @@ export { Span } from './span';
 export { Text } from './text';
 export { Input } from './input';
 export { Button } from './button';
+export { ListItem } from './list';
 export { Article } from './article';
 export { StyledLink } from './link';
 export { Section } from './section';

@@ -27,12 +27,13 @@ const ImageComponent = props => {
     return (
       <Image
         {...props}
+        alt={R.propOr('', 'alt', props)}
         blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
       />
     );
   }
 
-  return <Image {...props} />;
+  return <Image {...props} alt={R.propOr('', 'alt', props)} />;
 };
 
 export default ImageComponent;

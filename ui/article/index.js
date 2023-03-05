@@ -5,6 +5,7 @@ import {
   width,
   height,
   fontSize,
+  maxWidth,
   textAlign,
   lineHeight
 } from 'styled-system';
@@ -15,6 +16,7 @@ export const Article = styled.article`
   ${width}
   ${color}
   ${height}
+  ${maxWidth}
   ${fontSize}
   ${textAlign}
   ${lineHeight}

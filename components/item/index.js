@@ -4,7 +4,7 @@ import ImageComponent from '../image';
 // theme
 import Theme from '../../theme';
 // ui
-import { Img, Box, Text, Flex, Button } from '../../ui';
+import { Img, Box, Text, Flex, Button, RelativeBox } from '../../ui';
 // ////////////////////////////////////////////////
 
 const ItemComponent = ({
@@ -21,13 +21,14 @@ const ItemComponent = ({
 
   return (
     <Box cursor="pointer" px={R.or(px, 20)}>
-      <ImageComponent
-        width={300}
-        src={imgUrl}
-        height={400}
-        placeholder="blur"
-        onClick={() => handleGoToDetailPage(id)}
-      />
+      <RelativeBox width="100%" height={350}>
+        <ImageComponent
+          src={imgUrl}
+          layout="fill"
+          placeholder="blur"
+          onClick={() => handleGoToDetailPage(id)}
+        />
+      </RelativeBox>
       <Box mx="auto" mt={20} width="90%">
         <Text
           fontWeight={600}

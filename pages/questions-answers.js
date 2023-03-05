@@ -58,8 +58,7 @@ const QuestionAnswer = props => {
               ml={10}
               iconName="pencil"
               handleClick={() =>
-                handleEditItem({ id, column, answer, question })
-              }
+                handleEditItem({ id, column, answer, question })}
             />
           )}
           {is.function(handleRemoveItem) && (
@@ -89,7 +88,8 @@ const QuestionAnswer = props => {
 export const QuestionAnswers = ({
   firebaseData,
   handleEditItem,
-  handleRemoveItem
+  handleRemoveItem,
+  showCustomerQuestions
 }) => {
   const customerQuestions = R.path(
     ['data', 'customer-questions'],
@@ -123,7 +123,10 @@ export const QuestionAnswers = ({
           </Box>
         ))}
       </Flex>
-      {isNotNilAndNotEmpty(customerQuestions) ? (
+      {R.and(
+        is.truthy(showCustomerQuestions),
+        isNotNilAndNotEmpty(customerQuestions)
+      ) ? (
         <>
           <Text my={20} fontSize={18} textAlign="center" fontWeight="bold">
             Customer Questions
@@ -148,15 +151,13 @@ export const QuestionAnswers = ({
                       ...R.pathOr({}, [id], customerQuestions),
                       id,
                       collection: 'customer-questions',
-                      question: R.path([id, 'question'], customerQuestions),
-                    })
-                  }
+                      question: R.path([id, 'question'], customerQuestions)
+                    })}
                   handleRemoveItem={() =>
                     handleRemoveItem({
                       id,
                       collection: 'customer-questions'
-                    })
-                  }
+                    })}
                 />
               </Box>
             ))}

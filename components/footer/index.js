@@ -7,7 +7,7 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Box, Flex, Text, StyledLink } from '../../ui';
+import { Box, Img, Flex, Text, StyledLink } from '../../ui';
 // feature footer
 import { Nav, NavItem, StyledFooter } from './ui';
 // //////////////////////////////////////////////////
@@ -41,6 +41,7 @@ const navItems = [
 ];
 
 const getNavItemStyles = {
+  my: '5px',
   fontSize: 18,
   fontWeight: 500,
   display: 'block',
@@ -59,7 +60,7 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
       />
       <Nav>
         <div>
-          <Link href={C.ROUTE_HOME_PAGE}>
+          <Link legacyBehavior href={C.ROUTE_HOME_PAGE}>
             <NavItem
               {...getNavItemStyles}
               opacity={getOpacity(C.ROUTE_HOME_PAGE)}
@@ -67,7 +68,7 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
               Home
             </NavItem>
           </Link>
-          <Link href={C.ROUTE_HOME_PAGE}>
+          <Link legacyBehavior href={C.ROUTE_HOME_PAGE}>
             <NavItem
               {...getNavItemStyles}
               opacity={getOpacity(C.ROUTE_RECIPE_PAGE)}
@@ -75,7 +76,7 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
               Recipe
             </NavItem>
           </Link>
-          <Link href={C.ROUTE_HOME_PAGE}>
+          <Link legacyBehavior href={C.ROUTE_HOME_PAGE}>
             <NavItem
               {...getNavItemStyles}
               opacity={getOpacity(C.ROUTE_ABOUT_PAGE)}
@@ -85,7 +86,7 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
           </Link>
         </div>
         <div>
-          <Link href={C.ROUTE_HOME_PAGE}>
+          <Link legacyBehavior href={C.ROUTE_HOME_PAGE}>
             <NavItem
               {...getNavItemStyles}
               opacity={getOpacity(C.ROUTE_PARTNERSHIP_PAGE)}
@@ -93,12 +94,28 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
               Partnership
             </NavItem>
           </Link>
-          <Link href={C.ROUTE_HOME_PAGE}>
+          <Link legacyBehavior href={C.ROUTE_HOME_PAGE}>
             <NavItem
               {...getNavItemStyles}
               opacity={getOpacity(C.ROUTE_PATH_SHOP)}
             >
               Shop
+            </NavItem>
+          </Link>
+          <Link legacyBehavior href={C.ROUTE_QUESTIONS_ANSWERS_PAGE}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_QUESTIONS_ANSWERS_PAGE)}
+            >
+              Q/A
+            </NavItem>
+          </Link>
+          <Link legacyBehavior href={C.ROUTE_PATH_DELIVERY_AND_PAYMENT}>
+            <NavItem
+              {...getNavItemStyles}
+              opacity={getOpacity(C.ROUTE_PATH_DELIVERY_AND_PAYMENT)}
+            >
+              Delivery and Payment
             </NavItem>
           </Link>
         </div>
@@ -115,7 +132,7 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
         </div>
       </Nav>
       <Box>
-        <Flex mb={30} width={200} justifyContent="space-between">
+        <Flex mb={15} width={200} justifyContent="space-between">
           {C.ICON_GROUP_SOCIALS.map(({ icon, link }, index) => (
             <StyledLink key={index} href={link} target="_blank">
               <Icon iconName={icon} />
@@ -125,6 +142,12 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
         <Text opacity={0.5} fontSize={18} color={Theme.colors.quincy}>
           kit’schocolate.com © 2019
         </Text>
+        <Flex mt={15} height={20} justifyContent="space-around">
+          <Img height="100%" src="../../master-card.svg" />
+          <Img height="100%" src="../../visa.svg" />
+          <Img height="100%" src="../../apple-pay.svg" />
+          <Img height="100%" src="../../google-pay.svg" />
+        </Flex>
       </Box>
     </StyledFooter>
   );

@@ -48,17 +48,15 @@ const CustomerQuestionsForm = () => {
         initialValues={getInitialValues()}
         validationSchema={validationSchema}
         onSubmit={async ({ email, question }, { resetForm }) => {
-          const today = new Date();
-          const date = `${today.getDate()}-${today.getMonth() +
-            1}-${today.getFullYear()}`;
-          const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-          const newDatabaseRouteRef = firebase
+          const date = new Date().toLocaleString();
+          const ref = firebase
             .database()
             .ref()
             .child('customer-questions')
             .push();
-          await newDatabaseRouteRef
-            .set({ email, question, date: `${date} ${time}` })
+
+          await ref
+            .set({ date, email, question })
             .then(() => {
               showToastifyMessage('success');
               resetForm();
@@ -67,7 +65,7 @@ const CustomerQuestionsForm = () => {
             .catch(error => {
               showToastifyMessage('error', 'error');
               console.log(
-                '----------------OrderForm-------------------',
+                '----------------CustomerQuestionsForm-------------------',
                 error
               );
             });

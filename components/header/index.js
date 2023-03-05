@@ -81,7 +81,7 @@ const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
         justifyContent="space-between"
       >
         {C.NAV_ITEMS.map(({ link, title }, index) => (
-          <Link key={index} href={link}>
+          <Link key={index} href={link} legacyBehavior>
             <NavItem
               fontSize={[14, 14, 16]}
               textTransform="uppercase"

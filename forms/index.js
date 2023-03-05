@@ -53,7 +53,7 @@ const getCityOptions = (inputValue, callback) => {
   const options = {
     modelName: 'Address',
     calledMethod: 'getCities',
-    apiKey: '5f9d3f032e76729f83f5fa983bcbc032',
+    apiKey: '5edf2628e12e6fd5f9fecf7286047dd8', // NOTE: expires on 	26.02.2024 14:13:20
     methodProperties: {
       FindByString: inputValue
     }
@@ -136,7 +136,7 @@ const getWarehouseOptions = (CityRef, callback) => {
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: { CityRef },
-    apiKey: '5f9d3f032e76729f83f5fa983bcbc032'
+    apiKey: '5edf2628e12e6fd5f9fecf7286047dd8' // NOTE: expires on 	26.02.2024 14:13:20
   };
   const url =
     'https://api.novaposhta.ua/v2.0/json/AddressGeneral/getWarehouses';
@@ -192,44 +192,6 @@ const WarehouseField = ({ form, field }) => {
       styles={selectStyles}
       value={values.warehouse}
       options={warehouseOptions}
-      onBlur={() => setFieldTouched(field.name, true)}
-      onChange={value => setFieldValue(field.name, value)}
-    />
-  );
-};
-
-const SelectImages = ({ form, field }) => {
-  const {
-    values,
-    errors,
-    touched,
-    imgUrls,
-    setFieldValue,
-    setFieldTouched
-  } = form;
-
-  const shippingCity = R.path(['shippingCity', 'value'], values);
-  const disabled = isNilOrEmpty(shippingCity);
-  const fieldName = field.name;
-  const borderColor = renderBorderColor({ errors, touched, id: fieldName });
-  const selectStyles = {
-    control: styles => ({
-      ...styles,
-      borderColor,
-      fontSize: 12,
-      borderRadius: 'none'
-    })
-  };
-
-  return (
-    <Select
-      isClearable
-      name={fieldName}
-      options={imgUrls}
-      disabled={disabled}
-      inputId={fieldName}
-      styles={selectStyles}
-      value={values.warehouse}
       onBlur={() => setFieldTouched(field.name, true)}
       onChange={value => setFieldValue(field.name, value)}
     />

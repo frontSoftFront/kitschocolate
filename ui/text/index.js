@@ -14,7 +14,7 @@ import {
 } from 'styled-system';
 // //////////////////////////////////////////////////
 
-export const Text = styled.div`
+export const Text = styled.p`
   ${space}
   ${color}
   ${width}

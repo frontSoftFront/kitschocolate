@@ -31,6 +31,7 @@ const makeSortedByOrderArrayFromObject = R.compose(
 const OrderDescription = ({
   call,
   email,
+  shipTo,
   comments,
   lastName,
   firstName,
@@ -41,9 +42,7 @@ const OrderDescription = ({
 }) => (
   <Box p="7px 10px">
     <Box fontWeight="bold">Order Description</Box>
-    <Box mt="7px">
-      {shippingCity.label}, {warehouse.value}
-    </Box>
+    <Box mt="7px">{shipTo}</Box>
     <Box mt="7px">
       {lastName} {firstName}, {phoneNumber}, {email}
     </Box>
@@ -69,11 +68,13 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
       {R.keys(orders).map((orderId, index) => {
         const order = R.pathOr({}, [orderId], orders);
 
-        const { date, status, items, orderDescription = {} } = R.pathOr(
-          {},
-          [orderId],
-          orders
-        );
+        const {
+          items,
+          status,
+          createdDate,
+          acceptedDate,
+          orderDescription = {}
+        } = R.pathOr({}, [orderId], orders);
 
         const openedOrder = R.contains(orderId, openedOrders);
         const total = R.compose(
@@ -85,7 +86,11 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
         return (
           <div key={index}>
             <Flex my={10} alignItems="center">
-              <Text>Date: {date}</Text>
+              <Text>Created Date: {createdDate}</Text>
+              {isNotNilAndNotEmpty(acceptedDate) ? (
+                <Text>Accepted Date: ${acceptedDate}</Text>
+              ) : null}
+
               <Text mx={10}>Status: {status}</Text>
               <Text mr={10}>Total: {total}</Text>
               {R.not(openedOrder) && (
@@ -98,7 +103,8 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
                 <Icon
                   iconName="arrowUp"
                   handleClick={() =>
-                    setOpenedOrders(R.filter(notEquals(orderId)))}
+                    setOpenedOrders(R.filter(notEquals(orderId)))
+                  }
                 />
               )}
               {notEquals(status, 'PENDING') && (
@@ -261,7 +267,7 @@ const ImagesComponent = ({
           <Grid key={id} gridTemplateColumns="1fr 20px">
             <ImageComponent
               src={url}
-              width="100%"
+              width={300}
               placeholder="blur"
               height={imageHeight}
             />
@@ -475,6 +481,7 @@ const Content = ({ router, firebaseData }) => {
       </Grid>
       {R.equals(activeTab, 2) && (
         <QuestionAnswers
+          showCustomerQuestions
           firebaseData={firebaseData}
           handleEditItem={handleOpenModal}
           handleRemoveItem={handleRemoveItem}

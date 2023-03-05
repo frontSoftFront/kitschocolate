@@ -117,3 +117,79 @@ exports.contactUs = functions.https.onRequest((req, res) => {
     });
   });
 });
+
+exports.acceptOrder = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    const { items, total, orderId, acceptedDate, orderDescription } = req.body;
+
+    const {
+      call,
+      email,
+      shipTo,
+      comments,
+      lastName,
+      firstName,
+      paymentType,
+      phoneNumber
+    } = orderDescription;
+
+    const transporter = nodemailer.createTransport({
+      port: 465,
+      secure: true,
+      host: 'smtp.gmail.com',
+      auth: {
+        pass: 'bqtcpdmfjvyzbcrc',
+        user: 'greedisgood214@gmail.com'
+      }
+    });
+
+    const mappedItems = Object.values(items).map(
+      ({ title, quantity, subtotal }) =>
+        `${title} (${quantity}) - ${subtotal} грн.`
+    );
+
+    const html = `
+      <h1>Accept Order</h1>
+      <div>
+        <h2>Client Description</h2>
+        <div><b>Accepted Date</b>: ${acceptedDate}</div>
+        <div><b>Client Name</b>: ${lastName} ${firstName}</div>
+        <div><b>Phone</b>: ${phoneNumber}</div>
+        <div><b>Email</b>: ${email}</div>
+        <div><b>Ship to</b>: ${shipTo}</div>
+        <div><b>Payment Type<b>: ${paymentType}</div>
+        <div><b>Call</>: ${call}</div>
+        <div><b>Comments</>: ${comments}</div>
+      </div>
+      <div>
+        <h2>Items:</h2>
+        <div>${mappedItems.join('<br />')}</div>
+      </div>
+      <h2>Total: ${total} грн.</h2>
+    `;
+
+    const mailOptions = {
+      html,
+      subject: 'Order Confirmation',
+      to: 'greedisgood214@gmail.com',
+      from: 'Kits Chocolate Website'
+    };
+
+    return transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('-----transporter-----', error, info);
+
+        return res.send(error.toString());
+      }
+
+      const ref = admin.database().ref(`orders/${orderId}`);
+
+      ref
+        .update(req.body)
+        .then(res.send('Success'))
+        .catch(firebaseError => res.send(`'Error' - ${firebaseError}`));
+
+      return res.send('Sended');
+    });
+  });
+});

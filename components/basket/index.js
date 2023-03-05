@@ -170,9 +170,11 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
       .ref()
       .child('orders')
       .push();
+
     const id = newDatabaseRouteRef.key;
-    const date = new Date().toLocaleDateString();
-    const data = { date, items: localBasket, status: 'PENDING' };
+    const createdDate = new Date().toLocaleString();
+    const data = { createdDate, items: localBasket, status: 'PENDING' };
+
     await newDatabaseRouteRef.set(data).then(() => {
       router.push(`/checkout/${id}`);
       setLocalBasket({});
@@ -182,6 +184,7 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
 
   useEffect(() => {
     setGlobalBasketList(localBasket);
+
     if (H.isNilOrEmpty(localBasket)) handleCloseBasket();
   }, [localBasket]);
 

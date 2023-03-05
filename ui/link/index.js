@@ -27,5 +27,6 @@ export const StyledLink = styled.a`
   text-transform: ${({ textTransform }) => textTransform};
   &:hover {
     color: ${({ hoveredColor }) => hoveredColor};
+    text-decoration: ${({ hoveredTextDecoration }) => hoveredTextDecoration};
   }
 `;
