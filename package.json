@@ -33,6 +33,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",
     "styled-system": "^5.1.5",
+    "utf8": "^3.0.0",
     "yup": "^0.29.1"
   },
   "devDependencies": {

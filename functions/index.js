@@ -3,6 +3,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const Busboy = require('busboy');
+const WayForPay = require('wayforpay');
 const nodemailer = require('nodemailer');
 const cors = require('cors')({ origin: true });
 const functions = require('firebase-functions');
@@ -16,6 +17,8 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://kitschocolate-bc8f8.firebaseio.com'
 });
+
+const wayforpay = new WayForPay('test_merch_n1', 'flk3409refn54t54t*FNJRET');
 
 // File Upload Endpoint
 exports.uploadFile = functions.https.onRequest((req, res) => {
@@ -120,7 +123,14 @@ exports.contactUs = functions.https.onRequest((req, res) => {
 
 exports.acceptOrder = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
-    const { items, total, orderId, acceptedDate, orderDescription } = req.body;
+    const {
+      items,
+      total,
+      orderId,
+      acceptedDate,
+      wayForPayFields,
+      orderDescription
+    } = req.body;
 
     const {
       call,
@@ -142,6 +152,14 @@ exports.acceptOrder = functions.https.onRequest((req, res) => {
         user: 'greedisgood214@gmail.com'
       }
     });
+
+    let url = '';
+    let form = '';
+
+    if (paymentType === 'card') {
+      url = wayforpay.generatePurchaseUrl(wayForPayFields);
+      form = wayforpay.buildForm(wayForPayFields);
+    }
 
     const mappedItems = Object.values(items).map(
       ({ title, quantity, subtotal }) =>
@@ -186,10 +204,10 @@ exports.acceptOrder = functions.https.onRequest((req, res) => {
 
       ref
         .update(req.body)
-        .then(res.send('Success'))
+        .then(res.send({ url, form, message: 'Success' }))
         .catch(firebaseError => res.send(`'Error' - ${firebaseError}`));
 
-      return res.send('Sended');
+      // return res.send({ url, message: 'Sended' });
     });
   });
 });

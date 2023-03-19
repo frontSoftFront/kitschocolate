@@ -1,5 +1,7 @@
+import utf8 from 'utf8';
 import * as R from 'ramda';
 import * as Yup from 'yup';
+import { useState } from 'react';
 import { createHmac } from 'crypto';
 import { Form, Formik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -277,6 +279,7 @@ const handleSubmit = async props => {
 
     if (R.equals(paymentType, 'card')) {
       // const data = {}
+      const wayforpay = new Wayforpay();
 
       const items = R.values(R.pathOr({}, ['items'], order));
 
@@ -284,17 +287,22 @@ const handleSubmit = async props => {
       const productPrice = R.map(R.prop('price'), items);
       const productCount = R.map(R.prop('quantity'), items);
 
-      const url = 'https://secure.wayforpay.com/pay';
       let data = {
-        productName,
-        productCount,
-        productPrice,
         amount: total,
+        language: 'UA',
         currency: 'UAH',
+        clientEmail: email,
+        orderDate: '1679230811',
         orderReference: orderId,
-        orderDate: 1415379863,
-        merchantAccount: 'test_merch_n1',
-        // merchantAccount: 'kitschocolate_eight_vercel_app',
+        clientLastName: lastName,
+        clientFirstName: firstName,
+        clientPhone: '380631234567',
+        productName: R.head(productName),
+        productPrice: R.head(productPrice),
+        productCount: R.head(productCount),
+        merchantTransactionSecureType: 'AUTO',
+        merchantAccount: 'kitschocolate_eight_vercel_app',
+        serviceUrl: 'https://kitschocolate-eight.vercel.app',
         merchantDomainName: 'https://kitschocolate-eight.vercel.app'
       };
 
@@ -304,77 +312,109 @@ const handleSubmit = async props => {
           R.values,
           R.pick(fields)
         )(data);
+      const arrayJoiner = R.join(';');
 
-      const string = `${makeString([
+      const secret = `${makeString([
         'merchantAccount',
         'merchantDomainName',
+        'orderDate',
         'orderReference',
         'amount',
         'currency'
-      ])};${R.join(';', productName)};${R.join(';', productCount)};${R.join(
-        ';',
-        productPrice
-      )}`;
+      ])};${arrayJoiner(productName)};${arrayJoiner(
+        productCount
+      )};${arrayJoiner(productPrice)}`;
+      const encodedSecret = utf8.encode(secret);
+
+      console.log('encodedSecret', encodedSecret);
 
       const merchantSignature = createHmac(
         'md5',
         '15bc1b3b6a30ee5a220e0be952838afdd3c78c80'
       )
-        .update(string)
+        .update(encodedSecret)
         .digest('hex');
-
 
       data = R.assoc('merchantSignature', merchantSignature, data);
 
-      const payload = new window.FormData();
+      wayforpay.run(data);
 
-      R.forEachObjIndexed(
-        (value, key) => payload.append(key, value),
-        data,
-        // R.omit(['productName', 'productCount', 'productPrice'], data)
-      );
+      // const payload = new window.FormData();
+
+      // R.forEachObjIndexed(
+      //   (value, key) => payload.append(key, value),
+      //   data,
+      //   R.omit(['productName', 'productCount', 'productPrice'], data)
+      // );
 
       // payload.append('productName[]', R.head(productName));
       // payload.append('productPrice[]', R.head(productPrice));
       // payload.append('productCount[]', R.head(productCount));
 
-      const options = {
-        method: 'POST',
-        body: payload
-      };
+      // const options = {
+      //   method: 'POST',
+      //   body: JSON.stringify(data),
+      //   headers: {
+      //     'Content-Type': 'application/json;charset=utf-8'
+      //   }
+      // };
 
-      // window.open(`https://secure.wayforpay.com/page?vkh=${merchantSignature}`);
+      // fetch(url, options)
+      //   .then(res => {
+      //     debugger
+      //     console.log('res', res)
+      //     if (res.status === 200) {
+      //       showToastifyMessage('Success');
 
-      // return;
-      fetch(url, options)
-        .then(res => {
-          console.log('res', res)
-          if (res.status === 200) {
-            showToastifyMessage('Success');
-
-            debugger
-            // dispatch({
-            //   data,
-            //   type: actionTypes.SET,
-            //   path: `orders.${orderId}`
-            // });
-          }
-        })
-        .catch(error => {
-          console.log('error', error);
-          showToastifyMessage('Something is wrong', 'error');
-        });
-
-        // debugger
+      //       debugger
+      //       // dispatch({
+      //       //   data,
+      //       //   type: actionTypes.SET,
+      //       //   path: `orders.${orderId}`
+      //       // });
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log('error', error);
+      //     debugger
+      //     showToastifyMessage('Something is wrong', 'error');
+      //   });
 
       return;
+    }
+
+    let wayForPayFields;
+
+    if (R.equals(paymentType, 'card')) {
+      const items = R.values(R.pathOr({}, ['items'], order));
+
+      const productName = R.map(R.prop('title'), items);
+      const productPrice = R.map(R.prop('price'), items);
+      const productCount = R.map(R.prop('quantity'), items);
+
+      wayForPayFields = {
+        productName,
+        productCount,
+        productPrice,
+        amount: total,
+        language: 'ua',
+        currency: 'UAH',
+        orderDate: acceptedDate,
+        orderReference: orderId,
+        merchantTransactionSecureType: 'AUTO',
+        merchantAccount: 'kitschocolate_eight_vercel_app',
+        serviceUrl: 'https://kitschocolate-eight.vercel.app',
+        merchantDomainName: 'https://kitschocolate-eight.vercel.app'
+      };
     }
 
     const data = R.merge(order, {
       total,
       shipTo,
       orderId,
+      paymentType,
       acceptedDate,
+      wayForPayFields,
       status: 'COMPLETED',
       orderDescription: {
         email,
@@ -387,8 +427,6 @@ const handleSubmit = async props => {
         call: call ? 'Yes' : 'No'
       }
     });
-
-    debugger;
 
     const url =
       'https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/acceptOrder';
@@ -410,6 +448,13 @@ const handleSubmit = async props => {
             path: `orders.${orderId}`
           });
         }
+
+        return res.json();
+      })
+      .then(({ form, url }) => {
+        fetch(url, {
+          method: 'GET'
+        });
       })
       .catch(error => {
         console.log('error', error);
@@ -435,46 +480,16 @@ const OrderForm = ({ order, orderId }) => {
   )(orderComposition);
   const initialValues = getInitialValues();
 
-  if (false) {
-    return (
-      <form method="post" action="https://secure.wayforpay.com/pay" accept-charset="utf-8">
-        <input name="merchantAccount" value="kitschocolate_eight_vercel_app" />
-        <input name="merchantAuthType" value="SimpleSignature" />
-        <input name="merchantDomainName" value="https://kitschocolate-eight.vercel.app" />
-        <input name="orderReference" value="-NPm7eq_ZqkD995a3vKl" />
-        <input name="orderDate" value="05/03/2023, 16:50:36" />
-        <input name="amount" value="78" />
-        <input name="currency" value="UAH" />
-        <input name="orderTimeout" value="49000" />
-        <input name="productName[]" value="Молочний Шоколад з Кокосом" />
-        {/* <input name="productName[]" value="Память Kingston DDR3-1600 4096MB PC3-12800" /> */}
-        <input name="productPrice[]" value="78" />
-        {/* <input name="productPrice[]" value="547.36" /> */}
-        <input name="productCount[]" value="1" />
-        {/* <input name="productCount[]" value="1" /> */}
-        <input name="clientFirstName" value="Вася" />
-        <input name="clientLastName" value="Пупкин" />
-        <input name="clientAddress" value="пр. Гагарина, 12" />
-        <input name="clientCity" value="Днепропетровск" />
-        <input name="clientEmail" value="some@mail.com" />
-        <input name="defaultPaymentSystem" value="card" />
-        <input name="merchantSignature" value="bb239a265729f1077aa75cee4f1ec5cc" />
-        <input type="submit" value="Test" />
-      </form>
-    )
-  }
-
   return (
     <Box>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={values =>
-          handleSubmit({ ...values, order, total, orderId, dispatch })
-        }
+          handleSubmit({ ...values, order, total, orderId, dispatch })}
       >
         {({ values }) => (
-          <Form acceptCharset="utf-8">
+          <Form>
             <Flex>
               <Box width="50%">
                 <Section>
@@ -580,6 +595,9 @@ const OrderForm = ({ order, orderId }) => {
                   >
                     Підтвердити замовлення
                   </Button>
+                  {/* <a href="https://secure.wayforpay.com/button/b8bb55827781a">
+                    <span>Оплатити</span>
+                  </a> */}
                 </Section>
               </Box>
             </Flex>
