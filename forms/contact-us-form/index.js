@@ -85,33 +85,38 @@ const ContactUsForm = ({ handleCloseModal }) => (
           alignItems="stretch"
           justifyContent="space-between"
         >
-          <FieldGroup id="name" width="48%" type="text" label="Ваше ім’я" />
+          <FieldGroup
+            id="name"
+            type="text"
+            label="Ваше ім’я"
+            width={['100%', '48%']}
+          />
           <FieldGroup
             id="phone"
             type="text"
-            width="48%"
             fieldGroupMT={10}
+            width={['100%', '48%']}
             label="Контактний телефон"
           />
           <FieldGroup
             id="email"
             type="text"
-            width="48%"
             fieldGroupMT={10}
+            width={['100%', '48%']}
             label="Електронна пошта"
           />
           <FieldGroup
             type="text"
-            width="48%"
             id="companyName"
             fieldGroupMT={10}
+            width={['100%', '48%']}
             label="Яку компанію ви представляєте?"
           />
           <FieldGroup
             id="url"
             type="text"
-            width="48%"
             fieldGroupMT={10}
+            width={['100%', '48%']}
             label="Ваш сайт чи сторінка у соціальних мережах?"
           />
         </Flex>

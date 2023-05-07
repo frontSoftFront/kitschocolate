@@ -83,8 +83,8 @@ const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
         {C.NAV_ITEMS.map(({ link, title }, index) => (
           <Link key={index} href={link} legacyBehavior>
             <NavItem
-              fontSize={[14, 14, 16]}
               textTransform="uppercase"
+              fontSize={[12, 13, 14, 16]}
               active={activeNavItem(link)}
             >
               {title}
@@ -123,10 +123,10 @@ const MobileHeader = ({
               <Portal selector="#menu">
                 <Menu
                   router={router}
-                  data={firebaseData.data}
                   activeNavItem={activeNavItem}
                   animationName={animationName}
                   handleToggleMenu={handleToggleMenu}
+                  data={R.pathOr([], ['data'], firebaseData)}
                 />
               </Portal>
             )}
@@ -173,7 +173,7 @@ const Header = ({
     handleGoToHomePage
   };
 
-  if (R.lt(width, 500)) return <MobileHeader {...headerProps} />;
+  if (R.lt(width, 600)) return <MobileHeader {...headerProps} />;
 
   return <DesktopHeader {...headerProps} />;
 };

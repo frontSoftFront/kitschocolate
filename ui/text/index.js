@@ -3,6 +3,7 @@ import {
   color,
   space,
   width,
+  display,
   opacity,
   fontSize,
   maxWidth,
@@ -18,6 +19,7 @@ export const Text = styled.p`
   ${space}
   ${color}
   ${width}
+  ${display}
   ${opacity}
   ${fontSize}
   ${maxWidth}

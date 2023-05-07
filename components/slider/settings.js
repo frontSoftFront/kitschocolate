@@ -1,15 +1,13 @@
 // components
 import Icon from '../../icons';
-// theme
-import Theme from '../../theme';
 // ui
 import { AbsoluteBox } from '../../ui';
 // //////////////////////////////////////////////////
 
 const appendDots = dots => <div style={{ bottom: -40 }}>{dots}</div>;
 
-const PrevArrow = ({ style, onClick, className }) => (
-  <AbsoluteBox top="35%" left="-40px">
+const PrevArrow = ({ onClick }) => (
+  <AbsoluteBox top="35%" left={[0, -20, -30, -40]}>
     <Icon
       w="100%"
       h="100%"
@@ -21,8 +19,8 @@ const PrevArrow = ({ style, onClick, className }) => (
   </AbsoluteBox>
 );
 
-const NextArrow = ({ style, onClick, className }) => (
-  <AbsoluteBox top="35%" right="-40px">
+const NextArrow = ({ onClick }) => (
+  <AbsoluteBox top="35%" right={[0, -20, -30, -40]}>
     <Icon
       w="100%"
       h="100%"

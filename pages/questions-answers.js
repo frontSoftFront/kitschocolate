@@ -105,13 +105,14 @@ export const QuestionAnswers = ({
   return (
     <>
       <Flex
-        p={50}
+        flexWrap="wrap"
         borderRadius="16px"
         background="#F8FBFC"
         justifyContent="space-between"
+        p={Theme.styles.spacing.paddingY}
       >
         {columns.map((column, columnIndex) => (
-          <Box width="45%" key={columnIndex}>
+          <Box key={columnIndex} width={['100%', '45%']}>
             {R.values(column).map((item, index) => (
               <QuestionAnswer
                 {...item}
@@ -170,7 +171,7 @@ export const QuestionAnswers = ({
 
 const Content = ({ firebaseData }) => (
   <>
-    <Section my={50}>
+    <Section my={Theme.styles.spacing.paddingY}>
       <Img
         width="100%"
         src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fquestions-answers%2F_MG_4971%201.png?alt=media&token=b516cdfe-95d4-4be3-adcb-7b82c294e644"
@@ -178,24 +179,24 @@ const Content = ({ firebaseData }) => (
     </Section>
     <Section>
       <SectionTitle
-        mb={50}
-        fontSize={32}
         fontWeight={500}
         textAlign="center"
         fontFamily="Montserrat"
+        fontSize={[20, 24, 28, 32]}
         color={Theme.colors.woodyBrown}
+        mb={Theme.styles.spacing.paddingY}
       >
         We answer all questions
       </SectionTitle>
       <QuestionAnswers firebaseData={firebaseData} />
     </Section>
-    <Section my={50} mx="auto" maxWidth={660}>
+    <Section mx="auto" maxWidth={660} my={Theme.styles.spacing.paddingY}>
       <SectionTitle
-        mb={50}
-        fontSize={32}
         textAlign="center"
         fontFamily="Montserrat"
+        fontSize={[20, 24, 28, 32]}
         color={Theme.colors.woodyBrown}
+        mb={Theme.styles.spacing.paddingY}
       >
         Do you have any question?
       </SectionTitle>
@@ -206,9 +207,9 @@ const Content = ({ firebaseData }) => (
 
 const QuestionsAnswersPage = ({ router, firebaseData }) => (
   <Layout
-    title="About"
     router={router}
     firebaseData={firebaseData}
+    title="Questions and Answers"
     collections={['questions-answers']}
   >
     <Content firebaseData={firebaseData} />

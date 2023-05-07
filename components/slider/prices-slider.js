@@ -8,7 +8,7 @@ import actions from '../../store/actions';
 import Icon from '../../icons';
 import ItemComponent from '../item';
 // helpers
-import { showToastifyMessage } from '../../helpers';
+import { isNotNilAndNotEmpty, showToastifyMessage } from '../../helpers';
 // hooks
 import { useActions } from '../../hooks/use-actions';
 // theme
@@ -56,47 +56,54 @@ const PricesSlider = ({
 
   return (
     <Box mt={mt}>
-      <Flex px={20} mb={20} alignItems="center">
-        {categoryTitle && (
-          <Text
-            lineHeight={1.2}
-            cursor="pointer"
-            fontSize={[18, 20, 25]}
-            textDecoration="underline"
-            color={Theme.colors.quincy}
-            onClick={() => push(`/category/${categoryId}`)}
-          >
-            {categoryTitle}
-          </Text>
-        )}
-        {is.function(handleEditItem) && (
-          <Icon
-            ml={15}
-            w={18}
-            h={18}
-            iconName="pencil"
-            handleClick={() => handleEditItem()}
-          />
-        )}
-        {is.function(handleRemoveItem) && (
-          <Icon
-            ml={15}
-            width={18}
-            height={18}
-            iconName="trash"
-            handleClick={handleRemoveItem}
-          />
-        )}
-        {is.function(handleMarkAsFavoriteCategory) && (
-          <Icon
-            ml={15}
-            width={18}
-            height={18}
-            iconName={favorite ? 'heartFilled' : 'heart'}
-            handleClick={() => handleMarkAsFavoriteCategory(categoryId)}
-          />
-        )}
-      </Flex>
+      {R.any(isNotNilAndNotEmpty, [
+        categoryTitle,
+        handleEditItem,
+        handleRemoveItem,
+        handleMarkAsFavoriteCategory
+      ]) && (
+        <Flex px={20} mb={20} alignItems="center">
+          {categoryTitle && (
+            <Text
+              lineHeight={1.2}
+              cursor="pointer"
+              fontSize={[18, 20, 25]}
+              textDecoration="underline"
+              color={Theme.colors.quincy}
+              onClick={() => push(`/category/${categoryId}`)}
+            >
+              {categoryTitle}
+            </Text>
+          )}
+          {is.function(handleEditItem) && (
+            <Icon
+              ml={15}
+              w={18}
+              h={18}
+              iconName="pencil"
+              handleClick={() => handleEditItem()}
+            />
+          )}
+          {is.function(handleRemoveItem) && (
+            <Icon
+              ml={15}
+              width={18}
+              height={18}
+              iconName="trash"
+              handleClick={handleRemoveItem}
+            />
+          )}
+          {is.function(handleMarkAsFavoriteCategory) && (
+            <Icon
+              ml={15}
+              width={18}
+              height={18}
+              iconName={favorite ? 'heartFilled' : 'heart'}
+              handleClick={() => handleMarkAsFavoriteCategory(categoryId)}
+            />
+          )}
+        </Flex>
+      )}
       <Slider ref={slider} {...sliderSettings}>
         {list.map((item, index) => {
           if (R.isNil(item.id)) return <div />;

@@ -142,7 +142,6 @@ const Menu = props => {
     R.pathOr({}, ['chocolates'], data)
   );
 
-  debugger
   const handleSetActiveCategory = ({ categoryName }) =>
     setActiveCategory(categoryName);
 

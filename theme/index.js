@@ -18,18 +18,21 @@ const colors = {
 export default {
   colors,
   styles: {
+    spacing: {
+      paddingY: [20, 30, 40, 50]
+    },
     mainPageTitle: {
-      fontSize: 40,
       lineHeight: 1.33,
       fontWeight: 'bold',
       textAlign: 'center',
-      color: colors.woodyBrown
+      color: colors.woodyBrown,
+      fontSize: [25, 30, 35, 40]
     },
     pageTitle: {
       textAlign: 'center',
       fontFamily: 'Caveat',
-      fontSize: [25, 35, 45],
-      color: colors.congoBrown
+      color: colors.congoBrown,
+      fontSize: [30, 35, 40, 45]
     },
     formSectionTitle: {
       fonSize: 20,

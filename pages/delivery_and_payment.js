@@ -22,18 +22,19 @@ import {
 const PaymentAndDelivery = ({ router }) => (
   <Layout router={router} title="Payment And Delivery">
     <Flex
-      my={50}
       mx="auto"
       maxWidth={1000}
+      flexWrap="wrap"
       alignItems="center"
       justifyContent="space-around"
+      my={Theme.styles.spacing.paddingY}
     >
       <PageTitle {...Theme.styles.mainPageTitle}>
         Доставка та
         <br />
         Оплата
       </PageTitle>
-      <RelativeBox width="45%" height={250}>
+      <RelativeBox mt={[20, 0]} height={250} width={['100%', '45%']}>
         <ImageComponent
           layout="fill"
           placeholder="blur"
@@ -44,9 +45,9 @@ const PaymentAndDelivery = ({ router }) => (
     <Section mx="auto" maxWidth={1000}>
       <SectionTitle
         {...Theme.styles.pageTitle}
-        mb={50}
         width="100%"
         textAlign="center"
+        mb={Theme.styles.spacing.paddingY}
       >
         Доставка
       </SectionTitle>
@@ -90,12 +91,12 @@ const PaymentAndDelivery = ({ router }) => (
         </ul>
       </Article>
     </Section>
-    <Section my={50} mx="auto" maxWidth={1000}>
+    <Section mx="auto" maxWidth={1000} my={Theme.styles.spacing.paddingY}>
       <SectionTitle
         {...Theme.styles.pageTitle}
-        mb={50}
         width="100%"
         textAlign="center"
+        mb={Theme.styles.spacing.paddingY}
       >
         Оплата
       </SectionTitle>

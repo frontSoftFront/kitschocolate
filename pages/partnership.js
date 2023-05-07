@@ -54,7 +54,8 @@ const ContactUs = () => {
         <Portal selector="#modal">
           <ModalWrapper>
             <Box
-              p={30}
+              width="90%"
+              p={[20, 30]}
               maxWidth={700}
               maxHeight="90vh"
               overflowY="auto"
@@ -64,16 +65,16 @@ const ContactUs = () => {
             >
               <Icon
                 ml="auto"
-                width="20px"
-                height="20px"
                 iconName="close"
+                width={[16, 17, 18, 20]}
+                height={[16, 17, 18, 20]}
                 handleClick={handleCloseModal}
               />
               <SectionTitle
                 my={10}
-                fontSize={25}
                 textAlign="center"
                 fontFamily="Montserrat"
+                fontSize={[18, 20, 22, 25]}
                 color={Theme.colors.woodyBrown}
               >
                 Команда Kit`s chocolate вітає вас
@@ -92,12 +93,15 @@ const PartnershipPage = ({ router, firebaseData }) => (
     router={router}
     title="Partnership"
     firebaseData={firebaseData}
-    collections={['chocolates']}
+    collections={['shop', 'chocolates']}
   >
-    <PageTitle {...Theme.styles.mainPageTitle} my={50}>
+    <PageTitle
+      {...Theme.styles.mainPageTitle}
+      my={Theme.styles.spacing.paddingY}
+    >
       ПАРТНЕРАМ
     </PageTitle>
-    <Article fontSize={16}>
+    <Article fontSize={[12, 14, 15, 16]}>
       <ArticleTitle fontWeight={500}>
         <Icon mr={10} iconName="checkMark" display="inline-block" />
         Корпоративні замовлення
@@ -115,15 +119,20 @@ const PartnershipPage = ({ router, firebaseData }) => (
         Львові.
       </Text>
     </Article>
-    <Section my={50} display="flex" justifyContent="space-between">
-      <RelativeBox width="45%" height={250}>
+    <Section
+      display="flex"
+      flexWrap="wrap"
+      justifyContent="space-between"
+      my={Theme.styles.spacing.paddingY}
+    >
+      <RelativeBox height={250} width={['100%', '45%']}>
         <ImageComponent
           layout="fill"
           placeholder="blur"
           src="/partnership.jpeg"
         />
       </RelativeBox>
-      <Article width="45%" fontSize={16}>
+      <Article width={['100%', '45%']} fontSize={[12, 14, 15, 16]}>
         <ArticleTitle fontWeight={500}>Ми обіцяємо:</ArticleTitle>
         <Text mt={10}>
           <Icon mr={10} iconName="checkMark" display="inline-block" />
@@ -151,19 +160,23 @@ const PartnershipPage = ({ router, firebaseData }) => (
         </Text>
       </Article>
     </Section>
-    <Article fontSize={16}>
+    <Article fontSize={[12, 14, 15, 16]}>
       З подарунками Kit's вам вдасться проявити турботу по-особливому.
     </Article>
-    <Article my={50} fontSize={16} lineHeight={1.54}>
+    <Article
+      lineHeight={1.54}
+      fontSize={[12, 14, 15, 16]}
+      my={Theme.styles.spacing.paddingY}
+    >
       Бажаєте продавати шоколад Kit`s chocolate? Запрошуємо до співпраці. Ми
       завжди раді новим партнерам. Заповніть, будь ласка, коротку анкету, чи
       напишіть нам
       <StyledLink
         ml="5px"
-        fontSize={17}
         fontWeight="bold"
         display="inline-block"
         color={Theme.colors.blue}
+        fontSize={[14, 15, 16, 17]}
         href="mailto:kitschocolate@gmail.com"
         hoveredColor={Theme.colors.congoBrown}
       >

@@ -21,7 +21,11 @@ const ItemComponent = ({
 
   return (
     <Box cursor="pointer" px={R.or(px, 20)}>
-      <RelativeBox width="100%" height={350}>
+      <RelativeBox
+        mx="auto"
+        width={['80%', '100%']}
+        height={[250, 250, 300, 350]}
+      >
         <ImageComponent
           src={imgUrl}
           layout="fill"

@@ -30,15 +30,11 @@ export const FavoriteProducts = ({ shop, router, chocolates }) => {
   )(shop);
 
   return (
-    <Section py={50}>
-      <SectionTitle
-        fontSize={45}
-        textAlign="center"
-        color={Theme.colors.congoBrown}
-      >
+    <Section py={Theme.styles.spacing.paddingY}>
+      <SectionTitle {...Theme.styles.pageTitle}>
         Найчастіше замовляють
       </SectionTitle>
-      <Box mt={50}>
+      <Box mt={Theme.styles.spacing.paddingY}>
         <PricesSlider router={router} list={favoriteChocolates} />
       </Box>
     </Section>
@@ -52,7 +48,7 @@ const Content = ({ shop, data, router, chocolates }) => {
 
   return (
     <>
-      <Box py={50}>
+      <Box py={Theme.styles.spacing.paddingY}>
         <Flex justifyContent="space-between">
           <Section
             display="flex"
@@ -60,26 +56,27 @@ const Content = ({ shop, data, router, chocolates }) => {
             flexDirection="column"
             justifyContent="space-between"
           >
-            <PageTitle {...Theme.styles.mainPageTitle} mt={20} mr={10}>
+            <PageTitle {...Theme.styles.mainPageTitle} mt={20}>
               Welcome to Kit’s Chocolate
             </PageTitle>
             <Button
               my={20}
-              width={300}
-              height={40}
-              fontSize={20}
               border="2px solid"
+              height={[30, 35, 40]}
+              width={[200, 250, 300]}
+              fontSize={[16, 18, 20]}
               textTransform="uppercase"
               color={Theme.colors.woodyBrown}
+              onClick={() => router.push('/shop')}
             >
               Shop Online
             </Button>
             <Img
               src={left}
-              width="46vw"
-              height="26vw"
               maxWidth={644}
               maxHeight={364}
+              width={['100%', '46vw']}
+              height={['auto', '26vw']}
             />
           </Section>
           <Img
@@ -88,25 +85,25 @@ const Content = ({ shop, data, router, chocolates }) => {
             height="100%"
             maxWidth={476}
             maxHeight={616}
+            display={['none', 'block']}
           />
         </Flex>
       </Box>
-      <Section py={50}>
-        <SectionTitle
-          fontSize={45}
-          textAlign="center"
-          color={Theme.colors.congoBrown}
-        >
+      <Section py={Theme.styles.spacing.paddingY}>
+        <SectionTitle {...Theme.styles.pageTitle}>
           З’явився новий шоколад
         </SectionTitle>
-        <Article my={50}>
-          <ArticleTitle fontSize={25} color={Theme.colors.congoBrown}>
+        <Article my={Theme.styles.spacing.paddingY}>
+          <ArticleTitle
+            fontSize={[15, 15, 20, 25]}
+            color={Theme.colors.congoBrown}
+          >
             Великоднім наборам бути!
           </ArticleTitle>
           <Text
             mt={20}
-            fontSize={20}
             fontWeight={300}
+            fontSize={[14, 16, 18, 20]}
             color={Theme.colors.congoBrown}
           >
             Недивлячись на цей непростий час, ми вирішили, що таким чином дамо

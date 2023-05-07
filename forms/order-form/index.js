@@ -1,11 +1,9 @@
-import utf8 from 'utf8';
 import * as R from 'ramda';
 import * as Yup from 'yup';
-import { useState } from 'react';
-import { createHmac } from 'crypto';
 import { Form, Formik } from 'formik';
+import { LiqPayPay } from 'react-liqpay';
 import { useDispatch } from 'react-redux';
-import { useFirebase, actionTypes } from 'react-redux-firebase';
+import { actionTypes } from 'react-redux-firebase';
 // helpers
 import { isNilOrEmpty, showToastifyMessage } from '../../helpers';
 // theme
@@ -171,7 +169,7 @@ const PaymentTypes = ({ paymentType }) => (
               Карткою (онлайн)
             </ArticleTitle>
             <Text mt="5px" fontSize={10} textAlign="justify">
-              За підтримкою WayForPay
+              За підтримкою Liqpay
             </Text>
             <Flex mt={15} height={20} justifyContent="space-between">
               <Img width="21%" height="100%" src="../../master-card.svg" />
@@ -252,216 +250,94 @@ const getInitialValues = () => {
   return R.merge(defaultValues, JSON.parse(clientFields));
 };
 
-const handleSubmit = async props => {
-  {
-    const {
-      call,
-      total,
-      order,
+const handleSubmit = props => {
+  const {
+    call,
+    total,
+    order,
+    email,
+    orderId,
+    comments,
+    dispatch,
+    lastName,
+    firstName,
+    warehouse,
+    paymentType,
+    phoneNumber,
+    shippingCity
+  } = props;
+
+  const clientFields = JSON.stringify(getClientFields(props));
+
+  localStorage.setItem('clientFields', clientFields);
+
+  const acceptedDate = new Date().toLocaleString();
+  const shipTo = `${shippingCity.label} ${warehouse.label}`;
+
+  const data = R.merge(order, {
+    total,
+    shipTo,
+    orderId,
+    paymentType,
+    acceptedDate,
+    status: 'COMPLETED',
+    orderDescription: {
       email,
-      orderId,
+      shipTo,
       comments,
-      dispatch,
       lastName,
       firstName,
-      warehouse,
       paymentType,
       phoneNumber,
-      shippingCity
-    } = props;
-
-    const clientFields = JSON.stringify(getClientFields(props));
-
-    localStorage.setItem('clientFields', clientFields);
-
-    const acceptedDate = new Date().toLocaleString();
-    const shipTo = `${shippingCity.label} ${warehouse.label}`;
-
-    if (R.equals(paymentType, 'card')) {
-      // const data = {}
-      const wayforpay = new Wayforpay();
-
-      const items = R.values(R.pathOr({}, ['items'], order));
-
-      const productName = R.map(R.prop('title'), items);
-      const productPrice = R.map(R.prop('price'), items);
-      const productCount = R.map(R.prop('quantity'), items);
-
-      let data = {
-        amount: total,
-        language: 'UA',
-        currency: 'UAH',
-        clientEmail: email,
-        orderDate: '1679230811',
-        orderReference: orderId,
-        clientLastName: lastName,
-        clientFirstName: firstName,
-        clientPhone: '380631234567',
-        productName: R.head(productName),
-        productPrice: R.head(productPrice),
-        productCount: R.head(productCount),
-        merchantTransactionSecureType: 'AUTO',
-        merchantAccount: 'kitschocolate_eight_vercel_app',
-        serviceUrl: 'https://kitschocolate-eight.vercel.app',
-        merchantDomainName: 'https://kitschocolate-eight.vercel.app'
-      };
-
-      const makeString = fields =>
-        R.compose(
-          R.join(';'),
-          R.values,
-          R.pick(fields)
-        )(data);
-      const arrayJoiner = R.join(';');
-
-      const secret = `${makeString([
-        'merchantAccount',
-        'merchantDomainName',
-        'orderDate',
-        'orderReference',
-        'amount',
-        'currency'
-      ])};${arrayJoiner(productName)};${arrayJoiner(
-        productCount
-      )};${arrayJoiner(productPrice)}`;
-      const encodedSecret = utf8.encode(secret);
-
-      console.log('encodedSecret', encodedSecret);
-
-      const merchantSignature = createHmac(
-        'md5',
-        '15bc1b3b6a30ee5a220e0be952838afdd3c78c80'
-      )
-        .update(encodedSecret)
-        .digest('hex');
-
-      data = R.assoc('merchantSignature', merchantSignature, data);
-
-      wayforpay.run(data);
-
-      // const payload = new window.FormData();
-
-      // R.forEachObjIndexed(
-      //   (value, key) => payload.append(key, value),
-      //   data,
-      //   R.omit(['productName', 'productCount', 'productPrice'], data)
-      // );
-
-      // payload.append('productName[]', R.head(productName));
-      // payload.append('productPrice[]', R.head(productPrice));
-      // payload.append('productCount[]', R.head(productCount));
-
-      // const options = {
-      //   method: 'POST',
-      //   body: JSON.stringify(data),
-      //   headers: {
-      //     'Content-Type': 'application/json;charset=utf-8'
-      //   }
-      // };
-
-      // fetch(url, options)
-      //   .then(res => {
-      //     debugger
-      //     console.log('res', res)
-      //     if (res.status === 200) {
-      //       showToastifyMessage('Success');
-
-      //       debugger
-      //       // dispatch({
-      //       //   data,
-      //       //   type: actionTypes.SET,
-      //       //   path: `orders.${orderId}`
-      //       // });
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log('error', error);
-      //     debugger
-      //     showToastifyMessage('Something is wrong', 'error');
-      //   });
-
-      return;
+      call: call ? 'Yes' : 'No'
     }
+  });
 
-    let wayForPayFields;
-
-    if (R.equals(paymentType, 'card')) {
-      const items = R.values(R.pathOr({}, ['items'], order));
-
-      const productName = R.map(R.prop('title'), items);
-      const productPrice = R.map(R.prop('price'), items);
-      const productCount = R.map(R.prop('quantity'), items);
-
-      wayForPayFields = {
-        productName,
-        productCount,
-        productPrice,
-        amount: total,
-        language: 'ua',
-        currency: 'UAH',
-        orderDate: acceptedDate,
-        orderReference: orderId,
-        merchantTransactionSecureType: 'AUTO',
-        merchantAccount: 'kitschocolate_eight_vercel_app',
-        serviceUrl: 'https://kitschocolate-eight.vercel.app',
-        merchantDomainName: 'https://kitschocolate-eight.vercel.app'
-      };
+  const url =
+    'https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/acceptOrder';
+  const options = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
     }
+  };
 
-    const data = R.merge(order, {
-      total,
-      shipTo,
-      orderId,
-      paymentType,
-      acceptedDate,
-      wayForPayFields,
-      status: 'COMPLETED',
-      orderDescription: {
-        email,
-        shipTo,
-        comments,
-        lastName,
-        firstName,
-        paymentType,
-        phoneNumber,
-        call: call ? 'Yes' : 'No'
-      }
-    });
-
-    const url =
-      'https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/acceptOrder';
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    };
-
-    fetch(url, options)
-      .then(res => {
-        if (res.status === 200) {
-          showToastifyMessage('Success');
-          dispatch({
-            data,
-            type: actionTypes.SET,
-            path: `orders.${orderId}`
-          });
-        }
-
-        return res.json();
-      })
-      .then(({ form, url }) => {
-        fetch(url, {
-          method: 'GET'
+  fetch(url, options)
+    .then(res => {
+      if (res.status === 200) {
+        showToastifyMessage('Success');
+        dispatch({
+          data,
+          type: actionTypes.SET,
+          path: `orders.${orderId}`
         });
-      })
-      .catch(error => {
-        console.log('error', error);
-        showToastifyMessage('Something is wrong', 'error');
+      }
+
+      return res.json();
+    })
+    .then(({ form, url }) => {
+      fetch(url, {
+        method: 'GET'
       });
-  }
+    })
+    .catch(error => {
+      console.log('error', error);
+      showToastifyMessage('Something is wrong', 'error');
+    });
 };
+
+const PaymentButton = () => (
+  <Button
+    {...Theme.styles.actionButton}
+    mx="auto"
+    width={250}
+    height={50}
+    type="submit"
+  >
+    Підтвердити замовлення
+  </Button>
+);
 
 const OrderForm = ({ order, orderId }) => {
   // const firebase = useFirebase();
@@ -586,18 +462,22 @@ const OrderForm = ({ order, orderId }) => {
                       {R.add(total, 50)} грн
                     </Text>
                   </Flex>
-                  <Button
-                    {...Theme.styles.actionButton}
-                    mx="auto"
-                    width={250}
-                    height={50}
-                    type="submit"
-                  >
-                    Підтвердити замовлення
-                  </Button>
-                  {/* <a href="https://secure.wayforpay.com/button/b8bb55827781a">
-                    <span>Оплатити</span>
-                  </a> */}
+                  {R.propEq('paymentType', 'card', values) ? (
+                    <LiqPayPay
+                      amount="3"
+                      currency="UAH"
+                      result_url="localhost:3000"
+                      publicKey="sandbox_i60346112176"
+                      description="Payment for product"
+                      extra={[<PaymentButton key={1} />]}
+                      product_description="Online courses"
+                      server_url="http://server.domain.com/liqpay"
+                      orderId={Math.floor(1 + Math.random() * 900000000)}
+                      privateKey="sandbox_tib5dHdlRVhmkOumo4Cx9UpbMr39Dmihj5bzTA4z"
+                    />
+                  ) : (
+                    <PaymentButton />
+                  )}
                 </Section>
               </Box>
             </Flex>

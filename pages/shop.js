@@ -29,7 +29,7 @@ const Content = ({ router, categories, chocolateList }) => {
   )(categories);
 
   return (
-    <Section py={[30, 40, 50]}>
+    <Section py={Theme.styles.spacing.paddingY}>
       <PageTitle {...Theme.styles.pageTitle}>
         Правдивий шоколад від какаобоба до плитки
       </PageTitle>
@@ -39,10 +39,10 @@ const Content = ({ router, categories, chocolateList }) => {
             key={index}
             categoryId={id}
             router={router}
-            mt={[30, 40, 50]}
             list={chocolates}
             categoryTitle={title}
             categoryName={categoryName}
+            mt={R.equals(index, 0) ? Theme.styles.spacing.paddingY : 50}
           />
         )
       )}
