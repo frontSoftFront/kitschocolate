@@ -68,9 +68,16 @@ export const BasketCount = styled.div`
 `;
 
 export const StyledHeader = styled.header`
+  ${space}
+
   top: 0;
   left: 0;
   z-index: 100;
   position: sticky;
   background: ${Theme.colors.white};
+
+  @media (max-width: 580px) {
+    border-bottom: 1px solid;
+    border-color: ${Theme.colors.lighterGrey};
+  }
 `;

@@ -16,12 +16,16 @@ const Content = ({ data }) => {
   return (
     <>
       <Section
-        py={50}
         borderBottom="2px solid"
         borderColor={Theme.colors.quincy}
+        py={Theme.styles.spacing.paddingY}
       >
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
-        <Flex mt={50} justifyContent="space-between">
+        <Flex
+          flexWrap="wrap"
+          justifyContent="space-between"
+          mt={Theme.styles.spacing.paddingY}
+        >
           <OrderImage extraImages={extraImages} />
           <OrderItem orderItem={data} />
         </Flex>

@@ -43,7 +43,7 @@ const Layout = ({ title, router, children, collections, firebaseData }) => {
   const handleGoToHomePage = () => push('/');
 
   return (
-    <PageWrapper mx="auto" px={[25, 25, 50, 75]}>
+    <>
       <Head>
         <title>{R.or(title, 'kitschocolate')}</title>
       </Head>
@@ -53,13 +53,15 @@ const Layout = ({ title, router, children, collections, firebaseData }) => {
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}
       />
-      {children}
+      <PageWrapper mx="auto" px={[25, 25, 50, 75]}>
+        {children}
+      </PageWrapper>
       <Footer
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}
       />
       <ToastContainer />
-    </PageWrapper>
+    </>
   );
 };
 

@@ -25,6 +25,7 @@ const WrappedApp = ({ Component, pageProps }) => {
     // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
     // enableClaims: true // Get custom claims along with the profile
   };
+
   const rrfProps = {
     firebase,
     config: rrfConfig,
@@ -46,12 +47,6 @@ const WrappedApp = ({ Component, pageProps }) => {
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Caveat&family=Montserrat:wght@300;400;500&display=swap"
-        />
-        <script
-          id="widget-wfp-script"
-          language="javascript"
-          type="text/javascript"
-          src="https://secure.wayforpay.com/server/pay-widget.js"
         />
       </Head>
       <GlobalStyles />

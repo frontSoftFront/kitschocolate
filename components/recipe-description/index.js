@@ -37,23 +37,29 @@ const RecipeDescription = props => {
 
   return (
     <Section
-      mt={50}
       display="flex"
+      flexWrap="wrap"
       alignItems="center"
-      justifyContent="space-between"
+      mt={Theme.styles.spacing.paddingY}
+      justifyContent={['center', 'center', 'space-between']}
     >
-      <Img src={imgUrl} maxHeight={450} width="55%" />
-      <Box ml={50} width="45%" maxWidth={450}>
+      <Img
+        width="100%"
+        src={imgUrl}
+        maxHeight={450}
+        maxWidth={['100%', '100%', '45%']}
+      />
+      <Box width={['100%', '100%%', '45%']}>
         <Article>
-          <ArticleTitle fontSize={25} fontWeight={500}>
+          <ArticleTitle fontWeight={500} fontSize={[18, 20, 25]}>
             {title}
           </ArticleTitle>
           <Text
             my={20}
-            fontSize={14}
             opacity="0.54"
             lineHeight={1.54}
             textAlign="justify"
+            fontSize={[12, 15]}
           >
             {description}
           </Text>
@@ -64,17 +70,21 @@ const RecipeDescription = props => {
               <Input
                 pl={10}
                 width={40}
-                height={60}
                 type="number"
                 fontWeight={500}
                 value={quantity}
                 border="1px solid"
+                height={[40, 50, 60]}
                 borderColor={Theme.colors.lightBlue}
                 onChange={event =>
                   handleChangeQuantity(event.currentTarget.value)
                 }
               />
-              <Box width={30} height={60} background={Theme.colors.quincy}>
+              <Box
+                width={30}
+                height={[40, 50, 60]}
+                background={Theme.colors.quincy}
+              >
                 <Flex
                   height="50%"
                   cursor="pointer"

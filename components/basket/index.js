@@ -37,18 +37,19 @@ const BasketItem = ({
   handleChangeQuantity
 }) => (
   <Flex
-    py={20}
+    py={[15, 20]}
     borderBottom="1px solid"
     justifyContent="space-between"
+    flexDirection={['column', 'row']}
     borderColor={Theme.colors.transparentBlue}
   >
     <Flex>
-      <Img height={100} src={imgUrl} />
-      <Box ml={30} height="max-content">
+      <Img height={[60, 100]} src={imgUrl} />
+      <Box ml={[15, 30]} height="max-content">
         <Link href={`/shop/${id}`}>
           <StyledLink
-            fontSize={17}
             fontWeight="bold"
+            fontSize={[14, 17]}
             color={Theme.colors.blue}
             onClick={handleCloseBasket}
             hoveredColor={Theme.colors.congoBrown}
@@ -56,8 +57,8 @@ const BasketItem = ({
             {title}
           </StyledLink>
         </Link>
-        <Flex mt={10} height={50} alignItems="center">
-          <Text fontSize={25} fontWeight={500}>
+        <Flex mt={10} height={[40, 50]} alignItems="center">
+          <Text fontSize={[18, 25]} fontWeight={500}>
             ₴ {price}
           </Text>
         </Flex>
@@ -67,20 +68,20 @@ const BasketItem = ({
       <Icon
         mb={10}
         ml="auto"
-        width="20px"
-        height="20px"
         iconName="trash"
+        width={[17, 20]}
+        height={[17, 20]}
         handleClick={() => handleRemoveItem(id)}
       />
-      <Flex alignItems="center">
-        <Flex mr={20}>
+      <Flex width="100%" alignItems="center" justifyContent="space-between">
+        <Flex mr={[15, 20]}>
           <Input
             pl={10}
             disabled
-            width={40}
-            height={50}
             type="number"
+            width={[30, 40]}
             fontWeight={500}
+            height={[40, 50]}
             value={quantity}
             border="1px solid"
             borderColor={Theme.colors.lightBlue}
@@ -91,7 +92,11 @@ const BasketItem = ({
               })
             }
           />
-          <Box width={30} height={50} background={Theme.colors.quincy}>
+          <Box
+            width={[30, 40]}
+            height={[40, 50]}
+            background={Theme.colors.quincy}
+          >
             <Flex
               height="50%"
               cursor="pointer"
@@ -131,10 +136,10 @@ const BasketItem = ({
         <Text
           width={110}
           withEllipsis
-          fontSize={25}
           maxWidth={110}
           fontWeight={500}
           textAlign="right"
+          fontSize={[18, 25]}
           title={`₴ ${subtotal}`}
         >
           ₴ {subtotal}
@@ -191,7 +196,7 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
   return (
     <ModalWrapper>
       <Box
-        p={30}
+        p={[20, 30]}
         width="90vw"
         maxWidth={1000}
         maxHeight="90vh"
@@ -201,11 +206,11 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
         boxShadow="0 1px 3px rgb(0 0 0 / 30%)"
       >
         <Flex mb={20} alignItems="center" justifyContent="space-between">
-          <Text fontSize={25}>Корзина</Text>
+          <Text fontSize={[18, 25]}>Корзина</Text>
           <Icon
-            width="25px"
-            height="25px"
+            width={[18, 25]}
             iconName="close"
+            height={[18, 25]}
             handleClick={handleCloseBasket}
           />
         </Flex>
@@ -220,29 +225,29 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
         ))}
         <Box
           p={20}
-          mt={30}
           ml="auto"
-          width="50%"
+          mt={[20, 30]}
           borderRadius="4px"
           border="1px solid"
+          width={['100%', '50%']}
           borderColor={Theme.colors.lightBlue}
         >
           <Flex mb={20} alignItems="center" justifyContent="space-between">
-            <Text fontSize={25} fontWeight="bold">
+            <Text fontSize={[18, 25]} fontWeight="bold">
               Всього:
             </Text>
-            <Text fontSize={30} fontWeight="bold">
+            <Text fontSize={[22, 30]} fontWeight="bold">
               ₴ {total}
             </Text>
           </Flex>
           <Button
             {...Theme.styles.actionButton}
             mx="auto"
-            height={50}
             width="100%"
             type="button"
-            fontSize={16}
+            height={[40, 50]}
             fontWeight="bold"
+            fontSize={[14, 16]}
             onClick={handleGoToOrder}
           >
             Оформити замовлення

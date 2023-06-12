@@ -54,12 +54,21 @@ const OrderItem = ({ orderItem }) => {
   };
 
   return (
-    <Section width="45%" my="auto">
+    <Section
+      my="auto"
+      width={['100%', '100%', '45%']}
+      mt={Theme.styles.spacing.paddingY}
+    >
       <Article>
-        <ArticleTitle fontSize={25} fontWeight={500}>
+        <ArticleTitle fontWeight={500} fontSize={[18, 18, 20, 25]}>
           {title}
         </ArticleTitle>
-        <Text my={20} fontSize={14} opacity="0.54" lineHeight={1.54}>
+        <Text
+          my={[15, 20]}
+          opacity="0.54"
+          lineHeight={1.54}
+          fontSize={[12, 14]}
+        >
           {description}
         </Text>
       </Article>
@@ -106,28 +115,32 @@ const OrderItem = ({ orderItem }) => {
         </Flex>
       </Box>
       <Flex
-        py={20}
+        py={[15, 20]}
         alignItems="center"
         borderTop="1px solid"
         borderBottom="1px solid"
         borderColor={Theme.colors.transparentBlue}
       >
-        <Text fontSize={30} width={110}>
+        <Text withEllipsis fontSize={[20, 30]} width={[70, 110]}>
           ₴ {totalPrice}
         </Text>
         <Flex ml={20}>
           <Input
             pl={10}
             width={40}
-            height={60}
             type="number"
             fontWeight={500}
             value={quantity}
             border="1px solid"
+            height={[40, 50, 60]}
             borderColor={Theme.colors.lightBlue}
             onChange={event => handleChangeQuantity(event.currentTarget.value)}
           />
-          <Box width={30} height={60} background={Theme.colors.quincy}>
+          <Box
+            width={30}
+            height={[40, 50, 60]}
+            background={Theme.colors.quincy}
+          >
             <Flex
               height="50%"
               cursor="pointer"
@@ -164,8 +177,8 @@ const OrderItem = ({ orderItem }) => {
       <Button
         {...Theme.styles.actionButton}
         mt={20}
-        width={170}
-        height={50}
+        height={[40, 50]}
+        width={[150, 170]}
         textTransform="uppercase"
         onClick={handleAddItemToBasket}
       >

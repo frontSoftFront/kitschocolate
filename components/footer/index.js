@@ -92,8 +92,8 @@ const Footer = ({ activeNavItem, handleGoToHomePage }) => {
       <Box>
         <Text
           opacity={0.5}
-          textAlign={['center', 'initial']}
           fontSize={[14, 13, 14, 16]}
+          textAlign={['center', 'initial']}
         >
           Contact Us
         </Text>

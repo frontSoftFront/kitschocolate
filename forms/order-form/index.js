@@ -332,15 +332,15 @@ const PaymentButton = () => (
     {...Theme.styles.actionButton}
     mx="auto"
     width={250}
-    height={50}
+    mt={[20, 0]}
     type="submit"
+    height={[40, 50]}
   >
     Підтвердити замовлення
   </Button>
 );
 
 const OrderForm = ({ order, orderId }) => {
-  // const firebase = useFirebase();
   const dispatch = useDispatch();
 
   const orderComposition = R.values(order.items);
@@ -354,137 +354,138 @@ const OrderForm = ({ order, orderId }) => {
     R.values,
     R.map(R.prop('quantity'))
   )(orderComposition);
+
   const initialValues = getInitialValues();
 
   return (
-    <Box>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={values =>
-          handleSubmit({ ...values, order, total, orderId, dispatch })}
-      >
-        {({ values }) => (
-          <Form>
-            <Flex>
-              <Box width="50%">
-                <Section>
-                  <SectionTitle {...Theme.styles.formSectionTitle}>
-                    Контактна інформація
-                  </SectionTitle>
-                  <FieldGroup id="firstName" label="First Name" />
-                  <FieldGroup id="lastName" label="Last Name" />
-                  <FieldGroup id="phoneNumber" label="Phone Number" />
-                  <FieldGroup id="email" label="Email" />
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={values =>
+        handleSubmit({ ...values, order, total, orderId, dispatch })}
+    >
+      {({ values }) => (
+        <Form>
+          <Flex flexWrap="wrap" justifyContent="space-between">
+            <Box width={['100%', '100%', '48%']}>
+              <Section>
+                <SectionTitle {...Theme.styles.formSectionTitle}>
+                  Контактна інформація
+                </SectionTitle>
+                <FieldGroup id="firstName" label="First Name" />
+                <FieldGroup id="lastName" label="Last Name" />
+                <FieldGroup id="phoneNumber" label="Phone Number" />
+                <FieldGroup id="email" label="Email" />
+                <Flex
+                  mt={15}
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Label htmlFor="call">
+                    Прошу перетелефонувати мені для уточнення замовлення
+                  </Label>
+                  <FieldComponent id="call" type="toggle" />
+                </Flex>
+              </Section>
+              <Section mt={50}>
+                <SectionTitle {...Theme.styles.formSectionTitle}>
+                  Доставка та оплата
+                </SectionTitle>
+                <FieldGroup
+                  id="shippingCity"
+                  type="searchCity"
+                  label="Місто або населений пункт"
+                />
+                <FieldGroup
+                  id="warehouse"
+                  type="warehouse"
+                  label="Номер відділення Новой Пошти"
+                />
+                <FieldGroup
+                  id="comments"
+                  type="textarea"
+                  label="Коментар до замовлення"
+                />
+              </Section>
+              <PaymentTypes paymentType={values.paymentType} />
+            </Box>
+            <Box
+              pl={[0, 0, 30]}
+              mt={[20, 30, 0]}
+              pt={[20, 30, 0]}
+              width={['100%', '100%', '48%']}
+              borderColor={Theme.colors.lightGrey}
+              borderLeft={['none', 'none', '1px solid']}
+              borderTop={['1px solid', '1px solid', 'none']}
+            >
+              <OrderComposition orderComposition={orderComposition} />
+              <Section mt={Theme.styles.spacing.paddingY}>
+                <SectionTitle {...Theme.styles.formSectionTitle}>
+                  Разом до сплати
+                </SectionTitle>
+                <Box
+                  borderBottom="1px solid"
+                  borderColor={Theme.colors.lightGrey}
+                >
                   <Flex
-                    mt={15}
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Label htmlFor="call">
-                      Прошу перетелефонувати мені для уточнення замовлення
-                    </Label>
-                    <FieldComponent id="call" type="toggle" />
-                  </Flex>
-                </Section>
-                <Section mt={50}>
-                  <SectionTitle {...Theme.styles.formSectionTitle}>
-                    Доставка та оплата
-                  </SectionTitle>
-                  <FieldGroup
-                    id="shippingCity"
-                    type="searchCity"
-                    label="Місто або населений пункт"
-                  />
-                  <FieldGroup
-                    id="warehouse"
-                    type="warehouse"
-                    label="Номер відділення Новой Пошти"
-                  />
-                  <FieldGroup
-                    id="comments"
-                    type="textarea"
-                    label="Коментар до замовлення"
-                  />
-                </Section>
-                <PaymentTypes paymentType={values.paymentType} />
-              </Box>
-              <Box
-                ml={30}
-                pl={30}
-                width="50%"
-                borderLeft="1px solid"
-                borderColor={Theme.colors.lightGrey}
-              >
-                <OrderComposition orderComposition={orderComposition} />
-                <Section mt={50}>
-                  <SectionTitle {...Theme.styles.formSectionTitle}>
-                    Разом до сплати
-                  </SectionTitle>
-                  <Box
-                    borderBottom="1px solid"
-                    borderColor={Theme.colors.lightGrey}
-                  >
-                    <Flex
-                      py={15}
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Text color={Theme.colors.lightSlateGrey}>
-                        {totalQuantity} товарів на суму
-                      </Text>
-                      <Text fontWeight={500}>{total} грн</Text>
-                    </Flex>
-                    <Flex
-                      py={15}
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Text color={Theme.colors.lightSlateGrey}>
-                        Вартість доставки
-                      </Text>
-                      <Text fontWeight={500}>50 грн</Text>
-                    </Flex>
-                  </Box>
-                  <Flex
-                    py={25}
+                    py={[10, 15]}
                     alignItems="center"
                     justifyContent="space-between"
                   >
                     <Text color={Theme.colors.lightSlateGrey}>
-                      Разом до сплати
+                      {totalQuantity} товарів на суму
                     </Text>
-                    <Text
-                      fontSize={18}
-                      fontWeight="bold"
-                      color={Theme.colors.mainBlack}
-                    >
-                      {R.add(total, 50)} грн
-                    </Text>
+                    <Text fontWeight={500}>{total} грн</Text>
                   </Flex>
-                  {R.propEq('paymentType', 'card', values) ? (
-                    <LiqPayPay
-                      amount="3"
-                      currency="UAH"
-                      result_url="localhost:3000"
-                      publicKey="sandbox_i60346112176"
-                      description="Payment for product"
-                      extra={[<PaymentButton key={1} />]}
-                      product_description="Online courses"
-                      server_url="http://server.domain.com/liqpay"
-                      orderId={Math.floor(1 + Math.random() * 900000000)}
-                      privateKey="sandbox_tib5dHdlRVhmkOumo4Cx9UpbMr39Dmihj5bzTA4z"
-                    />
-                  ) : (
-                    <PaymentButton />
-                  )}
-                </Section>
-              </Box>
-            </Flex>
-          </Form>
-        )}
-      </Formik>
-    </Box>
+                  <Flex
+                    py={[10, 15]}
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Text color={Theme.colors.lightSlateGrey}>
+                      Вартість доставки
+                    </Text>
+                    <Text fontWeight={500}>50 грн</Text>
+                  </Flex>
+                </Box>
+                <Flex
+                  py={[15, 20, 25]}
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Text color={Theme.colors.lightSlateGrey}>
+                    Разом до сплати
+                  </Text>
+                  <Text
+                    fontWeight="bold"
+                    fontSize={[16, 18]}
+                    color={Theme.colors.mainBlack}
+                  >
+                    {R.add(total, 50)} грн
+                  </Text>
+                </Flex>
+                {R.propEq('paymentType', 'card', values) ? (
+                  <LiqPayPay
+                    amount="3"
+                    currency="UAH"
+                    result_url="localhost:3000"
+                    publicKey="sandbox_i60346112176"
+                    description="Payment for product"
+                    extra={[<PaymentButton key={1} />]}
+                    product_description="Online courses"
+                    server_url="http://server.domain.com/liqpay"
+                    orderId={Math.floor(1 + Math.random() * 900000000)}
+                    privateKey="sandbox_tib5dHdlRVhmkOumo4Cx9UpbMr39Dmihj5bzTA4z"
+                  />
+                ) : (
+                  <PaymentButton />
+                )}
+              </Section>
+            </Box>
+          </Flex>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

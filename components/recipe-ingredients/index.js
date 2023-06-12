@@ -144,9 +144,20 @@ const RecipeIngredients = props => {
   };
 
   return (
-    <Section mt={100} display="flex" justifyContent="space-between">
-      <Article width="55%">
-        <ArticleTitle fontSize={25} fontWeight={500}>
+    <Section
+      display="flex"
+      flexWrap="wrap"
+      justifyContent={['center', 'center', 'space-between']}
+    >
+      <Article
+        width={['100%', '100%%', '45%']}
+        mt={Theme.styles.spacing.paddingY}
+      >
+        <ArticleTitle
+          fontWeight={500}
+          fontSize={[18, 20, 25]}
+          textAlign={['center', 'center', 'left']}
+        >
           Ingredients
         </ArticleTitle>
         {ingredients.map((item, index) => (
@@ -160,12 +171,15 @@ const RecipeIngredients = props => {
         ))}
       </Article>
       <Article
-        ml={50}
-        width="45%"
-        maxWidth={450}
         color={Theme.colors.woodyBrown}
+        width={['100%', '100%%', '45%']}
+        mt={Theme.styles.spacing.paddingY}
       >
-        <ArticleTitle fontSize={25} fontWeight={500}>
+        <ArticleTitle
+          fontWeight={500}
+          fontSize={[18, 20, 25]}
+          textAlign={['center', 'center', 'left']}
+        >
           Direction
         </ArticleTitle>
         {direction.map((item, index) => (

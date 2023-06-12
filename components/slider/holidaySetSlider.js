@@ -16,8 +16,23 @@ const HolidaySetSlider = ({ list }) => {
   return (
     <Box>
       <Flex mb={20} ml="auto" width="max-content">
-        <Icon iconName="arrow" handleClick={prev} />
-        <Icon ml={20} iconName="styledArrow" handleClick={next} />
+        <Icon
+          w="100%"
+          h="100%"
+          iconName="arrow"
+          handleClick={prev}
+          width={[35, 35, 50]}
+          height={[35, 35, 50]}
+        />
+        <Icon
+          ml={20}
+          w="100%"
+          h="100%"
+          handleClick={next}
+          width={[35, 35, 50]}
+          height={[35, 35, 50]}
+          iconName="styledArrow"
+        />
       </Flex>
       <Slider ref={slider} {...holidaySetSettings}>
         {list.map((imageUrl, index) => (

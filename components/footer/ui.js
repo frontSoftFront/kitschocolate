@@ -40,7 +40,7 @@ export const StyledFooter = styled.footer`
 export const NavItem = styled(StyledLink)`
   display: block;
 
-  &: hover {
+  &:hover {
     opacity: 1;
   }
 

@@ -13,23 +13,25 @@ import { FieldGroup } from '..';
 // //////////////////////////////////////////////////
 
 const initialValues = {
-  loginId: '',
+  email: '',
   password: ''
 };
 
 const validationSchema = Yup.object().shape({
-  loginId: Yup.string().required('Field is Required'),
+  email: Yup.string().required('Field is Required'),
   password: Yup.string().required('Field is Required')
 });
 
 const AuthForm = ({ router }) => {
+  const firebase = useFirebase();
+
   return (
     <Box>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={({ loginId, password }) => {
-          if (R.and(R.equals(loginId, 'admin'), R.equals(password, 'admin'))) {
+        onSubmit={async ({ email, password }) => {
+          if (R.and(R.equals(email, 'admin'), R.equals(password, 'admin'))) {
             router.push('/constructor');
           } else {
             showToastifyMessage('bad credentials', 'error');
@@ -38,7 +40,7 @@ const AuthForm = ({ router }) => {
       >
         {() => (
           <Form>
-            <FieldGroup type="text" id="loginId" label="User Name" />
+            <FieldGroup type="text" id="email" label="Email" />
             <FieldGroup type="text" id="password" label="Password" />
             <Button
               {...Theme.styles.actionButton}

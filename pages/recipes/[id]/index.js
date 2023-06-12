@@ -44,7 +44,7 @@ const Content = ({ router, recipe, recipes, chocolates }) => {
 
   return (
     <>
-      <Section py={50}>
+      <Section py={Theme.styles.spacing.paddingY}>
         <PageTitle {...Theme.styles.pageTitle}>Рецепт / {title}</PageTitle>
         <RecipeDescription
           imgUrl={imgUrl}

@@ -58,17 +58,26 @@ const Content = ({ data, title, categoryName }) => {
   return (
     <>
       <Section
-        py={50}
         borderBottom="2px solid"
         borderColor={Theme.colors.quincy}
+        py={Theme.styles.spacing.paddingY}
       >
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
-        <Flex my={20} ml="auto" width="100" justifyContent="flex-end">
-          <Icon w={40} h={40} iconName="arrow" handleClick={handlePrev} />
+        <Flex my={20} ml="auto" width="100%" justifyContent="flex-end">
           <Icon
-            w={40}
-            h={40}
+            w="100%"
+            h="100%"
+            iconName="arrow"
+            width={[30, 35, 40]}
+            height={[30, 35, 40]}
+            handleClick={handlePrev}
+          />
+          <Icon
             ml={20}
+            w="100%"
+            h="100%"
+            width={[30, 35, 40]}
+            height={[30, 35, 40]}
             iconName="styledArrow"
             handleClick={handleNext}
           />
@@ -77,7 +86,7 @@ const Content = ({ data, title, categoryName }) => {
           animationName={animationName}
           animationProps="0.6s cubic-bezier(.77,0.000,.175,1.000) both"
         >
-          <Flex justifyContent="space-between">
+          <Flex flexWrap="wrap" justifyContent="space-between">
             <OrderImage extraImages={orderItem.extraImages} />
             <OrderItem category orderItem={orderItem} />
           </Flex>

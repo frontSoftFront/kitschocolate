@@ -264,7 +264,7 @@ const ImagesComponent = ({
       </Box>
       <Grid pt={20} gridGap="20px" gridTemplateColumns={gridTemplateColumns}>
         {filteredImages.map(({ id, url, type, filename }) => (
-          <Grid key={id} gridTemplateColumns="1fr 20px">
+          <Flex key={id}>
             <ImageComponent
               src={url}
               width={300}
@@ -280,7 +280,7 @@ const ImagesComponent = ({
               position="relative"
               handleClick={() => handleRemoveImage({ id, type, filename })}
             />
-          </Grid>
+          </Flex>
         ))}
       </Grid>
     </>

@@ -19,8 +19,11 @@ const CheckoutPage = ({ router, firebaseData }) => {
       title="Оформлення замовлення"
       collections={['chocolates', `orders/${id}`]}
     >
-      <Section py={50} maxWidth={1100}>
-        <PageTitle {...Theme.styles.pageTitle} mb={50}>
+      <Section maxWidth={1100} py={Theme.styles.spacing.paddingY}>
+        <PageTitle
+          {...Theme.styles.pageTitle}
+          mb={Theme.styles.spacing.paddingY}
+        >
           Оформлення замовлення
         </PageTitle>
         <OrderForm

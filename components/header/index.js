@@ -2,7 +2,6 @@ import * as R from 'ramda';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useFirebaseConnect } from 'react-redux-firebase';
 // components
 import Menu from '../menu';
 import Portal from '../portal';
@@ -19,7 +18,7 @@ import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Flex, StyledLink } from '../../ui';
+import { Flex } from '../../ui';
 // feature header
 import { Nav, NavItem, BasketCount, StyledHeader } from './ui';
 // //////////////////////////////////////////////////
@@ -64,9 +63,11 @@ const BasketIcon = ({ router }) => {
 };
 
 const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
-  <StyledHeader>
+  <StyledHeader px={[25, 25, 50, 75]}>
     <Flex
       py={15}
+      mx="auto"
+      maxWidth={1440}
       alignItems="flex-end"
       borderBottom="1px solid"
       justifyContent="space-between"
@@ -99,20 +100,33 @@ const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
 
 const MobileHeader = ({
   router,
-  mounted,
-  menuOpened,
   firebaseData,
-  animationName,
   activeNavItem,
-  handleToggleMenu,
   handleGoToHomePage
 }) => {
-  if (R.not(R.path(['requested', 'shop'], firebaseData))) {
-    useFirebaseConnect('shop');
-  }
+  const [mounted, setMounted] = useState(false);
+  const [menuOpened, toggleMenu] = useState(false);
+  const [animationName, setAnimationName] = useState('');
+
+  const handleToggleMenu = () => {
+    if (menuOpened) {
+      setAnimationName('slide-left');
+
+      toggleMenu(false);
+      setTimeout(() => setMounted(false), 400);
+
+      document.getElementsByTagName('body')[0].style.overflow = 'initial';
+    } else {
+      toggleMenu(true);
+      setMounted(true);
+      setAnimationName('slide-right');
+
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    }
+  };
 
   return (
-    <header>
+    <StyledHeader px={[25, 25, 50, 75]}>
       <Flex py={15} alignItems="center" justifyContent="space-between">
         <ToggleIcon menuOpened={menuOpened} action={handleToggleMenu} />
         <Icon h={50} iconName="logo" handleClick={handleGoToHomePage} />
@@ -133,7 +147,7 @@ const MobileHeader = ({
           </Flex>
         </Flex>
       </Flex>
-    </header>
+    </StyledHeader>
   );
 };
 
@@ -145,35 +159,14 @@ const Header = ({
 }) => {
   const { width } = useWindowSize();
 
-  const [mounted, setMounted] = useState(false);
-  const [menuOpened, toggleMenu] = useState(false);
-  const [animationName, setAnimationName] = useState('');
-  const handleToggleMenu = () => {
-    if (menuOpened) {
-      setAnimationName('slide-left');
-
-      toggleMenu(false);
-      setTimeout(() => setMounted(false), 400);
-    } else {
-      toggleMenu(true);
-      setMounted(true);
-      setAnimationName('slide-right');
-    }
-  };
-
   const headerProps = {
     router,
-    mounted,
-    toggleMenu,
-    menuOpened,
     firebaseData,
-    animationName,
     activeNavItem,
-    handleToggleMenu,
     handleGoToHomePage
   };
 
-  if (R.lt(width, 600)) return <MobileHeader {...headerProps} />;
+  if (R.lt(width, 580)) return <MobileHeader {...headerProps} />;
 
   return <DesktopHeader {...headerProps} />;
 };

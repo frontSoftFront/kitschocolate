@@ -1,25 +1,16 @@
 import * as R from 'ramda';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useFirebaseConnect } from 'react-redux-firebase';
-// components
-import Portal from '../portal';
-import Basket from '../basket';
+import { useState } from 'react';
 // constants
 import * as C from '../../constants';
 // helpers
 import * as H from '../../helpers';
-// hooks
-import { useWindowSize } from '../../hooks/use-window-size';
 // icons
 import Icon from '../../icons';
 // theme
 import Theme from '../../theme';
 // ui
-import { Box, Text, Flex, StyledLink, AnimatedBox } from '../../ui';
-// menu
-import { MenuWrapper } from './ui';
+import { Text, Flex, StyledLink, AnimatedBox } from '../../ui';
 // //////////////////////////////////////////////////
 
 const Categories = ({ categories, handleClick, categoryTitle }) => (
@@ -69,21 +60,16 @@ const Navigation = ({
         : link;
 
       return (
-        <Link
-          passHref
-          key={index}
-          href={href}
-          onClick={() => H.isNotNilAndNotEmpty(id) && handleToggleMenu()}
-        >
+        <Link passHref key={index} href={href}>
           <StyledLink
             py={10}
             fontSize={14}
             display="flex"
             fontWeight={600}
             alignItems="center"
+            onClick={handleToggleMenu}
             color={Theme.colors.quincy}
             justifyContent="space-between"
-            onClick={() => H.isNotNilAndNotEmpty(id) && handleToggleMenu()}
           >
             {title}
             <Icon iconName="arrowRight" />
@@ -95,13 +81,7 @@ const Navigation = ({
 );
 
 const SubCategory = props => {
-  const {
-    router,
-    navItems,
-    navTitle,
-    setActiveCategory,
-    handleToggleMenu
-  } = props;
+  const { navItems, navTitle, setActiveCategory, handleToggleMenu } = props;
 
   return (
     <>
@@ -119,7 +99,6 @@ const SubCategory = props => {
         </Text>
       </Flex>
       <Navigation
-        router={router}
         navItems={navItems}
         navTitle={navTitle}
         handleToggleMenu={handleToggleMenu}
@@ -146,39 +125,37 @@ const Menu = props => {
     setActiveCategory(categoryName);
 
   return (
-    <MenuWrapper>
-      <AnimatedBox
-        p={15}
-        top={84}
-        left={0}
-        width="80vw"
-        position="fixed"
-        height="calc(100vh - 84px)"
-        animationName={animationName}
-        background={Theme.colors.white}
-        boxShadow="0 0 13px 0 rgb(0 0 0 / 20%)"
-        animationProps="0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both"
-      >
-        {R.isNil(activeCategory) && (
-          <>
-            <Categories
-              categories={categoriesArr}
-              categoryTitle="Каталог товарів"
-              handleClick={handleSetActiveCategory}
-            />
-            <Navigation />
-          </>
-        )}
-        {H.isNotNilAndNotEmpty(activeCategory) && (
-          <SubCategory
-            handleToggleMenu={handleToggleMenu}
-            setActiveCategory={setActiveCategory}
-            navItems={R.values(activeCategoryChocolates)}
-            navTitle={R.path([activeCategory, 'title'], categories)}
+    <AnimatedBox
+      p={15}
+      top={84}
+      left={0}
+      width="100vw"
+      position="fixed"
+      height="calc(100vh - 84px)"
+      animationName={animationName}
+      background={Theme.colors.white}
+      boxShadow="0 0 13px 0 rgb(0 0 0 / 20%)"
+      animationProps="0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both"
+    >
+      {R.isNil(activeCategory) && (
+        <>
+          <Categories
+            categories={categoriesArr}
+            categoryTitle="Каталог товарів"
+            handleClick={handleSetActiveCategory}
           />
-        )}
-      </AnimatedBox>
-    </MenuWrapper>
+          <Navigation handleToggleMenu={handleToggleMenu} />
+        </>
+      )}
+      {H.isNotNilAndNotEmpty(activeCategory) && (
+        <SubCategory
+          handleToggleMenu={handleToggleMenu}
+          setActiveCategory={setActiveCategory}
+          navItems={R.values(activeCategoryChocolates)}
+          navTitle={R.path([activeCategory, 'title'], categories)}
+        />
+      )}
+    </AnimatedBox>
   );
 };
 
