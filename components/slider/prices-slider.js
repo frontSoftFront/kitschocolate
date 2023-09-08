@@ -1,7 +1,9 @@
 import is from 'is_js';
 import * as R from 'ramda';
 import Slider from 'react-slick';
-import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import React, { useRef, useCallback } from 'react';
 // actions
 import actions from '../../store/actions';
 // components
@@ -19,6 +21,11 @@ import { Box, Text, Flex } from '../../ui';
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
+const makeSelectBasketList = createSelector(
+  ({ basket }) => basket,
+  ({ basketList }) => basketList
+);
+
 const PricesSlider = ({
   mt,
   list,
@@ -34,21 +41,33 @@ const PricesSlider = ({
   const { push } = router;
 
   const slider = useRef(null);
+  const basketList = useSelector(makeSelectBasketList);
+
   const sliderSettings = R.assoc(
     'infinite',
     R.gt(R.length(4, list)),
     priceSettings
   );
-  const addItemToBasket = useActions(actions.addItemToBasket);
-  const handleAddItemToBasket = ({ id, title, price, imgUrl }) => {
-    showToastifyMessage('success');
-    addItemToBasket({ id, title, price, imgUrl, quantity: 1 });
-  };
+
+  const [addItemToBasket, removeItemFromBasket] = useActions([
+    actions.addItemToBasket,
+    actions.removeItemFromBasket
+  ]);
+
+  const handleAddItemToBasket = useCallback(
+    ({ id, title, price, imgUrl }) => {
+      showToastifyMessage('success');
+      addItemToBasket({ id, title, price, imgUrl, quantity: 1 });
+    },
+    [addItemToBasket]
+  );
+
   const handleGoToDetailPage = id => {
     const swiped = R.path(
       ['current', 'innerSlider', 'state', 'animating'],
       slider
     );
+
     if (swiped) return;
 
     push(`/shop/${id}`);
@@ -112,9 +131,13 @@ const PricesSlider = ({
             <ItemComponent
               key={index}
               item={item}
+              basketList={basketList}
+              handleRemoveItem={handleRemoveItem}
               hideActionButton={hideActionButton}
               handleGoToDetailPage={handleGoToDetailPage}
               handleAddItemToBasket={handleAddItemToBasket}
+              handleRemoveItemFromBasket={removeItemFromBasket}
+              quantity={R.path([item.id, 'quantity'], basketList)}
             />
           );
         })}

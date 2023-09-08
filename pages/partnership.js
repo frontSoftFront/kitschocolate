@@ -26,7 +26,7 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-const ContactUs = () => {
+export const ContactUs = ({ mt, mx = "auto", text = 'Анкета' }) => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => {
@@ -43,12 +43,13 @@ const ContactUs = () => {
     <>
       <Button
         {...Theme.styles.actionButton}
-        mx="auto"
+        mx={mx}
+        mt={mt}
         height={40}
         width={200}
         onClick={handleOpenModal}
       >
-        Анкета
+        {text}
       </Button>
       {opened ? (
         <Portal selector="#modal">
@@ -91,8 +92,8 @@ const ContactUs = () => {
 const PartnershipPage = ({ router, firebaseData }) => (
   <Layout
     router={router}
-    title="Partnership"
     firebaseData={firebaseData}
+    title="Корпоративна співпраця"
     collections={['shop', 'chocolates']}
   >
     <PageTitle

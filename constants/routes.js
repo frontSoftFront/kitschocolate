@@ -8,24 +8,24 @@ export const ROUTE_PATH_DELIVERY_AND_PAYMENT = '/delivery_and_payment';
 
 export const NAV_ITEMS = [
   {
-    title: 'Home',
+    title: 'Головна',
     link: ROUTE_HOME_PAGE
   },
   {
-    title: 'About',
+    title: 'Про нас',
     link: ROUTE_ABOUT_PAGE
   },
   {
-    title: 'Shop',
+    title: 'Магазин',
     link: ROUTE_PATH_SHOP
   },
   {
-    title: 'Recipe',
+    title: 'Рецепти',
     link: ROUTE_RECIPE_PAGE
   },
   {
-    title: 'Partnership',
-    link: ROUTE_PARTNERSHIP_PAGE
+    link: ROUTE_PARTNERSHIP_PAGE,
+    title: 'Корпоративна співпраця'
   },
   {
     title: 'Q/A',

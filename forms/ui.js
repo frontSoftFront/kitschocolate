@@ -27,8 +27,8 @@ export const Input = styled.input`
 `;
 
 export const Error = styled.div`
-  left: 0;
-  top: 100%;
+  top: 101%;
+  left: 12px;
   font-size: 11px;
   position: absolute;
   color: ${Theme.colors.inputErrorColor};
@@ -40,20 +40,18 @@ export const Error = styled.div`
 
 export const InputWrapper = styled.div`
   width: 100%;
-  margin-top: 10px;
+  margin-top: 5px;
   position: relative;
-
-  @media (max-width: 600px) {
-    margin-top: 5px;
-  }
 `;
 
 export const Label = styled.label`
   ${width}
-  font-size: 14px;
+
+  display: block;
+  font-size: 13px;
   cursor: pointer;
   font-weight: 600;
-  margin-left: 12px;
+  padding-left: 12px;
   font-family: Poppins, sans-serif;
   color: ${Theme.colors.lightSlateGrey};
 

@@ -67,27 +67,27 @@ const OrderItem = ({ orderItem }) => {
           my={[15, 20]}
           opacity="0.54"
           lineHeight={1.54}
-          fontSize={[12, 14]}
+          fontSize={[14, 16]}
         >
           {description}
         </Text>
       </Article>
       <Box>
         <Flex>
-          <Flex mr={40}>
+          {/* <Flex mr={40}>
             <Text color={Theme.colors.lightGrey}>Size:</Text>
             <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
               {activeSize}
             </Text>
-          </Flex>
-          <Flex>
-            <Text color={Theme.colors.lightGrey}>Weight:</Text>
+          </Flex> */}
+          <Flex mb={20} fontSize={[12, 14]}>
+            <Text color={Theme.colors.lightGrey}>Вага:</Text>
             <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
               {activeWeight} gr
             </Text>
           </Flex>
         </Flex>
-        <Flex my={20}>
+        {/* <Flex my={20}>
           <Button
             mr={20}
             width={90}
@@ -112,7 +112,7 @@ const OrderItem = ({ orderItem }) => {
           >
             medium
           </Button>
-        </Flex>
+        </Flex> */}
       </Box>
       <Flex
         py={[15, 20]}
@@ -182,7 +182,7 @@ const OrderItem = ({ orderItem }) => {
         textTransform="uppercase"
         onClick={handleAddItemToBasket}
       >
-        Add to cart
+        В корзину
       </Button>
     </Section>
   );

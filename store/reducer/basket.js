@@ -35,6 +35,25 @@ const basket = (state = initialState, { type, payload }) => {
 
       return { ...state, basketList: newBasketList };
     }
+    case 'REMOVE_ITEM_FROM_BASKET': {
+      const { basketList } = state;
+
+      const { id, price } = payload;
+
+      const quantity = R.path([id, 'quantity'], basketList);
+
+      if (R.equals(quantity, 1)) {
+        return { ...state, basketList: R.dissoc(id, basketList) };
+      }
+
+      const newItem = {
+        ...R.prop(id, basketList),
+        quantity: R.dec(quantity),
+        subtotal: R.multiply(R.dec(quantity), price)
+      };
+
+      return { ...state, basketList: R.assoc(id, newItem, basketList) };
+    }
     default:
       return state;
   }

@@ -24,17 +24,6 @@ export const Nav = styled.nav`
 
 export const StyledFooter = styled.footer`
   ${space}
-
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  border-top: 2px solid;
-  justify-content: space-around;
-  border-color: ${Theme.colors.quincy};
-
-  @media (max-width: 580px) {
-    flex-direction: column;
-  }
 `;
 
 export const NavItem = styled(StyledLink)`

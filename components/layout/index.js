@@ -9,7 +9,7 @@ import Footer from '../footer';
 // helpers
 import * as H from '../../helpers';
 // ui
-import { Img, Flex, PageWrapper } from '../../ui';
+import { Img, Flex, Box } from '../../ui';
 // //////////////////////////////////////////////////
 
 const Loader = () => (
@@ -53,9 +53,11 @@ const Layout = ({ title, router, children, collections, firebaseData }) => {
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}
       />
-      <PageWrapper mx="auto" px={[25, 25, 50, 75]}>
-        {children}
-      </PageWrapper>
+      <Box px={[25, 25, 50, 75]}>
+        <Box mx="auto" maxWidth={1400}>
+          {children}
+        </Box>
+      </Box>
       <Footer
         activeNavItem={activeNavItem}
         handleGoToHomePage={handleGoToHomePage}

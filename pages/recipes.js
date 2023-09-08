@@ -18,12 +18,12 @@ const Content = ({ router, recipes }) => {
 
   return (
     <Section pt={[30, 40, 50]}>
-      <PageTitle mb={50} {...Theme.styles.pageTitle}>
+      <PageTitle mb={[30, 40, 50]} {...Theme.styles.pageTitle}>
         Рецепти
       </PageTitle>
       <Grid
-        mt={50}
         gridGap="20px"
+        mt={[30, 40, 50]}
         gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
       >
         {recipes.map((item, index) => (

@@ -10,31 +10,37 @@ import { Img, Box, Text, Flex, Button, RelativeBox } from '../../ui';
 const ItemComponent = ({
   px,
   item,
+  quantity,
   handleEditItem,
   handleRemoveItem,
   handleGoToDetailPage,
   handleAddItemToBasket,
   itemType = 'chocolate',
-  hideActionButton = false
+  hideActionButton = false,
+  handleRemoveItemFromBasket
 }) => {
   const { id, price, title, imgUrl, cookingTime } = item;
 
   return (
-    <Box cursor="pointer" px={R.or(px, 20)}>
-      <RelativeBox
-        mx="auto"
-        width={['80%', '100%']}
-        height={[250, 250, 300, 350]}
-      >
-        <ImageComponent
-          src={imgUrl}
-          layout="fill"
-          placeholder="blur"
+    <Flex
+      px={R.or(px, 20)}
+      flexDirection="column"
+      height={[410, 410, 470, 520]}
+      justifyContent="space-between"
+    >
+      <div>
+        <RelativeBox
+          mx="auto"
+          cursor="pointer"
+          width={['80%', '100%']}
+          height={[250, 250, 300, 350]}
           onClick={() => handleGoToDetailPage(id)}
-        />
-      </RelativeBox>
-      <Box mx="auto" mt={20} width="90%">
+        >
+          <ImageComponent src={imgUrl} layout="fill" placeholder="blur" />
+        </RelativeBox>
         <Text
+          mt={20}
+          cursor="pointer"
           fontWeight={600}
           textAlign="center"
           fontSize={[16, 16, 18]}
@@ -44,6 +50,8 @@ const ItemComponent = ({
         >
           {title}
         </Text>
+      </div>
+      <Box mx="auto" width="90%">
         {R.and(R.equals(itemType, 'chocolate'), R.not(hideActionButton)) && (
           <>
             <Text
@@ -52,22 +60,58 @@ const ItemComponent = ({
               mx="auto"
               fontWeight="bold"
               width="max-content"
-              background="#D2C8D1"
               fontSize={[16, 16, 18]}
               color={Theme.colors.congoBrown}
             >
               {price} грн
             </Text>
-            <Button
-              {...Theme.styles.actionButton}
-              height={40}
-              width="100%"
-              m="20px auto 0 auto"
-              onClick={() => handleAddItemToBasket(item)}
-            >
-              <Img mr="7px" width={15} height={15} src="./shopping-cart.svg" />
-              Add to card
-            </Button>
+            {R.isNil(quantity) && (
+              <Button
+                {...Theme.styles.actionButton}
+                height={40}
+                width="100%"
+                m="20px auto 0 auto"
+                onClick={() => handleAddItemToBasket(item)}
+              >
+                <Img
+                  mr="7px"
+                  width={15}
+                  height={15}
+                  src="./shopping-cart.svg"
+                />
+                В корзину
+              </Button>
+            )}
+            {quantity && (
+              <Flex
+                {...Theme.styles.actionButton}
+                height={40}
+                width="100%"
+                alignItems="center"
+                m="20px auto 0 auto"
+                justifyContent="space-between"
+              >
+                <Button
+                  ml={10}
+                  p={10}
+                  color="white"
+                  fontSize={16}
+                  onClick={() => handleRemoveItemFromBasket(item)}
+                >
+                  -
+                </Button>
+                <Box>{quantity} шт.</Box>
+                <Button
+                  p={10}
+                  mr={10}
+                  color="white"
+                  fontSize={16}
+                  onClick={() => handleAddItemToBasket(item)}
+                >
+                  +
+                </Button>
+              </Flex>
+            )}
           </>
         )}
         {R.equals(itemType, 'recipe') && (
@@ -93,7 +137,6 @@ const ItemComponent = ({
               mx="auto"
               fontWeight="bold"
               width="max-content"
-              background="#D2C8D1"
               fontSize={[16, 16, 18]}
               color={Theme.colors.congoBrown}
             >
@@ -120,7 +163,7 @@ const ItemComponent = ({
           </>
         )}
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

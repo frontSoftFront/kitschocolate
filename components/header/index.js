@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import Link from 'next/link';
 import { useState } from 'react';
+import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
 // components
 import Menu from '../menu';
@@ -23,33 +24,45 @@ import { Flex } from '../../ui';
 import { Nav, NavItem, BasketCount, StyledHeader } from './ui';
 // //////////////////////////////////////////////////
 
+const makeSelectBasket = createSelector(
+  ({ basket }) => basket,
+  ({ basketList }) => {
+    let basketCount = R.compose(
+      R.sum,
+      R.map(R.prop('quantity')),
+      R.values
+    )(basketList);
+
+    if (R.gt(basketCount, 100)) basketCount = 100;
+
+    return { basketList, basketCount };
+  }
+);
+
 const BasketIcon = ({ router }) => {
   const [basketOpened, setBasketOpened] = useState(false);
+
   const handleCloseBasket = () => {
     setBasketOpened(false);
     document.getElementsByTagName('body')[0].style.overflow = 'initial';
   };
-  const basketList = useSelector(state => state.basket.basketList);
+
+  const { basketList, basketCount } = useSelector(makeSelectBasket);
+
   const handleOpenBasket = () => {
     if (H.isNotNilAndNotEmpty(basketList)) {
       setBasketOpened(true);
       document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     }
   };
-  let count = R.compose(
-    R.sum,
-    R.map(R.prop('quantity')),
-    R.values
-  )(basketList);
-  if (R.gt(count, 100)) count = 100;
 
   return (
     <>
       <Flex mb={10}>
         <Icon iconName="basket" handleClick={handleOpenBasket} />
-        {R.gt(count, 0) && <BasketCount>{count}</BasketCount>}
+        {R.gt(basketCount, 0) ? <BasketCount>{basketCount}</BasketCount> : null}
       </Flex>
-      {basketOpened && (
+      {basketOpened ? (
         <Portal selector="#modal">
           <Basket
             router={router}
@@ -57,7 +70,7 @@ const BasketIcon = ({ router }) => {
             handleCloseBasket={handleCloseBasket}
           />
         </Portal>
-      )}
+      ) : null}
     </>
   );
 };
@@ -77,15 +90,16 @@ const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
       <Nav
         mb={10}
         mx="auto"
-        maxWidth={750}
+        maxWidth={650}
+        // maxWidth={750}
         width="calc(100% - 180px)"
         justifyContent="space-between"
       >
-        {C.NAV_ITEMS.map(({ link, title }, index) => (
+        {R.tail(C.NAV_ITEMS).map(({ link, title }, index) => (
           <Link key={index} href={link} legacyBehavior>
             <NavItem
               textTransform="uppercase"
-              fontSize={[12, 13, 14, 16]}
+              fontSize={[12, 12, 14, 16]}
               active={activeNavItem(link)}
             >
               {title}
@@ -166,7 +180,7 @@ const Header = ({
     handleGoToHomePage
   };
 
-  if (R.lt(width, 580)) return <MobileHeader {...headerProps} />;
+  if (R.lt(width, 650)) return <MobileHeader {...headerProps} />;
 
   return <DesktopHeader {...headerProps} />;
 };

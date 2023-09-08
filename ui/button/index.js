@@ -3,6 +3,7 @@ import {
   space,
   width,
   color,
+  order,
   height,
   border,
   display,
@@ -16,6 +17,7 @@ export const Button = styled.button`
   ${space}
   ${width}
   ${color}
+  ${order}
   ${height}
   ${border}
   ${display}

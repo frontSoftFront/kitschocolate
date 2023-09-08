@@ -24,6 +24,7 @@ const reducer = (state, action) => {
       ...state, // use previous state
       ...action.payload // apply delta from hydration
     };
+
     if (state.basket) nextState.basket = state.basket; // preserve count value on client side navigation
 
     return nextState;

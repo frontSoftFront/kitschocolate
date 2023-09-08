@@ -30,6 +30,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-firestore": "^0.13.0",
     "redux-logger": "^3.0.6",
+    "reselect": "^4.1.8",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",
     "styled-system": "^5.1.5",

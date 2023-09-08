@@ -28,7 +28,7 @@ import { FieldGroup, FieldComponent } from '..';
 const OrderComposition = ({ orderComposition }) => (
   <Section>
     <SectionTitle {...Theme.styles.formSectionTitle}>
-      Склад замовлення
+      Ваше замовлення
     </SectionTitle>
     {orderComposition.map(
       ({ id, title, imgUrl, price, quantity, subtotal }) => (
@@ -49,13 +49,13 @@ const OrderComposition = ({ orderComposition }) => (
               {title}
             </ArticleTitle>
             <Flex justifyContent="space-between">
-              <Text mt={10} fontWeight={500}>
+              <Text ml="5px" mt={10} fontWeight={500}>
                 {price} грн
               </Text>
-              <Text mt={10} fontWeight={500}>
+              <Text ml="5px" mt={10} fontWeight={500}>
                 {quantity} шт.
               </Text>
-              <Text mt={10} fontWeight={500}>
+              <Text ml="5px" mt={10} fontWeight={500}>
                 {subtotal} грн
               </Text>
             </Flex>
@@ -231,7 +231,7 @@ const getClientFields = R.pick([
 
 const defaultValues = {
   email: '',
-  call: true,
+  call: false,
   lastName: '',
   comments: '',
   warehouse: '',
@@ -382,7 +382,7 @@ const OrderForm = ({ order, orderId }) => {
                   justifyContent="space-between"
                 >
                   <Label htmlFor="call">
-                    Прошу перетелефонувати мені для уточнення замовлення
+                    Прошу зателефонувати мені для уточнення замовлення
                   </Label>
                   <FieldComponent id="call" type="toggle" />
                 </Flex>
@@ -466,14 +466,15 @@ const OrderForm = ({ order, orderId }) => {
                 </Flex>
                 {R.propEq('paymentType', 'card', values) ? (
                   <LiqPayPay
-                    amount="3"
+                    amount="1"
                     currency="UAH"
-                    result_url="localhost:3000"
                     publicKey="sandbox_i60346112176"
                     description="Payment for product"
                     extra={[<PaymentButton key={1} />]}
                     product_description="Online courses"
                     server_url="http://server.domain.com/liqpay"
+                    result_url="https://kitschocolate-eight.vercel.app/"
+                    // result_url=''
                     orderId={Math.floor(1 + Math.random() * 900000000)}
                     privateKey="sandbox_tib5dHdlRVhmkOumo4Cx9UpbMr39Dmihj5bzTA4z"
                   />
