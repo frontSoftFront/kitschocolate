@@ -44,10 +44,10 @@ const WrappedApp = ({ Component, pageProps }) => {
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link
+        {/* <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Caveat&family=Montserrat:wght@300;400;500&display=swap"
-        />
+        /> */}
       </Head>
       <GlobalStyles />
       <ReactReduxFirebaseProvider {...rrfProps}>

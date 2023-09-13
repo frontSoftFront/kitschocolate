@@ -266,10 +266,13 @@ const ImagesComponent = ({
         {filteredImages.map(({ id, url, type, filename }) => (
           <Flex key={id}>
             <ImageComponent
+              fill
               src={url}
-              width={300}
               placeholder="blur"
-              height={imageHeight}
+              wrapperStyles={{
+                width: 300,
+                height: imageHeight
+              }}
             />
             <Icon
               width={25}

@@ -366,3 +366,43 @@ export const checkMark = ({ w, h, color }) => (
     />
   </svg>
 );
+
+export const arrowLeftSimple = ({ w, h, color }) => (
+  <svg
+    fill="none"
+    width={w || 24}
+    height={h || 24}
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g id="24 / arrows / chevron-left">
+      <path
+        id="icon"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill={color || 'black'}
+        d="M9.41424 12.0001L16.7071 19.293L15.2929 20.7072L6.58582 12.0001L15.2929 3.29297L16.7071 4.70718L9.41424 12.0001Z"
+      />
+    </g>
+  </svg>
+);
+
+export const arrowRightSimple = ({ w, h, color }) => (
+  <svg
+    fill="none"
+    width={w || 24}
+    height={h || 24}
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g id="24 / arrows / chevron-right">
+      <path
+        id="icon"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill={color || 'black'}
+        d="M14.5857 12.0001L7.29285 4.70718L8.70706 3.29297L17.4142 12.0001L8.70706 20.7072L7.29285 19.293L14.5857 12.0001Z"
+      />
+    </g>
+  </svg>
+);

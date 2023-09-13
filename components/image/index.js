@@ -1,5 +1,7 @@
 import * as R from 'ramda';
 import Image from 'next/image';
+// ui
+import { RelativeBox } from '../../ui';
 // //////////////////////////////////////////////////
 
 const shimmer = (w, h) => `
@@ -25,15 +27,27 @@ const toBase64 = str =>
 const ImageComponent = props => {
   if (R.propEq('placeholder', 'blur', props)) {
     return (
-      <Image
-        {...props}
-        alt={R.propOr('', 'alt', props)}
-        blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
-      />
+      <RelativeBox {...props.wrapperStyles}>
+        <Image
+          {...R.dissoc('wrapperStyles', props)}
+          alt={R.propOr('', 'alt', props)}
+          style={{ objectFit: 'contain' }}
+          sizes={R.pathOr('100vw', ['sizes'], props)}
+          blurDataURL={`data:image/svg+xml;base64,${toBase64(
+            shimmer(700, 475)
+          )}`}
+        />
+      </RelativeBox>
     );
   }
 
-  return <Image {...props} alt={R.propOr('', 'alt', props)} />;
+  return (
+    <Image
+      {...props}
+      alt={R.propOr('', 'alt', props)}
+      sizes={R.pathOr('100vw', ['sizes'], props)}
+    />
+  );
 };
 
 export default ImageComponent;

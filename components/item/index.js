@@ -4,7 +4,7 @@ import ImageComponent from '../image';
 // theme
 import Theme from '../../theme';
 // ui
-import { Img, Box, Text, Flex, Button, RelativeBox } from '../../ui';
+import { Img, Box, Text, Flex, Button } from '../../ui';
 // ////////////////////////////////////////////////
 
 const ItemComponent = ({
@@ -17,27 +17,31 @@ const ItemComponent = ({
   handleAddItemToBasket,
   itemType = 'chocolate',
   hideActionButton = false,
-  handleRemoveItemFromBasket
+  handleRemoveItemFromBasket,
+  height = [410, 410, 470, 520]
 }) => {
   const { id, price, title, imgUrl, cookingTime } = item;
 
   return (
     <Flex
+      height={height}
       px={R.or(px, 20)}
       flexDirection="column"
-      height={[410, 410, 470, 520]}
       justifyContent="space-between"
     >
       <div>
-        <RelativeBox
-          mx="auto"
-          cursor="pointer"
-          width={['80%', '100%']}
-          height={[250, 250, 300, 350]}
+        <ImageComponent
+          fill
+          src={imgUrl}
+          placeholder="blur"
           onClick={() => handleGoToDetailPage(id)}
-        >
-          <ImageComponent src={imgUrl} layout="fill" placeholder="blur" />
-        </RelativeBox>
+          wrapperStyles={{
+            mx: 'auto',
+            cursor: 'pointer',
+            width: ['80%', '100%'],
+            height: [250, 250, 300, 350]
+          }}
+        />
         <Text
           mt={20}
           cursor="pointer"

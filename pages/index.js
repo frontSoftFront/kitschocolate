@@ -2,23 +2,24 @@ import * as R from 'ramda';
 // components
 import Layout from '../components/layout';
 import { ContactUs } from './partnership';
+import ImageComponent from '../components/image';
 import PricesSlider from '../components/slider/prices-slider';
-import HolidaySetSlider from '../components/slider/holidaySetSlider';
 // theme
 import Theme from '../theme';
 // ui
 import {
-  Img,
   Box,
   Flex,
-  Text,
   Button,
   Section,
   Article,
   PageTitle,
   SectionTitle,
-  ArticleTitle
 } from '../ui';
+// images
+import Image1 from '../public/images/1.jpeg';
+import Image2 from '../public/images/2.jpeg';
+import Image3 from '../public/images/3.jpeg';
 // ////////////////////////////////////////////////
 
 export const FavoriteProducts = ({ shop, router, chocolates }) => {
@@ -45,75 +46,59 @@ export const FavoriteProducts = ({ shop, router, chocolates }) => {
 const Content = ({ shop, router, chocolates }) => {
   return (
     <>
-      <Box py={Theme.styles.spacing.paddingY}>
-        <Flex justifyContent="space-between">
-          <Section
-            mx="auto"
-            display="flex"
-            maxWidth={1200}
-            alignItems="center"
-            flexDirection="column"
-            justifyContent="space-between"
+      <Flex
+        mx="auto"
+        maxWidth={1200}
+        justifyContent="space-around"
+        py={Theme.styles.spacing.paddingY}
+      >
+        <Section
+          display="flex"
+          maxWidth={644}
+          alignItems="center"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <PageTitle {...Theme.styles.mainPageTitle} mt={[0, 20]} mb={[20, 0]}>
+            Вітаємо в Kit’s chocolate
+          </PageTitle>
+          <Button
+            height={40}
+            mt={[20, 0]}
+            my={[0, 20]}
+            order={[3, 0]}
+            border="2px solid"
+            width={[200, 250, 300]}
+            fontSize={[16, 18, 20]}
+            textTransform="uppercase"
+            color={Theme.colors.woodyBrown}
+            onClick={() => router.push('/shop')}
           >
-            <PageTitle {...Theme.styles.mainPageTitle} mt={20}>
-              Вітаємо в Kit’s chocolate
-            </PageTitle>
-            <Button
-              mt={20}
-              height={40}
-              order={[3, 0]}
-              border="2px solid"
-              width={[200, 250, 300]}
-              fontSize={[16, 18, 20]}
-              textTransform="uppercase"
-              color={Theme.colors.woodyBrown}
-              onClick={() => router.push('/shop')}
-            >
-              Обрати шоколад
-            </Button>
-            <Img
-              mt={[20, 0]}
-              maxWidth={644}
-              maxHeight={364}
-              src="/images/1.jpeg"
-              width={['100%', '46vw']}
-              height={['auto', '26vw']}
-            />
-          </Section>
-          <Img
-            width="34vw"
-            height="100%"
-            maxWidth={476}
-            maxHeight={616}
-            src="/images/2.jpeg"
-            display={['none', 'block']}
+            Обрати шоколад
+          </Button>
+          <ImageComponent
+            src={Image1}
+            alt="image1"
+            placeholder="blur"
+            layout="responsive"
+            wrapperStyles={{
+              maxWidth: 644,
+              width: ['80%', '46vw']
+            }}
           />
-        </Flex>
-      </Box>
-      {/* <Section py={Theme.styles.spacing.paddingY}>
-        <SectionTitle {...Theme.styles.pageTitle}>
-          З’явився новий шоколад
-        </SectionTitle>
-        <Article my={Theme.styles.spacing.paddingY}>
-          <ArticleTitle
-            fontSize={[15, 15, 20, 25]}
-            color={Theme.colors.congoBrown}
-          >
-            Великоднім наборам бути!
-          </ArticleTitle>
-          <Text
-            mt={20}
-            fontWeight={300}
-            fontSize={[14, 16, 18, 20]}
-            color={Theme.colors.congoBrown}
-          >
-            Недивлячись на цей непростий час, ми вирішили, що таким чином дамо
-            змогу привітати один одного дистанційно, яскраво і шоколадно. Ми
-            розробили 3 набори:
-          </Text>
-        </Article>
-        <HolidaySetSlider list={holidaySet} />
-      </Section> */}
+        </Section>
+        <ImageComponent
+          src={Image2}
+          alt="image2"
+          placeholder="blur"
+          layout="responsive"
+          wrapperStyles={{
+            maxWidth: 420,
+            width: '34vw',
+            display: ['none', 'block']
+          }}
+        />
+      </Flex>
       <Section
         mx="auto"
         display="flex"
@@ -130,11 +115,14 @@ const Content = ({ shop, router, chocolates }) => {
         >
           Оберіть подарунковий набір
         </SectionTitle>
-        <Img
-          height="100%"
-          maxHeight={400}
-          src="/images/3.jpeg"
-          width={['100%', '100%', '40%']}
+        <ImageComponent
+          src={Image3}
+          alt="image3"
+          placeholder="blur"
+          layout="responsive"
+          wrapperStyles={{
+            width: ['80%', '80%', '40%']
+          }}
         />
         <Article
           mt={[20, 20, 0]}
@@ -146,9 +134,8 @@ const Content = ({ shop, router, chocolates }) => {
           Ми залюбки підготуємо для вас та ваших рідних подарунковий набір з
           нашим шоколадом та естетичними подарунками від наших друзів: свічкою,
           чашкою, блокнотом, тощо. Напишіть нам
-          <ContactUs mt={20} mx="unset" text="Contact Us" />
+          <ContactUs mt={20} mx="unset" text="Напишіть Нам" />
         </Article>
-        {/* <HolidaySetSlider list={holidaySet} /> */}
       </Section>
       <FavoriteProducts shop={shop} router={router} chocolates={chocolates} />
     </>

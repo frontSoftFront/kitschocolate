@@ -181,7 +181,7 @@ const Content = ({ firebaseData }) => (
       <SectionTitle
         fontWeight={500}
         textAlign="center"
-        fontFamily="Montserrat"
+        // fontFamily="Montserrat"
         fontSize={[20, 24, 28, 32]}
         color={Theme.colors.woodyBrown}
         mb={Theme.styles.spacing.paddingY}
@@ -193,7 +193,7 @@ const Content = ({ firebaseData }) => (
     <Section mx="auto" maxWidth={660} my={Theme.styles.spacing.paddingY}>
       <SectionTitle
         textAlign="center"
-        fontFamily="Montserrat"
+        // fontFamily="Montserrat"
         fontSize={[20, 24, 28, 32]}
         color={Theme.colors.woodyBrown}
         mb={Theme.styles.spacing.paddingY}

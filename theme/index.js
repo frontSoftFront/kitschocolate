@@ -23,21 +23,17 @@ export default {
     },
     mainPageTitle: {
       lineHeight: 1.33,
-      fontWeight: 'bold',
       textAlign: 'center',
       color: colors.woodyBrown,
       fontSize: [25, 30, 35, 40]
     },
     pageTitle: {
       textAlign: 'center',
-      fontFamily: 'Caveat',
       color: colors.congoBrown,
-      fontSize: [30, 35, 40, 45]
+      fontSize: [25, 30, 35, 40]
     },
     formSectionTitle: {
       fonSize: 20,
-      fontWeight: 'bold',
-      fontFamily: 'Poppins',
       color: colors.mainBlack
     },
     actionButton: {

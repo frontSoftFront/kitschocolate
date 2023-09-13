@@ -85,6 +85,7 @@ export const AbsoluteBox = styled.div`
   ${space}
   ${width}
   ${bottom}
+  ${display}
 
   position: absolute;
 `;

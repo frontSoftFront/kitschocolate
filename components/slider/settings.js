@@ -7,27 +7,39 @@ import { AbsoluteBox } from '../../ui';
 const appendDots = dots => <div style={{ bottom: -40 }}>{dots}</div>;
 
 const PrevArrow = ({ onClick }) => (
-  <AbsoluteBox top="35%" left={[0, -20, -30, -40]}>
+  <AbsoluteBox
+    top="35%"
+    zIndex={20}
+    left={[0, -20, -30, -40]}
+    display={['none', 'block']}
+  >
     <Icon
       w="100%"
       h="100%"
       width={35}
       height={35}
-      iconName="arrow"
+      color="#644543"
       handleClick={onClick}
+      iconName="arrowLeftSimple"
     />
   </AbsoluteBox>
 );
 
 const NextArrow = ({ onClick }) => (
-  <AbsoluteBox top="35%" right={[0, -20, -30, -40]}>
+  <AbsoluteBox
+    zIndex={20}
+    top="35%"
+    display={['none', 'block']}
+    right={[0, -20, -30, -40]}
+  >
     <Icon
       w="100%"
       h="100%"
       width={35}
       height={35}
+      color="#644543"
       handleClick={onClick}
-      iconName="styledArrow"
+      iconName="arrowRightSimple"
     />
   </AbsoluteBox>
 );
@@ -80,7 +92,7 @@ export const priceSettings = {
   nextArrow: <NextArrow />,
   responsive: [
     {
-      breakpoint: 1024,
+      breakpoint: 1100,
       settings: {
         swipe: true,
         infinite: true,

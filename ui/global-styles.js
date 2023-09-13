@@ -1,18 +1,31 @@
+import { Roboto, Montserrat } from 'next/font/google';
 import { createGlobalStyle } from 'styled-components';
 // //////////////////////////////////////////////////
+
+const roboto = Roboto({
+  display: 'auto',
+  subsets: ['latin'],
+  weight: ['400', '500', '900']
+});
+
+const montserrat = Montserrat({
+  display: 'auto',
+  subsets: ['latin'],
+  weight: ['400', '500', '600']
+});
 
 export default createGlobalStyle`
   body {
     font-size: 14px;
-    font-family: Montserrat;
+    font-family: ${montserrat.style.fontFamily};
   }
 
   a {
     text-decoration: none;
   }
 
-  h2 {
-    font-family: Caveat;
+  h1, h2 {
+    font-family: ${roboto.style.fontFamily};
   }
 
   * {

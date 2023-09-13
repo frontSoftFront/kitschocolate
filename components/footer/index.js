@@ -56,14 +56,14 @@ const getNavItemStyles = {
   fontSize: [14, 13, 14, 16]
 };
 
-const Footer = ({ activeNavItem, handleGoToHomePage }) => {
+const Footer = ({ route, activeNavItem, handleGoToHomePage }) => {
   const getOpacity = link => (activeNavItem(link) ? 1 : 0.7);
 
   return (
     <StyledFooter
       pb={50}
       px={[0, 25, 50, 75]}
-      mt={Theme.styles.spacing.paddingY}
+      mt={['/', '/shop'].includes(route) ? 50 : Theme.styles.spacing.paddingY}
     >
       <Flex
         mx="auto"

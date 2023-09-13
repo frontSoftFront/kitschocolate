@@ -35,7 +35,7 @@ const CustomerReviews = () => (
         mt={15}
         fontWeight={500}
         fontSize={[18, 25]}
-        fontFamily="Montserrat"
+        // fontFamily="Montserrat"
         color="rgba(0, 0, 0, 0.87)"
       >
         WHAT PEOPLE SAYS

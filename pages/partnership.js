@@ -74,7 +74,7 @@ export const ContactUs = ({ mt, mx = "auto", text = 'Анкета' }) => {
               <SectionTitle
                 my={10}
                 textAlign="center"
-                fontFamily="Montserrat"
+                // fontFamily="Montserrat"
                 fontSize={[18, 20, 22, 25]}
                 color={Theme.colors.woodyBrown}
               >
@@ -100,9 +100,9 @@ const PartnershipPage = ({ router, firebaseData }) => (
       {...Theme.styles.mainPageTitle}
       my={Theme.styles.spacing.paddingY}
     >
-      ПАРТНЕРАМ
+      Бажаєте проявити турботу подарунком від Kit`s chocolate?
     </PageTitle>
-    <Article fontSize={[12, 14, 15, 16]}>
+    {/* <Article fontSize={[12, 14, 15, 16]}>
       <ArticleTitle fontWeight={500}>
         <Icon mr={10} iconName="checkMark" display="inline-block" />
         Корпоративні замовлення
@@ -119,20 +119,22 @@ const PartnershipPage = ({ router, firebaseData }) => (
         пригощати вишуканістю, насолодою, ніжністю та безпекою, створеною у
         Львові.
       </Text>
-    </Article>
+    </Article> */}
     <Section
       display="flex"
       flexWrap="wrap"
       justifyContent="space-between"
-      my={Theme.styles.spacing.paddingY}
+      mb={Theme.styles.spacing.paddingY}
     >
-      <RelativeBox height={250} width={['100%', '45%']}>
-        <ImageComponent
-          layout="fill"
-          placeholder="blur"
-          src="/partnership.jpeg"
-        />
-      </RelativeBox>
+      <ImageComponent
+        fill
+        placeholder="blur"
+        src="/partnership.jpeg"
+        wrapperStyles={{
+          height: 250,
+          width: ['100%', '45%']
+        }}
+      />
       <Article width={['100%', '45%']} fontSize={[12, 14, 15, 16]}>
         <ArticleTitle fontWeight={500}>Ми обіцяємо:</ArticleTitle>
         <Text mt={10}>

@@ -1,4 +1,6 @@
 import * as R from 'ramda';
+// components
+import ImageComponent from '../image';
 // theme
 import Theme from '../../theme';
 // ui
@@ -43,11 +45,15 @@ const RecipeDescription = props => {
       mt={Theme.styles.spacing.paddingY}
       justifyContent={['center', 'center', 'space-between']}
     >
-      <Img
-        width="100%"
+      <ImageComponent
+        fill
         src={imgUrl}
-        maxHeight={450}
+        placeholder="blur"
         maxWidth={['100%', '100%', '45%']}
+        wrapperStyles={{
+          height: 500,
+          width: ['100%', '45%']
+        }}
       />
       <Box width={['100%', '100%%', '45%']}>
         <Article>
@@ -77,8 +83,7 @@ const RecipeDescription = props => {
                 height={[40, 50, 60]}
                 borderColor={Theme.colors.lightBlue}
                 onChange={event =>
-                  handleChangeQuantity(event.currentTarget.value)
-                }
+                  handleChangeQuantity(event.currentTarget.value)}
               />
               <Box
                 width={30}

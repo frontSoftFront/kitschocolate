@@ -5,7 +5,7 @@ import ItemComponent from '../components/item';
 // theme
 import Theme from '../theme';
 // ui
-import { Section, Grid, PageTitle } from '../ui';
+import { Grid, Section, PageTitle } from '../ui';
 // ////////////////////////////////////////////////
 
 const makeSortedByOrderArrayFromObject = R.compose(
@@ -32,7 +32,7 @@ const Content = ({ router, recipes }) => {
             key={index}
             item={item}
             itemType="recipe"
-            imgSize={{ width: '100%', height: 350 }}
+            height="max-content"
             handleGoToDetailPage={handleGoToDetailPage}
           />
         ))}

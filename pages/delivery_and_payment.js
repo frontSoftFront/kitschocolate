@@ -15,7 +15,7 @@ import {
   StyledLink,
   RelativeBox,
   SectionTitle,
-  ArticleTitle,
+  ArticleTitle
 } from '../ui';
 // ////////////////////////////////////////////////
 
@@ -34,13 +34,16 @@ const PaymentAndDelivery = ({ router }) => (
         <br />
         Оплата
       </PageTitle>
-      <RelativeBox mt={[20, 0]} height={250} width={['100%', '45%']}>
-        <ImageComponent
-          layout="fill"
-          placeholder="blur"
-          src="/nova_poshta.png"
-        />
-      </RelativeBox>
+      <ImageComponent
+        fill
+        placeholder="blur"
+        src="/nova_poshta.png"
+        wrapperStyles={{
+          mt: [20, 0],
+          height: 250,
+          width: ['100%', '45%']
+        }}
+      />
     </Flex>
     <Section mx="auto" maxWidth={1000}>
       <SectionTitle
@@ -133,10 +136,12 @@ const PaymentAndDelivery = ({ router }) => (
         </Text>
         <ul>
           <ListItem mt={10}>
-            Ви можете оплатити замовлення безпосередньо в момент доставки товару кур'єром. (Львів)
+            Ви можете оплатити замовлення безпосередньо в момент доставки товару
+            кур'єром. (Львів)
           </ListItem>
           <ListItem mt={10}>
-            Ви оплачуєте товар, доставку і зворотний переказ грошей в офісі служби доставки "Нова Пошта" свого міста, або кур'єру при отриманні.
+            Ви оплачуєте товар, доставку і зворотний переказ грошей в офісі
+            служби доставки "Нова Пошта" свого міста, або кур'єру при отриманні.
           </ListItem>
         </ul>
       </Article>

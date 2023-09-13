@@ -92,7 +92,7 @@ const PaymentTypes = ({ paymentType }) => (
     <Text
       mb={10}
       fontWeight={600}
-      fontFamily="Poppins, sans-serif"
+      // fontFamily="Poppins, sans-serif"
       color={Theme.colors.lightSlateGrey}
     >
       Оберіть метод оплати
@@ -122,7 +122,7 @@ const PaymentTypes = ({ paymentType }) => (
             <ArticleTitle
               fontSize={14}
               fontWeight={600}
-              fontFamily="Poppins, sans-serif"
+              // fontFamily="Poppins, sans-serif"
             >
               Готівкою
             </ArticleTitle>
@@ -164,7 +164,7 @@ const PaymentTypes = ({ paymentType }) => (
             <ArticleTitle
               fontSize={14}
               fontWeight={600}
-              fontFamily="Poppins, sans-serif"
+              // fontFamily="Poppins, sans-serif"
             >
               Карткою (онлайн)
             </ArticleTitle>
@@ -204,7 +204,7 @@ const PaymentTypes = ({ paymentType }) => (
             <ArticleTitle
               fontSize={14}
               fontWeight={600}
-              fontFamily="Poppins, sans-serif"
+              // fontFamily="Poppins, sans-serif"
             >
               Інший
             </ArticleTitle>

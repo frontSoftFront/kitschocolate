@@ -63,20 +63,32 @@ const AboutPage = ({ router, firebaseData }) => (
           надихає нас продовжувати нашу місію та дарувати вам найкраще.
         </Text>
       </Article>
-      <Article
-        textAlign="center"
-        fontSize={[12, 14, 15, 16]}
-        // color={Theme.colors.congoBrown}
-        mt={Theme.styles.spacing.paddingY}
-      >
-        <Text mb={20} lineHeight={1.54}>
+    </Section>
+    <Section
+      mx="auto"
+      display="flex"
+      flexWrap="wrap"
+      maxWidth={1000}
+      alignItems="stretch"
+      justifyContent="space-between"
+    >
+      <Article width="45%" textAlign="center">
+        <Text mb={20} lineHeight={1.54} fontSize={[12, 14, 15, 16]}>
           Маєте бажання дізнатися більше або розпочати співпрацю? Звертатися до
           нас. З нетерпінням чекаємо на ваші листи!
         </Text>
-        <ContactUs text="Contact Us" />
-        <Text my={20} lineHeight={1.54}>
-          Або просто насолоджуйтесь нашим шоколадом” додати перехід в магазин
-          “купити шоколад
+        <ContactUs text="Напишіть Нам" />
+      </Article>
+      <Section
+        width="45%"
+        display="flex"
+        textAlign="center"
+        flexDirection="column"
+        fontSize={[12, 14, 15, 16]}
+        justifyContent="space-between"
+      >
+        <Text lineHeight={1.54} fontSize={[12, 14, 15, 16]}>
+          Або просто насолоджуйтесь нашим шоколадом
         </Text>
         <Button
           {...Theme.styles.actionButton}
@@ -87,49 +99,8 @@ const AboutPage = ({ router, firebaseData }) => (
         >
           Обрати шоколад
         </Button>
-      </Article>
+      </Section>
     </Section>
-    {/* <Section
-      mx="auto"
-      display="flex"
-      flexWrap="wrap"
-      maxWidth={1000}
-      alignItems="center"
-      justifyContent="space-between"
-      py={Theme.styles.spacing.paddingY}
-    >
-      <Article
-        lineHeight={1.54}
-        fontSize={[12, 14, 15, 16]}
-        width={['100%', '100%', '45%']}
-        color={Theme.colors.congoBrown}
-        my={Theme.styles.spacing.paddingY}
-      >
-        <Text mb={20} lineHeight={1.54}>
-          Маєте бажання дізнатися більше або розпочати співпрацю? Звертатися до
-          нас. З нетерпінням чекаємо на ваші листи!
-        </Text>
-        <ContactUs mx="unset" text="Contact Us" />
-        <Text my={20} lineHeight={1.54}>
-          Або просто насолоджуйтесь нашим шоколадом” додати перехід в магазин
-          “купити шоколад
-        </Text>
-        <Button
-          {...Theme.styles.actionButton}
-          height={40}
-          width={200}
-          onClick={() => router.push('/shop')}
-        >
-          Обрати шоколад
-        </Button>
-      </Article>
-      <Img
-        height="100%"
-        maxHeight={500}
-        src="/images/1.jpeg"
-        width={['100%', '100%', '50%']}
-      />
-    </Section> */}
   </Layout>
 );
 
