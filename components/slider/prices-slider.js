@@ -2,10 +2,9 @@ import is from 'is_js';
 import * as R from 'ramda';
 import Slider from 'react-slick';
 import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import React, { useRef, useCallback } from 'react';
-// actions
-import actions from '../../store/actions';
+import { useRef, useId, useState, useEffect, useCallback } from 'react';
+// lib
+import { basketActions, makeSelectBasket } from '../../lib/redux';
 // components
 import Icon from '../../icons';
 import ItemComponent from '../item';
@@ -21,27 +20,35 @@ import { Box, Text, Flex } from '../../ui';
 import { priceSettings } from './settings';
 // ////////////////////////////////////////////////
 
-const makeSelectBasketList = createSelector(
-  ({ basket }) => basket,
-  ({ basketList }) => basketList
-);
+const PricesSlider = props => {
+  const {
+    mt,
+    list,
+    router,
+    favorite,
+    categoryId,
+    categoryTitle,
+    handleEditItem,
+    handleRemoveItem,
+    hideActionButton,
+    handleMarkAsFavoriteCategory
+  } = props;
 
-const PricesSlider = ({
-  mt,
-  list,
-  router,
-  favorite,
-  categoryId,
-  categoryTitle,
-  handleEditItem,
-  handleRemoveItem,
-  hideActionButton,
-  handleMarkAsFavoriteCategory
-}) => {
+  // TODO: remove after testing
+  // const [visible, setVisible] = useState(true);
+
+  // useEffect(() => {
+  //   setVisible(false);
+  //   setVisible(true);
+  // }, [router]);
+
   const { push } = router;
 
+  const itemId = useId();
+
   const slider = useRef(null);
-  const basketList = useSelector(makeSelectBasketList);
+
+  const { basketList } = useSelector(makeSelectBasket);
 
   const sliderSettings = R.assoc(
     'infinite',
@@ -50,8 +57,8 @@ const PricesSlider = ({
   );
 
   const [addItemToBasket, removeItemFromBasket] = useActions([
-    actions.addItemToBasket,
-    actions.removeItemFromBasket
+    basketActions.addItemToBasket,
+    basketActions.removeItemFromBasket
   ]);
 
   const handleAddItemToBasket = useCallback(
@@ -62,16 +69,26 @@ const PricesSlider = ({
     [addItemToBasket]
   );
 
-  const handleGoToDetailPage = id => {
-    const swiped = R.path(
-      ['current', 'innerSlider', 'state', 'animating'],
-      slider
-    );
+  const swiped = R.path(
+    ['current', 'innerSlider', 'state', 'animating'],
+    slider
+  );
 
-    if (swiped) return;
+  const handleGoToDetailPage = useCallback(
+    id => {
+      if (swiped) return;
 
-    push(`/shop/${id}`);
-  };
+      push(`/shop/${id}`);
+    },
+    [swiped]
+  );
+
+  const containerHeight = R.path(
+    ['current', 'innerSlider', 'list', 'clientHeight'],
+    slider
+  );
+
+  console.log('containerHeight', containerHeight, 'slider', slider)
 
   return (
     <Box mt={mt}>
@@ -123,15 +140,38 @@ const PricesSlider = ({
           )}
         </Flex>
       )}
+      {/* TODO: remove after testing */}
+      {/* {visible ? (
+        <Slider ref={slider} {...sliderSettings}>
+          {list.map((item, index) => {
+            if (R.isNil(item.id)) return <div key={index} />;
+
+            return (
+              <ItemComponent
+                item={item}
+                basketList={basketList}
+                key={`${itemId}.${index}`}
+                handleRemoveItem={handleRemoveItem}
+                hideActionButton={hideActionButton}
+                handleGoToDetailPage={handleGoToDetailPage}
+                handleAddItemToBasket={handleAddItemToBasket}
+                handleRemoveItemFromBasket={removeItemFromBasket}
+                quantity={R.path([item.id, 'quantity'], basketList)}
+              />
+            );
+          })}
+        </Slider>
+      ) : null} */}
       <Slider ref={slider} {...sliderSettings}>
         {list.map((item, index) => {
-          if (R.isNil(item.id)) return <div />;
+          if (R.isNil(item.id)) return <div key={index} />;
 
           return (
             <ItemComponent
-              key={index}
               item={item}
               basketList={basketList}
+              // height={containerHeight}
+              key={`${itemId}.${index}`}
               handleRemoveItem={handleRemoveItem}
               hideActionButton={hideActionButton}
               handleGoToDetailPage={handleGoToDetailPage}

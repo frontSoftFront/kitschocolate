@@ -1,9 +1,9 @@
 import * as R from 'ramda';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useFirebase } from 'react-redux-firebase';
-// actions
-import actions from '../../store/actions';
+// lib
+import { basketActions } from '../../lib/redux';
 // helpers
 import * as H from '../../helpers';
 // hooks
@@ -85,12 +85,9 @@ const BasketItem = ({
             value={quantity}
             border="1px solid"
             borderColor={Theme.colors.lightBlue}
-            onChange={event =>
-              handleChangeQuantity({
-                id,
-                quantity: event.currentTarget.value
-              })
-            }
+            onChange={event => {
+              handleChangeQuantity({ id, quantity: event.currentTarget.value });
+            }}
           />
           <Box
             width={[30, 40]}
@@ -102,9 +99,9 @@ const BasketItem = ({
               cursor="pointer"
               alignItems="center"
               justifyContent="center"
-              onClick={() =>
-                handleChangeQuantity({ id, quantity: R.inc(quantity) })
-              }
+              onClick={() => {
+                handleChangeQuantity({ id, quantity: R.inc(quantity) });
+              }}
             >
               <Box
                 width="0px"
@@ -120,8 +117,7 @@ const BasketItem = ({
               alignItems="center"
               justifyContent="center"
               onClick={() =>
-                handleChangeQuantity({ id, quantity: R.dec(quantity) })
-              }
+                handleChangeQuantity({ id, quantity: R.dec(quantity) })}
             >
               <Box
                 width="0px"
@@ -151,25 +147,33 @@ const BasketItem = ({
 
 const Basket = ({ router, basketList, handleCloseBasket }) => {
   const firebase = useFirebase();
-  const setGlobalBasketList = useActions(actions.setBasketList);
+  const setGlobalBasketList = useActions(basketActions.setBasket);
+
   const [localBasket, setLocalBasket] = useState(basketList);
+
   const total = R.compose(
     R.sum,
     R.values,
     R.map(R.prop('subtotal'))
   )(localBasket);
+
   const handleRemoveItem = id => setLocalBasket(R.dissoc(id, localBasket));
-  const handleChangeQuantity = ({ id, quantity }) => {
-    if (R.lt(quantity, 1)) return;
 
-    const item = R.prop(id, localBasket);
-    const subtotal = R.multiply(quantity, item.price);
-    const newItem = R.merge(item, { quantity, subtotal });
-    const newLocalBasket = R.assocPath([id], newItem, localBasket);
+  const handleChangeQuantity = useCallback(
+    ({ id, quantity }) => {
+      if (R.lt(quantity, 1)) return;
 
-    setLocalBasket(newLocalBasket);
-  };
-  const handleGoToOrder = async () => {
+      const item = R.prop(id, localBasket);
+      const subtotal = R.multiply(quantity, item.price);
+      const newItem = R.merge(item, { quantity, subtotal });
+      const newLocalBasket = R.assocPath([id], newItem, localBasket);
+
+      setLocalBasket(newLocalBasket);
+    },
+    [localBasket]
+  );
+
+  const handleGoToOrder = useCallback(async () => {
     const newDatabaseRouteRef = firebase
       .database()
       .ref()
@@ -182,10 +186,11 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
 
     await newDatabaseRouteRef.set(data).then(() => {
       router.push(`/checkout/${id}`);
+
       setLocalBasket({});
       handleCloseBasket();
     });
-  };
+  }, [localBasket]);
 
   useEffect(() => {
     setGlobalBasketList(localBasket);

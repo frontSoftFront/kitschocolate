@@ -51,12 +51,13 @@ const getNavItemStyles = {
   mb: 15,
   fontWeight: 500,
   display: 'block',
+  cursor: 'pointer',
   maxWidth: [100, '100%'],
   color: Theme.colors.quincy,
   fontSize: [14, 13, 14, 16]
 };
 
-const Footer = ({ route, activeNavItem, handleGoToHomePage }) => {
+const Footer = ({ route, activeNavItem, handleNavigate }) => {
   const getOpacity = link => (activeNavItem(link) ? 1 : 0.7);
 
   return (
@@ -79,7 +80,7 @@ const Footer = ({ route, activeNavItem, handleGoToHomePage }) => {
         <Icon
           iconName="logo"
           width="max-content"
-          handleClick={handleGoToHomePage}
+          handleClick={() => handleNavigate('/')}
         />
         <Nav>
           <Text
@@ -93,15 +94,18 @@ const Footer = ({ route, activeNavItem, handleGoToHomePage }) => {
             Navigation
           </Text>
           {columns.map((col, colIndex) => (
-            <Box key={colIndex}>
+            <div key={colIndex}>
               {col.map(({ text, link }, index) => (
-                <Link legacyBehavior href={link} key={index}>
-                  <NavItem {...getNavItemStyles} opacity={getOpacity(link)}>
-                    {text}
-                  </NavItem>
-                </Link>
+                <NavItem
+                  {...getNavItemStyles}
+                  key={index}
+                  opacity={getOpacity(link)}
+                  onClick={() => handleNavigate(link)}
+                >
+                  {text}
+                </NavItem>
               ))}
-            </Box>
+            </div>
           ))}
         </Nav>
         <Box>

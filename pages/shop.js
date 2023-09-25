@@ -31,7 +31,8 @@ const Content = ({ router, categories, chocolateList }) => {
   return (
     <Section py={Theme.styles.spacing.paddingY}>
       <PageTitle {...Theme.styles.pageTitle}>
-        Істинний шоколад, народжений з бобів какао <br />Шоколад, яким він повинен бути
+        Істинний шоколад, народжений з бобів какао <br />
+        Шоколад, яким він повинен бути
       </PageTitle>
       {mappedCategories.map(
         ({ id, title, chocolates, categoryName }, index) => (
@@ -50,24 +51,26 @@ const Content = ({ router, categories, chocolateList }) => {
   );
 };
 
-const ShopPage = ({ router, firebaseData }) => {
-  const chocolateList = R.pathOr({}, ['data', 'chocolates'], firebaseData);
-  const categories = R.pathOr({}, ['data', 'shop', 'categories'], firebaseData);
+const ShopPage = () => (
+  <Layout title="Shop" collections={['shop', 'chocolates']}>
+    {({ router, firebaseData }) => {
+      const chocolateList = R.pathOr({}, ['data', 'chocolates'], firebaseData);
 
-  return (
-    <Layout
-      title="Shop"
-      router={router}
-      firebaseData={firebaseData}
-      collections={['shop', 'chocolates']}
-    >
-      <Content
-        router={router}
-        categories={categories}
-        chocolateList={chocolateList}
-      />
-    </Layout>
-  );
-};
+      const categories = R.pathOr(
+        {},
+        ['data', 'shop', 'categories'],
+        firebaseData
+      );
+
+      return (
+        <Content
+          router={router}
+          categories={categories}
+          chocolateList={chocolateList}
+        />
+      );
+    }}
+  </Layout>
+);
 
 export default ShopPage;

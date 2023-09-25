@@ -2,6 +2,7 @@ import * as R from 'ramda';
 import { useState } from 'react';
 // components
 import Layout from '../../../components/layout';
+import ImagesSlider from '../../../components/slider/images-slider';
 import RecipeDescription from '../../../components/recipe-description';
 import RecipeIngredients from '../../../components/recipe-ingredients';
 // theme
@@ -17,7 +18,8 @@ const Content = ({ router, recipe, recipes, chocolates }) => {
     direction,
     description,
     ingredients,
-    ingredientIcons
+    ingredientIcons,
+    recipeDirectionImages = []
   } = recipe;
 
   const [quantity, setQuantity] = useState(1);
@@ -44,7 +46,7 @@ const Content = ({ router, recipe, recipes, chocolates }) => {
 
   return (
     <>
-      <Section py={Theme.styles.spacing.paddingY}>
+      <Section mx="auto" maxWidth={1200} py={Theme.styles.spacing.paddingY}>
         <PageTitle {...Theme.styles.pageTitle}>Рецепт / {title}</PageTitle>
         <RecipeDescription
           imgUrl={imgUrl}
@@ -63,34 +65,42 @@ const Content = ({ router, recipe, recipes, chocolates }) => {
           ingredients={mappedIngredients}
         />
       </Section>
+      <ImagesSlider pb={50} list={recipeDirectionImages} />
     </>
   );
 };
 
-const ShopPage = ({ router, firebaseData }) => {
+const makePageTitle = ({ router, firebaseData }) => {
   const {
     query: { id }
   } = router;
 
-  const recipes = R.path(['data', 'recipes'], firebaseData);
-  const recipe = R.path(['data', 'recipes', id], firebaseData);
-  const chocolates = R.path(['data', 'chocolates'], firebaseData);
+  const recipeTitle = R.path(['data', 'recipes', id, 'title'], firebaseData);
 
-  return (
-    <Layout
-      router={router}
-      firebaseData={firebaseData}
-      title={R.path(['title'], recipe)}
-      collections={['recipes', 'chocolates']}
-    >
-      <Content
-        router={router}
-        recipe={recipe}
-        recipes={recipes}
-        chocolates={chocolates}
-      />
-    </Layout>
-  );
+  return R.isNil(recipeTitle) ? 'Рецепт' : recipeTitle;
 };
+
+const ShopPage = () => (
+  <Layout title={makePageTitle} collections={['recipes', 'chocolates']}>
+    {({ router, firebaseData }) => {
+      const {
+        query: { id }
+      } = router;
+
+      const recipes = R.path(['data', 'recipes'], firebaseData);
+      const recipe = R.path(['data', 'recipes', id], firebaseData);
+      const chocolates = R.path(['data', 'chocolates'], firebaseData);
+
+      return (
+        <Content
+          router={router}
+          recipe={recipe}
+          recipes={recipes}
+          chocolates={chocolates}
+        />
+      );
+    }}
+  </Layout>
+);
 
 export default ShopPage;

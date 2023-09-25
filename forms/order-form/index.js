@@ -250,7 +250,7 @@ const getInitialValues = () => {
   return R.merge(defaultValues, JSON.parse(clientFields));
 };
 
-const handleSubmit = props => {
+const handleSubmit = (values, handlers) => {
   const {
     call,
     total,
@@ -258,16 +258,19 @@ const handleSubmit = props => {
     email,
     orderId,
     comments,
-    dispatch,
     lastName,
     firstName,
     warehouse,
     paymentType,
     phoneNumber,
     shippingCity
-  } = props;
+  } = values;
 
-  const clientFields = JSON.stringify(getClientFields(props));
+  const { dispatch, handleOpenLoader, handleCloseLoader } = handlers;
+
+  handleOpenLoader();
+
+  const clientFields = JSON.stringify(getClientFields(values));
 
   localStorage.setItem('clientFields', clientFields);
 
@@ -307,6 +310,7 @@ const handleSubmit = props => {
     .then(res => {
       if (res.status === 200) {
         showToastifyMessage('Success');
+
         dispatch({
           data,
           type: actionTypes.SET,
@@ -314,14 +318,10 @@ const handleSubmit = props => {
         });
       }
 
-      return res.json();
-    })
-    .then(({ form, url }) => {
-      fetch(url, {
-        method: 'GET'
-      });
+      handleCloseLoader();
     })
     .catch(error => {
+      handleCloseLoader();
       console.log('error', error);
       showToastifyMessage('Something is wrong', 'error');
     });
@@ -340,15 +340,17 @@ const PaymentButton = () => (
   </Button>
 );
 
-const OrderForm = ({ order, orderId }) => {
+const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
   const dispatch = useDispatch();
 
-  const orderComposition = R.values(order.items);
+  const orderComposition = R.values(R.propOr({}, 'items', order));
+
   const total = R.compose(
     R.sum,
     R.values,
     R.map(R.prop('subtotal'))
   )(orderComposition);
+
   const totalQuantity = R.compose(
     R.sum,
     R.values,
@@ -362,7 +364,11 @@ const OrderForm = ({ order, orderId }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={values =>
-        handleSubmit({ ...values, order, total, orderId, dispatch })}
+        handleSubmit(
+          { ...values, order, total, orderId },
+          { dispatch, handleOpenLoader, handleCloseLoader }
+        )
+      }
     >
       {({ values }) => (
         <Form>

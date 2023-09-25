@@ -43,7 +43,7 @@ const Categories = ({ categories, handleClick, categoryTitle }) => (
 const Navigation = ({
   handleToggleMenu,
   navTitle = 'Навігація',
-  navItems = C.NAV_ITEMS
+  navItems = R.dropLast(1, C.NAV_ITEMS)
 }) => (
   <nav>
     <Text

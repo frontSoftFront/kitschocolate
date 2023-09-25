@@ -6,7 +6,7 @@ import Theme from '../theme';
 import { Box, Section, SectionTitle } from '../ui';
 // ////////////////////////////////////////////////
 
-const Login = ({ router }) => (
+const Login = () => (
   <Section
     width="100vw"
     height="100vh"
@@ -32,7 +32,7 @@ const Login = ({ router }) => (
       p="0 20px 20px 20px"
       borderColor={Theme.colors.woodyBrown}
     >
-      <AuthForm router={router} />
+      <AuthForm />
     </Box>
   </Section>
 );

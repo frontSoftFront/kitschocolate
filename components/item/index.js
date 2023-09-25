@@ -58,17 +58,19 @@ const ItemComponent = ({
       <Box mx="auto" width="90%">
         {R.and(R.equals(itemType, 'chocolate'), R.not(hideActionButton)) && (
           <>
-            <Text
-              mt={10}
-              p="5px"
-              mx="auto"
-              fontWeight="bold"
-              width="max-content"
-              fontSize={[16, 16, 18]}
-              color={Theme.colors.congoBrown}
-            >
-              {price} грн
-            </Text>
+            {price ? (
+              <Text
+                mt={10}
+                p="5px"
+                mx="auto"
+                fontWeight="bold"
+                width="max-content"
+                fontSize={[16, 16, 18]}
+                color={Theme.colors.congoBrown}
+              >
+                {price} грн
+              </Text>
+            ) : null}
             {R.isNil(quantity) && (
               <Button
                 {...Theme.styles.actionButton}

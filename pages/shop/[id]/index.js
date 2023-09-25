@@ -35,23 +35,28 @@ const Content = ({ data }) => {
   );
 };
 
-const ShopPage = ({ router, firebaseData }) => {
+const makePageTitle = ({ router, firebaseData }) => {
   const {
     query: { id }
   } = router;
 
-  const data = R.path(['data', 'chocolates', id], firebaseData);
+  const title = R.path(['data', 'chocolates', id, 'title'], firebaseData);
 
-  return (
-    <Layout
-      router={router}
-      firebaseData={firebaseData}
-      collections={['chocolates']}
-      title={R.path(['title'], data)}
-    >
-      <Content data={data} />
-    </Layout>
-  );
+  return R.isNil(title) ? 'Рецепт' : title;
 };
+
+const ShopPage = () => (
+  <Layout title={makePageTitle} collections={['chocolates']}>
+    {({ router, firebaseData }) => {
+      const {
+        query: { id }
+      } = router;
+
+      const data = R.path(['data', 'chocolates', id], firebaseData);
+
+      return <Content data={data} />;
+    }}
+  </Layout>
+);
 
 export default ShopPage;

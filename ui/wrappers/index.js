@@ -19,5 +19,6 @@ export const ModalWrapper = styled.div`
   overflow: hidden;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(20px);
   background: rgba(0, 0, 0, 0.5);
 `;

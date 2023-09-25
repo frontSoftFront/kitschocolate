@@ -29,9 +29,9 @@ const ImageComponent = props => {
     return (
       <RelativeBox {...props.wrapperStyles}>
         <Image
+          style={{ objectFit: 'contain' }}
           {...R.dissoc('wrapperStyles', props)}
           alt={R.propOr('', 'alt', props)}
-          style={{ objectFit: 'contain' }}
           sizes={R.pathOr('100vw', ['sizes'], props)}
           blurDataURL={`data:image/svg+xml;base64,${toBase64(
             shimmer(700, 475)

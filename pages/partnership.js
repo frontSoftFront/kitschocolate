@@ -26,7 +26,7 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-export const ContactUs = ({ mt, mx = "auto", text = 'Анкета' }) => {
+export const ContactUs = ({ mt, mx = 'auto', text = 'Анкета' }) => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => {
@@ -89,37 +89,14 @@ export const ContactUs = ({ mt, mx = "auto", text = 'Анкета' }) => {
   );
 };
 
-const PartnershipPage = ({ router, firebaseData }) => (
-  <Layout
-    router={router}
-    firebaseData={firebaseData}
-    title="Корпоративна співпраця"
-    collections={['shop', 'chocolates']}
-  >
+const PartnershipPage = () => (
+  <Layout title="Корпоративна співпраця" collections={['shop', 'chocolates']}>
     <PageTitle
       {...Theme.styles.mainPageTitle}
       my={Theme.styles.spacing.paddingY}
     >
       Бажаєте проявити турботу подарунком від Kit`s chocolate?
     </PageTitle>
-    {/* <Article fontSize={[12, 14, 15, 16]}>
-      <ArticleTitle fontWeight={500}>
-        <Icon mr={10} iconName="checkMark" display="inline-block" />
-        Корпоративні замовлення
-      </ArticleTitle>
-      <ArticleTitle mt={20} fontWeight={500}>
-        <Icon mr={10} iconName="checkMark" display="inline-block" />
-        Подарункові набори
-      </ArticleTitle>
-      <Text mt={20}>
-        Ми створюємо довершені подарунки за формулою: смак + естетика.
-      </Text>
-      <Text mt={20}>
-        Дарувати Kit`s chocolate – це проявляти турботу. Адже ви зможете
-        пригощати вишуканістю, насолодою, ніжністю та безпекою, створеною у
-        Львові.
-      </Text>
-    </Article> */}
     <Section
       display="flex"
       flexWrap="wrap"
