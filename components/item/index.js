@@ -33,7 +33,6 @@ const ItemComponent = ({
         <ImageComponent
           fill
           src={imgUrl}
-          // style={{ objectFit: 'cover' }}
           placeholder="blur"
           onClick={() => handleGoToDetailPage(id)}
           wrapperStyles={{

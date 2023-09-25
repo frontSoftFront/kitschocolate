@@ -85,11 +85,9 @@ const BasketItem = ({
             value={quantity}
             border="1px solid"
             borderColor={Theme.colors.lightBlue}
-            onChange={event =>
-              handleChangeQuantity({
-                id,
-                quantity: event.currentTarget.value
-              })}
+            onChange={event => {
+              handleChangeQuantity({ id, quantity: event.currentTarget.value });
+            }}
           />
           <Box
             width={[30, 40]}
@@ -101,8 +99,9 @@ const BasketItem = ({
               cursor="pointer"
               alignItems="center"
               justifyContent="center"
-              onClick={() =>
-                handleChangeQuantity({ id, quantity: R.inc(quantity) })}
+              onClick={() => {
+                handleChangeQuantity({ id, quantity: R.inc(quantity) });
+              }}
             >
               <Box
                 width="0px"
@@ -187,6 +186,7 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
 
     await newDatabaseRouteRef.set(data).then(() => {
       router.push(`/checkout/${id}`);
+
       setLocalBasket({});
       handleCloseBasket();
     });
