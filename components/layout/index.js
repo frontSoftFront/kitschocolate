@@ -29,7 +29,7 @@ const makeSelectRequestedCollections = createSelector(
 
 const makeSelectUserAuthorized = createSelector(
   R.propOr({}, 'firebase'),
-  R.pathOr(false, ['auth', 'isLoaded'])
+  R.pathOr(false, ['auth', 'uid'])
 );
 
 const Glimmer = () => (

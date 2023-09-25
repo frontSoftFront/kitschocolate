@@ -33,6 +33,7 @@ export const NavItem = styled.div`
   position: relative;
   text-transform: uppercase;
 
+  display: ${({ display }) => display};
   font-weight: ${({ active }) => (active ? 'bold' : '500')};
   color: ${({ active }) =>
     active ? Theme.colors.woodyBrown : Theme.colors.lightSlateGrey};
