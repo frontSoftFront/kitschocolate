@@ -88,6 +88,7 @@ export const priceSettings = {
   ...defaultSettings,
   infinite: true,
   slidesToShow: 4,
+  adaptiveHeight: true,
   prevArrow: <PrevArrow />,
   nextArrow: <NextArrow />,
   responsive: [

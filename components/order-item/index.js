@@ -1,7 +1,7 @@
 import * as R from 'ramda';
-import { useState, useEffect } from 'react';
-// actions
-import actions from '../../store/actions';
+import { useState, useEffect, useCallback } from 'react';
+// lib
+import { basketActions } from '../../lib/redux';
 // helpers
 import { showToastifyMessage } from '../../helpers';
 // hooks
@@ -21,37 +21,36 @@ import {
 } from '../../ui';
 // //////////////////////////////////////////////////
 
-const weight = { small: 100, medium: 200 };
-
 const OrderItem = ({ orderItem }) => {
   const { id, imgUrl, price, title, description } = orderItem;
 
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(price);
-  const [activeSize, setActiveSize] = useState('small');
-  const activeWeight = R.prop(activeSize, weight);
-  const handleChangeQuantity = value => {
-    if (R.or(R.gt(value, 100), R.lt(value, 0))) return;
-    setQuantity(value);
-    setTotalPrice(R.multiply(price, value));
-  };
-  const getActiveSizeBtnColor = btn =>
-    R.equals(btn, activeSize)
-      ? Theme.colors.mediumWood
-      : Theme.colors.transparentBlue;
+
+  const handleChangeQuantity = useCallback(
+    value => {
+      if (R.or(R.gt(value, 100), R.lt(value, 0))) return;
+
+      setQuantity(value);
+      setTotalPrice(R.multiply(price, value));
+    },
+    [price]
+  );
+
   useEffect(() => {
     setQuantity(1);
     setTotalPrice(price);
-    setActiveSize('small');
   }, [orderItem]);
-  const addItemToBasket = useActions(actions.addItemToBasket);
-  const handleAddItemToBasket = () => {
+
+  const addItemToBasket = useActions(basketActions.addItemToBasket);
+
+  const handleAddItemToBasket = useCallback(() => {
     if (R.equals(quantity, 0)) return;
 
     handleChangeQuantity(1);
     showToastifyMessage('success');
     addItemToBasket({ id, title, price, imgUrl, quantity });
-  };
+  }, [id, title, price, imgUrl, quantity]);
 
   return (
     <Section
@@ -74,45 +73,13 @@ const OrderItem = ({ orderItem }) => {
       </Article>
       <Box>
         <Flex>
-          {/* <Flex mr={40}>
-            <Text color={Theme.colors.lightGrey}>Size:</Text>
-            <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
-              {activeSize}
-            </Text>
-          </Flex> */}
           <Flex mb={20} fontSize={[12, 14]}>
             <Text color={Theme.colors.lightGrey}>Вага:</Text>
             <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
-              {activeWeight} gr
+              100 gr
             </Text>
           </Flex>
         </Flex>
-        {/* <Flex my={20}>
-          <Button
-            mr={20}
-            width={90}
-            height={20}
-            border="1px solid"
-            textTransform="uppercase"
-            onClick={() => setActiveSize('small')}
-            color={getActiveSizeBtnColor('small')}
-            borderColor={getActiveSizeBtnColor('small')}
-          >
-            mini
-          </Button>
-          <Button
-            ml={20}
-            width={90}
-            height={20}
-            border="1px solid"
-            textTransform="uppercase"
-            color={getActiveSizeBtnColor('medium')}
-            onClick={() => setActiveSize('medium')}
-            borderColor={getActiveSizeBtnColor('medium')}
-          >
-            medium
-          </Button>
-        </Flex> */}
       </Box>
       <Flex
         py={[15, 20]}

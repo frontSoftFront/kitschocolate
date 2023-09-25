@@ -70,7 +70,8 @@ export const useConstructorActions = ({
         .child(collection)
         .push();
       const id = ref.key;
-      data = R.assoc('id', id, values);
+
+      data = R.assoc('id', id, data);
 
       await ref
         .set(data)

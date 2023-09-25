@@ -1,13 +1,14 @@
 import * as R from 'ramda';
 import Link from 'next/link';
 import { useState } from 'react';
-import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
 // components
 import Menu from '../menu';
 import Portal from '../portal';
 import Basket from '../basket';
 import ToggleIcon from '../menu/toggle-icon';
+// lib
+import { makeSelectBasket } from '../../lib/redux';
 // constants
 import * as C from '../../constants';
 // helpers
@@ -24,22 +25,7 @@ import { Flex } from '../../ui';
 import { Nav, NavItem, BasketCount, StyledHeader } from './ui';
 // //////////////////////////////////////////////////
 
-const makeSelectBasket = createSelector(
-  ({ basket }) => basket,
-  ({ basketList }) => {
-    let basketCount = R.compose(
-      R.sum,
-      R.map(R.prop('quantity')),
-      R.values
-    )(basketList);
-
-    if (R.gt(basketCount, 100)) basketCount = 100;
-
-    return { basketList, basketCount };
-  }
-);
-
-const BasketIcon = ({ router }) => {
+const BasketIcon = ({ mb = 10, router }) => {
   const [basketOpened, setBasketOpened] = useState(false);
 
   const handleCloseBasket = () => {
@@ -58,7 +44,7 @@ const BasketIcon = ({ router }) => {
 
   return (
     <>
-      <Flex mb={10}>
+      <Flex mb={mb}>
         <Icon iconName="basket" handleClick={handleOpenBasket} />
         {R.gt(basketCount, 0) ? <BasketCount>{basketCount}</BasketCount> : null}
       </Flex>
@@ -75,48 +61,61 @@ const BasketIcon = ({ router }) => {
   );
 };
 
-const DesktopHeader = ({ router, activeNavItem, handleGoToHomePage }) => (
-  <StyledHeader px={[25, 25, 50, 75]}>
-    <Flex
-      py={15}
-      mx="auto"
-      maxWidth={1440}
-      alignItems="flex-end"
-      borderBottom="1px solid"
-      justifyContent="space-between"
-      borderColor={Theme.colors.lighterGrey}
-    >
-      <Icon iconName="logo" handleClick={handleGoToHomePage} />
-      <Nav
-        mb={10}
+const DesktopHeader = ({
+  router,
+  userAuthorized,
+  handleNavigate,
+  activeNavItem
+}) => {
+  const constructorVisible = R.and(
+    R.not(userAuthorized),
+    R.equals(router.route, 'constructor')
+  )
+    ? 'none'
+    : undefined;
+
+  return (
+    <StyledHeader px={[25, 25, 50, 75]}>
+      <Flex
+        py={15}
         mx="auto"
-        maxWidth={650}
-        // maxWidth={750}
-        width="calc(100% - 180px)"
+        maxWidth={1440}
+        alignItems="flex-end"
+        borderBottom="1px solid"
         justifyContent="space-between"
+        borderColor={Theme.colors.lighterGrey}
       >
-        {R.tail(C.NAV_ITEMS).map(({ link, title }, index) => (
-          <Link key={index} href={link} legacyBehavior>
+        <Icon iconName="logo" handleClick={() => handleNavigate('/')} />
+        <Nav
+          mb={10}
+          mx="auto"
+          width="calc(100% - 180px)"
+          justifyContent="space-between"
+          maxWidth={userAuthorized ? 800 : 650}
+        >
+          {R.tail(C.NAV_ITEMS).map(({ link, title }, index) => (
             <NavItem
-              textTransform="uppercase"
+              key={index}
               fontSize={[12, 12, 14, 16]}
               active={activeNavItem(link)}
+              display={constructorVisible}
+              onClick={() => handleNavigate(link)}
             >
               {title}
             </NavItem>
-          </Link>
-        ))}
-      </Nav>
-      <BasketIcon router={router} />
-    </Flex>
-  </StyledHeader>
-);
+          ))}
+        </Nav>
+        <BasketIcon router={router} />
+      </Flex>
+    </StyledHeader>
+  );
+};
 
 const MobileHeader = ({
   router,
   firebaseData,
   activeNavItem,
-  handleGoToHomePage
+  handleNavigate
 }) => {
   const [mounted, setMounted] = useState(false);
   const [menuOpened, toggleMenu] = useState(false);
@@ -143,9 +142,9 @@ const MobileHeader = ({
     <StyledHeader px={[25, 25, 50, 75]}>
       <Flex py={15} alignItems="center" justifyContent="space-between">
         <ToggleIcon menuOpened={menuOpened} action={handleToggleMenu} />
-        <Icon h={50} iconName="logo" handleClick={handleGoToHomePage} />
+        <Icon h={50} iconName="logo" handleClick={() => handleNavigate('/')} />
         <Flex>
-          <BasketIcon router={router} />
+          <BasketIcon mb={0} router={router} />
           <Flex ml={25}>
             {mounted && (
               <Portal selector="#menu">
@@ -168,8 +167,9 @@ const MobileHeader = ({
 const Header = ({
   router,
   firebaseData,
+  userAuthorized,
   activeNavItem,
-  handleGoToHomePage
+  handleNavigate
 }) => {
   const { width } = useWindowSize();
 
@@ -177,7 +177,8 @@ const Header = ({
     router,
     firebaseData,
     activeNavItem,
-    handleGoToHomePage
+    userAuthorized,
+    handleNavigate
   };
 
   if (R.lt(width, 650)) return <MobileHeader {...headerProps} />;

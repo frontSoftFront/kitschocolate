@@ -1,6 +1,7 @@
-import * as R from 'ramda';
 import * as Yup from 'yup';
+import { useCallback } from 'react';
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import { useFirebase } from 'react-redux-firebase';
 // helpers
 import { showToastifyMessage } from '../../helpers';
@@ -13,8 +14,8 @@ import { FieldGroup } from '..';
 // //////////////////////////////////////////////////
 
 const initialValues = {
-  email: '',
-  password: ''
+  password: 'superadmin',
+  email: 'superadmin@mail.com'
 };
 
 const validationSchema = Yup.object().shape({
@@ -22,21 +23,26 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Field is Required')
 });
 
-const AuthForm = ({ router }) => {
+const AuthForm = () => {
   const firebase = useFirebase();
+
+  const { push } = useRouter();
+
+  const handleSubmit = useCallback(async ({ email, password }) => {
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      // .login({ email, password })
+      .then(() => push('/constructor'))
+      .catch(() => showToastifyMessage('Error', 'error'));
+  }, []);
 
   return (
     <Box>
       <Formik
+        onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={async ({ email, password }) => {
-          if (R.and(R.equals(email, 'admin'), R.equals(password, 'admin'))) {
-            router.push('/constructor');
-          } else {
-            showToastifyMessage('bad credentials', 'error');
-          }
-        }}
       >
         {() => (
           <Form>

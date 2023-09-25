@@ -58,7 +58,8 @@ const QuestionAnswer = props => {
               ml={10}
               iconName="pencil"
               handleClick={() =>
-                handleEditItem({ id, column, answer, question })}
+                handleEditItem({ id, column, answer, question })
+              }
             />
           )}
           {is.function(handleRemoveItem) && (
@@ -153,12 +154,14 @@ export const QuestionAnswers = ({
                       id,
                       collection: 'customer-questions',
                       question: R.path([id, 'question'], customerQuestions)
-                    })}
+                    })
+                  }
                   handleRemoveItem={() =>
                     handleRemoveItem({
                       id,
                       collection: 'customer-questions'
-                    })}
+                    })
+                  }
                 />
               </Box>
             ))}
@@ -193,7 +196,6 @@ const Content = ({ firebaseData }) => (
     <Section mx="auto" maxWidth={660} my={Theme.styles.spacing.paddingY}>
       <SectionTitle
         textAlign="center"
-        // fontFamily="Montserrat"
         fontSize={[20, 24, 28, 32]}
         color={Theme.colors.woodyBrown}
         mb={Theme.styles.spacing.paddingY}
@@ -205,14 +207,9 @@ const Content = ({ firebaseData }) => (
   </>
 );
 
-const QuestionsAnswersPage = ({ router, firebaseData }) => (
-  <Layout
-    router={router}
-    firebaseData={firebaseData}
-    title="Questions and Answers"
-    collections={['questions-answers']}
-  >
-    <Content firebaseData={firebaseData} />
+const QuestionsAnswersPage = () => (
+  <Layout title="Questions and Answers" collections={['questions-answers']}>
+    {({ firebaseData }) => <Content firebaseData={firebaseData} />}
   </Layout>
 );
 

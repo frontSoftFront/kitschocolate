@@ -2,8 +2,8 @@ import * as R from 'ramda';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useFirebase } from 'react-redux-firebase';
-// actions
-import actions from '../../store/actions';
+// lib
+import { basketActions } from '../../lib/redux';
 // helpers
 import * as H from '../../helpers';
 // hooks
@@ -46,7 +46,7 @@ const Ingredient = props => {
 
   if (ingredientTypeChocolate) href = `/shop/${id}`;
 
-  const makeIngredientText = R.contains(type, ['recipe', 'chocolate'])
+  const makeIngredientText = R.includes(type, ['recipe', 'chocolate'])
     ? `${R.multiply(quantity, recipeQuantity)} ${unit}.`
     : `${R.multiply(quantity, recipeQuantity)} ${unit}. ${title}`;
 
@@ -123,7 +123,7 @@ const RecipeIngredients = props => {
   const { router, direction, ingredients, recipeQuantity } = props;
 
   const firebase = useFirebase();
-  const addItemToBasket = useActions(actions.addItemToBasket);
+  const addItemToBasket = useActions(basketActions.addItemToBasket);
   const handleAddItemToBasket = ({ id, title, price, imgUrl }) => {
     H.showToastifyMessage('success');
     addItemToBasket({ id, title, price, imgUrl, quantity: 1 });

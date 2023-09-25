@@ -31,8 +31,8 @@ const Content = ({ router, recipes }) => {
             px="0px"
             key={index}
             item={item}
+            height="100%"
             itemType="recipe"
-            height="max-content"
             handleGoToDetailPage={handleGoToDetailPage}
           />
         ))}
@@ -41,22 +41,17 @@ const Content = ({ router, recipes }) => {
   );
 };
 
-const RecipesPage = ({ router, firebaseData }) => {
-  const recipes = R.compose(
-    makeSortedByOrderArrayFromObject,
-    R.pathOr({}, ['data', 'recipes'])
-  )(firebaseData);
+const RecipesPage = () => (
+  <Layout title="Recipes" collections={['recipes']}>
+    {({ router, firebaseData }) => {
+      const recipes = R.compose(
+        makeSortedByOrderArrayFromObject,
+        R.pathOr({}, ['data', 'recipes'])
+      )(firebaseData);
 
-  return (
-    <Layout
-      title="Recipes"
-      router={router}
-      collections={['recipes']}
-      firebaseData={firebaseData}
-    >
-      <Content router={router} recipes={recipes} />
-    </Layout>
-  );
-};
+      return <Content router={router} recipes={recipes} />;
+    }}
+  </Layout>
+);
 
 export default RecipesPage;

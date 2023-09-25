@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import { useRouter } from 'next/router';
 // components
 import Layout from '../../../components/layout';
 // forms
@@ -9,28 +10,32 @@ import Theme from '../../../theme';
 import { Section, PageTitle } from '../../../ui';
 // ////////////////////////////////////////////////
 
-const CheckoutPage = ({ router, firebaseData }) => {
+const CheckoutPage = () => {
+  const router = useRouter();
+
   const id = R.path(['query', 'id'], router);
 
   return (
     <Layout
-      router={router}
-      firebaseData={firebaseData}
       title="Оформлення замовлення"
       collections={['chocolates', `orders/${id}`]}
     >
-      <Section maxWidth={1100} py={Theme.styles.spacing.paddingY}>
-        <PageTitle
-          {...Theme.styles.pageTitle}
-          mb={Theme.styles.spacing.paddingY}
-        >
-          Оформлення замовлення
-        </PageTitle>
-        <OrderForm
-          orderId={id}
-          order={R.path(['data', 'orders', id], firebaseData)}
-        />
-      </Section>
+      {({ firebaseData, handleOpenLoader, handleCloseLoader }) => (
+        <Section maxWidth={1100} py={Theme.styles.spacing.paddingY}>
+          <PageTitle
+            {...Theme.styles.pageTitle}
+            mb={Theme.styles.spacing.paddingY}
+          >
+            Оформлення замовлення
+          </PageTitle>
+          <OrderForm
+            orderId={id}
+            handleOpenLoader={handleOpenLoader}
+            handleCloseLoader={handleCloseLoader}
+            order={R.path(['data', 'orders', id], firebaseData)}
+          />
+        </Section>
+      )}
     </Layout>
   );
 };

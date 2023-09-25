@@ -10,7 +10,7 @@ import PricesSlider from '../components/slider/prices-slider';
 // forms
 import ItemForm from '../forms/item-form';
 // helpers
-import { notEquals, notContains, isNotNilAndNotEmpty } from '../helpers';
+import { notEquals, notIncludes, isNotNilAndNotEmpty } from '../helpers';
 // hooks
 import { useConstructorActions } from '../hooks/use-constructor-actions';
 // icons
@@ -76,7 +76,7 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
           orderDescription = {}
         } = R.pathOr({}, [orderId], orders);
 
-        const openedOrder = R.contains(orderId, openedOrders);
+        const openedOrder = R.includes(orderId, openedOrders);
         const total = R.compose(
           R.sum,
           R.values,
@@ -103,8 +103,7 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
                 <Icon
                   iconName="arrowUp"
                   handleClick={() =>
-                    setOpenedOrders(R.filter(notEquals(orderId)))
-                  }
+                    setOpenedOrders(R.filter(notEquals(orderId)))}
                 />
               )}
               {notEquals(status, 'PENDING') && (
@@ -170,35 +169,6 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
     </>
   );
 };
-
-// const Standard = ({ filter }) => {
-//   const getUploadParams = () => {
-//     return {
-//       url: `https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/uploadFile?type=${filter}`
-//     };
-//   };
-
-//   const handleChangeStatus = ({ meta }, status) => {
-//     if (status === 'headers_received') {
-//       showToastifyMessage(`${meta.name} uploaded!`);
-//     } else if (status === 'aborted') {
-//       showToastifyMessage(`${meta.name}, upload failed...`, 'error');
-//     } else if (R.equals(status, 'removed')) {
-//       showToastifyMessage(`${meta.name}, removed...`);
-//     }
-//   };
-
-//   return (
-//     <Dropzone
-//       getUploadParams={getUploadParams}
-//       onChangeStatus={handleChangeStatus}
-//       styles={{
-//         dropzone: { minHeight: 200, maxHeight: 250 },
-//         submitButtonContainerStyle: { display: 'none' }
-//       }}
-//     />
-//   );
-// };
 
 const tabs = [
   {
@@ -362,12 +332,15 @@ const Content = ({ router, firebaseData }) => {
     ),
     R.pathOr([], ['data', 'images'], firebaseData)
   );
+
   const chocolates = R.compose(
     R.sortBy(R.prop('order')),
     R.values,
     R.pathOr([], ['data', 'chocolates'])
   )(firebaseData);
+
   const categories = R.pathOr([], ['data', 'shop', 'categories'], firebaseData);
+
   const recipes = R.compose(
     R.sortBy(R.prop('order')),
     R.values,
@@ -444,7 +417,7 @@ const Content = ({ router, firebaseData }) => {
             ml="auto"
             height={39}
             width={150}
-            onClick={handleOpenModal}
+            onClick={() => handleOpenModal()}
           >
             Add
           </Button>
@@ -526,7 +499,7 @@ const Content = ({ router, firebaseData }) => {
               borderRadius="4px"
               background={Theme.colors.white}
               boxShadow="0 1px 3px rgb(0 0 0 / 30%)"
-              overflowY={notContains(activeTab, [2, 4]) ? 'auto' : 'unset'}
+              overflowY={notIncludes(activeTab, [2, 4]) ? 'auto' : 'unset'}
             >
               <Flex mb={20} alignItems="center" justifyContent="space-between">
                 <Text fontSize={25}>Add Item</Text>
@@ -558,11 +531,9 @@ const Content = ({ router, firebaseData }) => {
   );
 };
 
-const ConstructorPage = ({ router, firebaseData }) => (
+const ConstructorPage = () => (
   <Layout
-    title="About"
-    router={router}
-    firebaseData={firebaseData}
+    title="Constructor"
     collections={[
       'chocolates',
       'recipes',
@@ -574,7 +545,9 @@ const ConstructorPage = ({ router, firebaseData }) => (
       'shop'
     ]}
   >
-    <Content router={router} firebaseData={firebaseData} />
+    {({ router, firebaseData }) => (
+      <Content router={router} firebaseData={firebaseData} />
+    )}
   </Layout>
 );
 

@@ -11,8 +11,6 @@ import {
 } from 'styled-system';
 // theme
 import Theme from '../../theme';
-// ui
-import { StyledLink } from '../../ui';
 // //////////////////////////////////////////////////
 
 export const Nav = styled.nav`
@@ -24,11 +22,17 @@ export const Nav = styled.nav`
   ${alignItems}
   ${flexDirection}
   ${justifyContent}
+
   display: ${({ display }) => display || 'flex'};
 `;
 
-export const NavItem = styled(StyledLink)`
+export const NavItem = styled.div`
+  ${fontSize}
+
+  cursor: pointer;
   position: relative;
+  text-transform: uppercase;
+
   font-weight: ${({ active }) => (active ? 'bold' : '500')};
   color: ${({ active }) =>
     active ? Theme.colors.woodyBrown : Theme.colors.lightSlateGrey};

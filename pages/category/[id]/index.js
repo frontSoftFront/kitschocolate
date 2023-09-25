@@ -97,24 +97,32 @@ const Content = ({ data, title, categoryName }) => {
   );
 };
 
-const CategoryPage = ({ router, firebaseData }) => {
+const makePageTitle = ({ router, firebaseData }) => {
   const {
     query: { id }
   } = router;
 
-  const data = R.path(['data'], firebaseData);
-  const title = R.path(['shop', 'categories', id, 'title'], data);
-
-  return (
-    <Layout
-      title={title}
-      router={router}
-      firebaseData={firebaseData}
-      collections={['shop', 'chocolates']}
-    >
-      <Content data={data} title={title} categoryName={id} />
-    </Layout>
+  const category = R.path(
+    ['data', 'shop', 'categories', id, 'title'],
+    firebaseData
   );
+
+  return R.isNil(category) ? 'Магазин' : `Магазин / ${category}`;
 };
+
+const CategoryPage = () => (
+  <Layout title={makePageTitle} collections={['shop', 'chocolates']}>
+    {({ router, firebaseData }) => {
+      const {
+        query: { id }
+      } = router;
+
+      const data = R.path(['data'], firebaseData);
+      const category = R.path(['shop', 'categories', id, 'title'], data);
+
+      return <Content data={data} title={category} categoryName={id} />;
+    }}
+  </Layout>
+);
 
 export default CategoryPage;

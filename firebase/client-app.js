@@ -1,8 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/storage';
-import 'firebase/database';
-import 'firebase/firestore';
-// import 'firebase/auth'; // If you need it
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
+import 'firebase/compat/database';
+import 'firebase/compat/auth'; // If you need it
 // import 'firebase/analytics'; // If you need it
 // import 'firebase/functions'; // If you need it
 // //////////////////////////////////////////////////
@@ -22,7 +21,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(clientCredentials);
   firebase.storage();
   firebase.database();
-  firebase.firestore();
   // firebase.functions(); // If you need it
 }
 

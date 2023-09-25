@@ -122,6 +122,17 @@ export const fieldsMap = {
       Option: ImageOption
     }
   },
+  recipeDirectionImages: {
+    isMulti: true,
+    options: 'recipes',
+    type: 'reactSelect',
+    id: 'recipeDirectionImages',
+    label: 'Recipe Direction Images',
+    reactSelectComponents: {
+      MultiValueLabel,
+      Option: ImageOption
+    }
+  },
   imgUrl: {
     id: 'imgUrl',
     options: 'recipes',
@@ -199,7 +210,7 @@ export const fieldsMap = {
         label: 'Title',
         wrapperStyles: {
           mr: 20,
-          width: 300,
+          width: 290,
           setDisplay: (id, values) => setDisplay(id, values, 'additional')
         }
       },
@@ -216,7 +227,7 @@ export const fieldsMap = {
         },
         wrapperStyles: {
           mr: 20,
-          width: 300,
+          width: 290,
           setDisplay: (id, values) => setDisplay(id, values, 'chocolate')
         }
       },
@@ -233,7 +244,7 @@ export const fieldsMap = {
         },
         wrapperStyles: {
           mr: 20,
-          width: 300,
+          width: 290,
           setDisplay: (id, values) => setDisplay(id, values, 'recipe')
         }
       },
@@ -253,9 +264,9 @@ export const fieldsMap = {
           { value: 'мл', label: 'мл' },
           { value: 'шт', label: 'шт' },
           { value: 'ч.л', label: 'ч.л' },
-          { value: 'ст.л', label: 'ст.л' },
+          { value: 'ст.л', label: 'ст.л' }
         ]
-      },
+      }
     ]
   },
   direction: {
@@ -369,6 +380,14 @@ export const recipeFields = [
   {
     key: 'ingredientIcons',
     wrapperStyles: {
+      width: 400,
+      mr: 20,
+    }
+  },
+  {
+    key: 'recipeDirectionImages',
+    wrapperStyles: {
+      ml: 20,
       width: 400
     }
   },

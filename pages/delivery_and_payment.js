@@ -19,8 +19,8 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-const PaymentAndDelivery = ({ router }) => (
-  <Layout router={router} title="Payment And Delivery">
+const PaymentAndDelivery = () => (
+  <Layout title="Payment And Delivery">
     <Flex
       mx="auto"
       maxWidth={1000}

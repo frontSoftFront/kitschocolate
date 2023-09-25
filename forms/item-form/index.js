@@ -97,7 +97,7 @@ const ItemForm = ({
   return (
     <Formik
       {...getFormikOptions()}
-      onSubmit={values => submitAction(values)}
+      onSubmit={submitAction}
       validationSchema={Yup.object().shape(validationSchemaObject)}
       initialValues={R.merge(defaultValues, R.or(initialValues, {}))}
     >
@@ -125,7 +125,7 @@ const ItemForm = ({
               mt={25}
               height={50}
               width={300}
-              type="submit"
+              // type="submit"
             >
               Submit
             </Button>

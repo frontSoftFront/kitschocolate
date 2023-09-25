@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 export const isNotNil = R.complement(R.isNil);
 export const notEquals = R.complement(R.equals);
 export const isNotEmpty = R.complement(R.isEmpty);
-export const notContains = R.complement(R.contains);
+export const notIncludes = R.complement(R.includes);
 export const isNilOrEmpty = value => R.or(R.isNil(value), R.isEmpty(value));
 export const isNotNilAndNotEmpty = value =>
   R.and(isNotNil(value), isNotEmpty(value));

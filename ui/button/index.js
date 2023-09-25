@@ -29,10 +29,12 @@ export const Button = styled.button`
   cursor: pointer;
   align-items: center;
   justify-content: center;
+
   text-transform: ${({ textTransform }) => textTransform};
 
   &:hover {
     color: ${({ hoverColor }) => hoverColor};
     background: ${({ hoverBackground }) => hoverBackground};
+    border-color: ${({ hoverBorderColor }) => hoverBorderColor};
   }
 `;

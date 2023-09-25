@@ -7,7 +7,7 @@ import { isNilOrEmpty, showToastifyMessage } from '../../helpers';
 // theme
 import Theme from '../../theme';
 // ui
-import { Box, Button } from '../../ui';
+import { Button } from '../../ui';
 // forms
 import { FieldGroup } from '..';
 // //////////////////////////////////////////////////
