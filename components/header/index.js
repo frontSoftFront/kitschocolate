@@ -67,13 +67,6 @@ const DesktopHeader = ({
   handleNavigate,
   activeNavItem
 }) => {
-  const constructorVisible = R.and(
-    R.not(userAuthorized),
-    R.equals(router.route, 'constructor')
-  )
-    ? 'none'
-    : undefined;
-
   return (
     <StyledHeader px={[25, 25, 50, 75]}>
       <Flex
@@ -98,8 +91,12 @@ const DesktopHeader = ({
               key={index}
               fontSize={[12, 12, 14, 16]}
               active={activeNavItem(link)}
-              display={constructorVisible}
               onClick={() => handleNavigate(link)}
+              display={
+                R.and(R.not(link), R.equals(router.route, 'constructor'))
+                  ? 'none'
+                  : undefined
+              }
             >
               {title}
             </NavItem>
