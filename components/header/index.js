@@ -93,7 +93,7 @@ const DesktopHeader = ({
               active={activeNavItem(link)}
               onClick={() => handleNavigate(link)}
               display={
-                R.and(R.not(userAuthorized), R.equals(link, 'constructor'))
+                R.and(R.not(userAuthorized), R.equals(link, '/constructor'))
                   ? 'none'
                   : undefined
               }
