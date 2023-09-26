@@ -63,9 +63,9 @@ const BasketIcon = ({ mb = 10, router }) => {
 
 const DesktopHeader = ({
   router,
+  activeNavItem,
   userAuthorized,
-  handleNavigate,
-  activeNavItem
+  handleNavigate
 }) => {
   return (
     <StyledHeader px={[25, 25, 50, 75]}>
@@ -93,7 +93,7 @@ const DesktopHeader = ({
               active={activeNavItem(link)}
               onClick={() => handleNavigate(link)}
               display={
-                R.and(R.not(link), R.equals(link, 'constructor'))
+                R.and(R.not(userAuthorized), R.equals(link, 'constructor'))
                   ? 'none'
                   : undefined
               }
