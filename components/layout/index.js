@@ -79,10 +79,13 @@ const Layout = ({ children, collections, title = 'kitschocolate' }) => {
     document.getElementsByTagName('body')[0].style.overflow = 'initial';
   }, []);
 
-  const collectionsToConnect = R.filter(
-    item => R.not(R.path([item], requestedCollections)),
-    R.or(collections, [])
-  );
+  const collectionsToConnect = R.filter(item => {
+    const collectionName = R.pathOr(item, ['path'], item);
+
+    return R.not(R.path([collectionName], requestedCollections));
+  }, R.or(collections, []));
+
+  console.log(collections, collectionsToConnect);
 
   useFirebaseConnect(collectionsToConnect);
 

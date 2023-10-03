@@ -27,6 +27,7 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
     }
 
     let uploadData = null;
+
     const type = req?.query?.type || 'chocolates';
     const busboy = new Busboy({ headers: req.headers });
 
@@ -38,6 +39,7 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
 
     busboy.on('finish', () => {
       const bucket = admin.storage().bucket('kitschocolate-bc8f8.appspot.com');
+
       return bucket
         .upload(uploadData.file, {
           uploadType: 'media',
@@ -55,7 +57,9 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
             .database()
             .ref(`images/${type}`)
             .push();
+
           const id = imagesRef.key;
+
           imagesRef
             .set({ id, url, type, filename: uploadData.filename })
             .then(() => {
@@ -103,7 +107,7 @@ exports.contactUs = functions.https.onRequest((req, res) => {
       html,
       subject: 'Partnership',
       from: 'Kits Chocolate Website',
-      to: 'greedisgood214@gmail.com'
+      to: 'kitscustomers@gmail.com'
     };
 
     return transporter.sendMail(mailOptions, (error, info) => {
@@ -171,7 +175,7 @@ exports.acceptOrder = functions.https.onRequest((req, res) => {
     const mailOptions = {
       html,
       subject: 'Order Confirmation',
-      to: 'greedisgood214@gmail.com',
+      to: 'kitscustomers@gmail.com',
       from: 'Kits Chocolate Website'
     };
 

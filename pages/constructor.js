@@ -10,7 +10,12 @@ import PricesSlider from '../components/slider/prices-slider';
 // forms
 import ItemForm from '../forms/item-form';
 // helpers
-import { notEquals, notIncludes, isNotNilAndNotEmpty } from '../helpers';
+import {
+  notEquals,
+  notIncludes,
+  isNilOrEmpty,
+  isNotNilAndNotEmpty
+} from '../helpers';
 // hooks
 import { useConstructorActions } from '../hooks/use-constructor-actions';
 // icons
@@ -20,13 +25,70 @@ import { QuestionAnswers } from './questions-answers';
 // theme
 import Theme from '../theme';
 // ui
-import { Box, Text, Grid, Flex, Button, ModalWrapper } from '../ui';
+import { Box, Text, Span, Grid, Flex, Button, ModalWrapper } from '../ui';
 // ////////////////////////////////////////////////
+
+const tabs = [
+  {
+    title: 'Шоколадки',
+    formType: 'chocolate',
+    collection: 'chocolates'
+  },
+  {
+    title: 'Рецепти',
+    formType: 'recipe',
+    collection: 'recipes'
+  },
+  {
+    title: 'Питання - Відповіді',
+    formType: 'questionsAnswers',
+    collection: 'questions-answers'
+  },
+  {
+    title: 'Замовлення',
+    collection: 'orders'
+  },
+  {
+    title: 'Магазин',
+    formType: 'category',
+    collection: 'shop/categories',
+    submitActionName: 'handleSendCategoryToApi'
+  },
+  {
+    title: 'Images',
+    formType: 'images',
+    collection: 'images'
+  }
+];
+
+const filterOptions = [
+  { value: 'chocolates', label: 'Chocolates' },
+  { value: 'recipes', label: 'Recipes' },
+  { value: 'ingredients', label: 'Ingredients' }
+];
+
+const orderFilterOptions = [
+  { value: 'ALL', label: 'Всі Замовлення' },
+  { value: 'ACCEPTED', label: 'Підтвердженні Замовлення' },
+  { value: 'PENDING', label: 'Нові Замовлення' }
+];
 
 const makeSortedByOrderArrayFromObject = R.compose(
   R.sortBy(R.prop('order')),
   R.values
 );
+
+const InfoPair = ({ ml, mr, mx, text, title }) => {
+  if (isNilOrEmpty(text)) return null;
+
+  const styles = R.filter(item => item, { ml, mr, mx });
+
+  return (
+    <Text {...styles}>
+      {title} <Span fontWeight="bold">{text}</Span>
+    </Text>
+  );
+};
 
 const OrderDescription = ({
   call,
@@ -54,6 +116,7 @@ const OrderDescription = ({
 );
 
 const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
+  const [filter, setFilter] = useState('ALL');
   const [openedOrders, setOpenedOrders] = useState([]);
 
   const handleCompleteOrder = order =>
@@ -65,7 +128,14 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
 
   return (
     <>
-      {R.keys(orders).map((orderId, index) => {
+      <Box mb={20} width={300}>
+        <Select
+          options={orderFilterOptions}
+          defaultValue={orderFilterOptions[0]}
+          onChange={({ value }) => setFilter(value)}
+        />
+      </Box>
+      {R.reverse(R.keys(orders)).map((orderId, index) => {
         const order = R.pathOr({}, [orderId], orders);
 
         const {
@@ -77,6 +147,7 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
         } = R.pathOr({}, [orderId], orders);
 
         const openedOrder = R.includes(orderId, openedOrders);
+
         const total = R.compose(
           R.sum,
           R.values,
@@ -86,13 +157,10 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
         return (
           <div key={index}>
             <Flex my={10} alignItems="center">
-              <Text>Created Date: {createdDate}</Text>
-              {isNotNilAndNotEmpty(acceptedDate) ? (
-                <Text>Accepted Date: ${acceptedDate}</Text>
-              ) : null}
-
-              <Text mx={10}>Status: {status}</Text>
-              <Text mr={10}>Total: {total}</Text>
+              <InfoPair text={createdDate} title="Created Date: " />
+              <InfoPair ml={10} text={acceptedDate} title="Accepted Date: " />
+              <InfoPair mx={10} text={status} title="Status: " />
+              <InfoPair mr={10} text={total} title="Total: " />
               {R.not(openedOrder) && (
                 <Icon
                   iconName="arrowDown"
@@ -102,8 +170,9 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
               {openedOrder && (
                 <Icon
                   iconName="arrowUp"
-                  handleClick={() =>
-                    setOpenedOrders(R.filter(notEquals(orderId)))}
+                  handleClick={() => {
+                    setOpenedOrders(R.filter(notEquals(orderId)));
+                  }}
                 />
               )}
               {notEquals(status, 'PENDING') && (
@@ -170,45 +239,6 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
   );
 };
 
-const tabs = [
-  {
-    title: 'Шоколадки',
-    formType: 'chocolate',
-    collection: 'chocolates'
-  },
-  {
-    title: 'Рецепти',
-    formType: 'recipe',
-    collection: 'recipes'
-  },
-  {
-    title: 'Питання - Відповіді',
-    formType: 'questionsAnswers',
-    collection: 'questions-answers'
-  },
-  {
-    title: 'Замовлення',
-    collection: 'orders'
-  },
-  {
-    title: 'Магазин',
-    formType: 'category',
-    collection: 'shop/categories',
-    submitActionName: 'handleSendCategoryToApi'
-  },
-  {
-    title: 'Images',
-    formType: 'images',
-    collection: 'images'
-  }
-];
-
-const filterOptions = [
-  { value: 'chocolates', label: 'Chocolates' },
-  { value: 'recipes', label: 'Recipes' },
-  { value: 'ingredients', label: 'Ingredients' }
-];
-
 const ImagesComponent = ({
   images,
   imagesFilter,
@@ -274,10 +304,10 @@ const CategoriesComponent = props => {
     R.map(category => {
       const { chocolates } = category;
 
-      const mappedChocolates = R.map(
-        id => R.path([id], chocolateList),
-        chocolates
-      );
+      const mappedChocolates = R.compose(
+        R.filter(item => item),
+        R.map(id => R.pathOr(null, [id], chocolateList))
+      )(chocolates);
 
       return R.assoc('mappedChocolates', mappedChocolates, category);
     }),
@@ -542,7 +572,8 @@ const ConstructorPage = () => (
       'home',
       'orders',
       'images',
-      'shop'
+      { path: 'orders', queryParams: ['orderByChild=createdDate'] },
+      { path: 'shop/categories', queryParams: ['orderByChild=order'] }
     ]}
   >
     {({ router, firebaseData }) => (

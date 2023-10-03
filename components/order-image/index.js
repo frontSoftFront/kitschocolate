@@ -27,7 +27,7 @@ const OrderImage = ({ extraImages }) => {
         height={['20%', '20%', '100%']}
         flexDirection={['row', 'row', 'column']}
       >
-        {extraImages.map((img, index) => (
+        {R.without(activeImage, extraImages).map((img, index) => (
           <Img
             src={img}
             key={index}

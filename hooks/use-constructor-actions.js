@@ -40,6 +40,7 @@ export const useConstructorActions = ({
       R.prop('imgUrl', values),
       R.head(R.pathOr([], ['extraImages'], values))
     );
+
     let data = values;
 
     if (isNotNilAndNotEmpty(imgUrl)) {
@@ -108,6 +109,7 @@ export const useConstructorActions = ({
   // images
   const handleGetImages = () => {
     const ref = firebase.database().ref('images');
+
     ref.once('value', snapshot => {
       const data = snapshot.val();
 
@@ -144,7 +146,7 @@ export const useConstructorActions = ({
   // categories
   const handleMarkAsFavoriteCategory = async id => {
     const ref = firebase.database().ref(`shop/categories`);
-    // const favorite = R.path([id, 'favorite'], categories);
+
     const data = R.map(item => {
       const favorite = R.propEq('id', id, item) ? R.not(item.favorite) : false;
 
