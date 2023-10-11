@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import is from 'is_js';
 // components
 import ImageComponent from '../image';
 // theme
@@ -11,6 +12,7 @@ const ItemComponent = ({
   px,
   item,
   quantity,
+  renderActions,
   handleEditItem,
   handleRemoveItem,
   handleGoToDetailPage,
@@ -135,19 +137,9 @@ const ItemComponent = ({
             {cookingTime} хв
           </Flex>
         )}
+        {is.function(renderActions) ? renderActions(item) : null}
         {R.equals(itemType, 'configurable') && (
           <>
-            <Text
-              mt={10}
-              p="5px"
-              mx="auto"
-              fontWeight="bold"
-              width="max-content"
-              fontSize={[16, 16, 18]}
-              color={Theme.colors.congoBrown}
-            >
-              {price} грн
-            </Text>
             <Flex mt={20} justifyContent="space-between">
               <Button
                 {...Theme.styles.actionButton}

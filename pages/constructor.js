@@ -1,17 +1,20 @@
 import * as R from 'ramda';
 import { useState } from 'react';
 import Select from 'react-select';
+import Toggle from 'react-toggle';
 // components
 import Portal from '../components/portal';
 import Layout from '../components/layout';
 import ItemComponent from '../components/item';
 import ImageComponent from '../components/image';
+import { ChangeQuantity } from '../components/order-item';
 import PricesSlider from '../components/slider/prices-slider';
 // forms
 import ItemForm from '../forms/item-form';
 // helpers
 import {
   notEquals,
+  setDebounce,
   notIncludes,
   isNilOrEmpty,
   isNotNilAndNotEmpty
@@ -30,7 +33,7 @@ import { Box, Text, Span, Grid, Flex, Button, ModalWrapper } from '../ui';
 
 const tabs = [
   {
-    title: 'Шоколадки',
+    title: 'Шоколад',
     formType: 'chocolate',
     collection: 'chocolates'
   },
@@ -70,7 +73,9 @@ const filterOptions = [
 const orderFilterOptions = [
   { value: 'ALL', label: 'Всі Замовлення' },
   { value: 'ACCEPTED', label: 'Підтвердженні Замовлення' },
-  { value: 'PENDING', label: 'Нові Замовлення' }
+  { value: 'PENDING', label: 'Нові Замовлення' },
+  { value: 'COMPLETED', label: 'COMPLETED' },
+  { value: 'DELIVERED', label: 'DELIVERED' },
 ];
 
 const makeSortedByOrderArrayFromObject = R.compose(
@@ -126,6 +131,21 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
   const handlePendingOrder = order =>
     handleChangeOrderStatus(R.assoc('status', 'PENDING', order));
 
+  const mapped = R.compose(
+    R.reverse,
+    R.filter(item => {
+      if (R.equals(filter, 'ALL')) return true;
+
+      const { status, acceptedDate } = item;
+
+      if (R.equals(filter, 'ACCEPTED')) return acceptedDate;
+
+      return R.equals(status, filter);
+    }),
+    R.values,
+    R.mapObjIndexed((item, orderId) => R.assoc('orderId', orderId, item))
+  )(orders);
+
   return (
     <>
       <Box mb={20} width={300}>
@@ -135,16 +155,15 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
           onChange={({ value }) => setFilter(value)}
         />
       </Box>
-      {R.reverse(R.keys(orders)).map((orderId, index) => {
-        const order = R.pathOr({}, [orderId], orders);
-
+      {mapped.map((order, index) => {
         const {
           items,
           status,
+          orderId,
           createdDate,
           acceptedDate,
           orderDescription = {}
-        } = R.pathOr({}, [orderId], orders);
+        } = order;
 
         const openedOrder = R.includes(orderId, openedOrders);
 
@@ -346,6 +365,53 @@ const CategoriesComponent = props => {
   );
 };
 
+const ChocolateActions = props => {
+  const {
+    item,
+    handleEditItem,
+    handleRemoveItem,
+    handleSendItemByCollectionToApi
+  } = props;
+
+  const { id, active, quantity } = item;
+
+  const handleActivateOrDeactivateItem = () =>
+    handleSendItemByCollectionToApi(R.assoc('active', R.not(active), item));
+
+  const handleChangeQuantity = value => {
+    if (R.equals(value, quantity)) return;
+
+    handleSendItemByCollectionToApi(R.assoc('quantity', value, item));
+  };
+
+  return (
+    <Flex width="100%" alignItems="center" justifyContent="space-between">
+      <Toggle
+        icons={false}
+        checked={active}
+        id={`active.${id}`}
+        onChange={handleActivateOrDeactivateItem}
+      />
+      <Icon
+        w={20}
+        h={20}
+        iconName="pencil"
+        handleClick={() => handleEditItem(item)}
+      />
+      <Icon
+        w={20}
+        h={20}
+        iconName="trash"
+        handleClick={() => handleRemoveItem(item)}
+      />
+      <ChangeQuantity
+        quantity={quantity}
+        handleChangeQuantity={setDebounce(handleChangeQuantity, 400)}
+      />
+    </Flex>
+  );
+};
+
 const Content = ({ router, firebaseData }) => {
   const [opened, setOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -398,6 +464,7 @@ const Content = ({ router, firebaseData }) => {
   const constructorActions = useConstructorActions({
     collection,
     categories,
+    chocolates,
     handleCloseModal
   });
 
@@ -464,11 +531,19 @@ const Content = ({ router, firebaseData }) => {
               px="0px"
               key={index}
               item={item}
-              itemType="configurable"
-              handleEditItem={handleOpenModal}
-              handleRemoveItem={handleRemoveItem}
+              hideActionButton
               imgSize={{ width: '100%', height: 350 }}
               handleGoToDetailPage={id => router.push(`/shop/${id}`)}
+              renderActions={() => (
+                <ChocolateActions
+                  item={item}
+                  handleEditItem={handleOpenModal}
+                  handleRemoveItem={handleRemoveItem}
+                  handleSendItemByCollectionToApi={
+                    handleSendItemByCollectionToApi
+                  }
+                />
+              )}
             />
           ))}
         {R.equals(activeTab, 1) &&

@@ -7,6 +7,10 @@ const nodemailer = require('nodemailer');
 const cors = require('cors')({ origin: true });
 const functions = require('firebase-functions');
 
+// gmail
+const mail = 'kitsinfo1234@gmail.com';
+const app_password = 'cmomofaurjbfiqfx';
+
 // Firebase Configuration
 const admin = require('firebase-admin');
 
@@ -87,8 +91,8 @@ exports.contactUs = functions.https.onRequest((req, res) => {
       secure: true,
       host: 'smtp.gmail.com',
       auth: {
-        pass: 'bqtcpdmfjvyzbcrc',
-        user: 'greedisgood214@gmail.com'
+        user: mail,
+        pass: app_password
       }
     });
 
@@ -142,8 +146,8 @@ exports.acceptOrder = functions.https.onRequest((req, res) => {
       secure: true,
       host: 'smtp.gmail.com',
       auth: {
-        pass: 'bqtcpdmfjvyzbcrc',
-        user: 'greedisgood214@gmail.com'
+        user: mail,
+        pass: app_password
       }
     });
 
@@ -175,7 +179,7 @@ exports.acceptOrder = functions.https.onRequest((req, res) => {
     const mailOptions = {
       html,
       subject: 'Order Confirmation',
-      to: 'kitscustomers@gmail.com',
+      to: 'kitscustomers@gmail.com, greedisgood214@gmail.com',
       from: 'Kits Chocolate Website'
     };
 

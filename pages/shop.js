@@ -20,7 +20,7 @@ const Content = ({ router, categories, chocolateList }) => {
       const { chocolates } = category;
 
       const mappedChocolates = R.compose(
-        R.filter(item => item),
+        R.filter(R.propOr(false, 'active')),
         R.map(id => R.pathOr(null, [id], chocolateList))
       )(chocolates);
 

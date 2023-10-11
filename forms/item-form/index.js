@@ -125,7 +125,7 @@ const ItemForm = ({
               mt={25}
               height={50}
               width={300}
-              // type="submit"
+              type="submit"
             >
               Submit
             </Button>

@@ -1,11 +1,11 @@
 import * as R from 'ramda';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useState, useCallback } from 'react';
 // components
 import Menu from '../menu';
 import Portal from '../portal';
-import Basket from '../basket';
+import { BasketModal } from '../basket';
 import ToggleIcon from '../menu/toggle-icon';
 // lib
 import { makeSelectBasket } from '../../lib/redux';
@@ -15,6 +15,7 @@ import * as C from '../../constants';
 import * as H from '../../helpers';
 // hooks
 import { useWindowSize } from '../../hooks/use-window-size';
+import { useBasketActions } from '../../hooks/use-basket-actions';
 // icons
 import Icon from '../../icons';
 // theme
@@ -26,38 +27,33 @@ import { Nav, NavItem, BasketCount, StyledHeader } from './ui';
 // //////////////////////////////////////////////////
 
 const BasketIcon = ({ mb = 10, router }) => {
-  const [basketOpened, setBasketOpened] = useState(false);
+  const {
+    basketList,
+    basketCount,
+    basketOpened,
+    handleOpenBasket,
+    handleCloseBasket
+  } = useBasketActions();
 
-  const handleCloseBasket = () => {
-    setBasketOpened(false);
-    document.getElementsByTagName('body')[0].style.overflow = 'initial';
-  };
-
-  const { basketList, basketCount } = useSelector(makeSelectBasket);
-
-  const handleOpenBasket = () => {
-    if (H.isNotNilAndNotEmpty(basketList)) {
-      setBasketOpened(true);
-      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
-    }
-  };
-
-  return (
-    <>
+  const renderBasketIcon = useCallback(
+    () => (
       <Flex mb={mb}>
         <Icon iconName="basket" handleClick={handleOpenBasket} />
         {R.gt(basketCount, 0) ? <BasketCount>{basketCount}</BasketCount> : null}
       </Flex>
-      {basketOpened ? (
-        <Portal selector="#modal">
-          <Basket
-            router={router}
-            basketList={basketList}
-            handleCloseBasket={handleCloseBasket}
-          />
-        </Portal>
-      ) : null}
-    </>
+    ),
+    [mb, basketCount]
+  );
+
+  return (
+    <BasketModal
+      router={router}
+      basketList={basketList}
+      basketOpened={basketOpened}
+      renderComponent={renderBasketIcon}
+      handleOpenBasket={handleOpenBasket}
+      handleCloseBasket={handleCloseBasket}
+    />
   );
 };
 

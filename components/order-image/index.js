@@ -1,7 +1,9 @@
 import * as R from 'ramda';
 import React, { useState, useEffect } from 'react';
+// components
+import ImageComponent from '../image';
 // ui
-import { Img, Flex } from '../../ui';
+import { Flex } from '../../ui';
 // //////////////////////////////////////////////////
 
 const OrderImage = ({ extraImages }) => {
@@ -11,37 +13,52 @@ const OrderImage = ({ extraImages }) => {
 
   useEffect(() => setActiveImage(initialImage), [extraImages]);
 
+  const condition = R.gte(R.length(extraImages), 5);
+
+  const list = condition ? R.without(activeImage, extraImages) : extraImages;
+
   return (
     <Flex
       width="100%"
-      maxWidth={[350, 400, '45%']}
+      maxWidth={[350, 400, 400]}
       mx={['auto', 'auto', 'unset']}
+      alignItems={['center', 'center', 'unset']}
       flexDirection={['column-reverse', 'column-reverse', 'row']}
     >
       <Flex
         mr={[0, 0, 20]}
         mt={[20, 20, 0]}
-        maxHeight={[100, 80, 'unset']}
+        maxHeight={[100, 80, 430]}
+        width={['100%', '100%', 70]}
         justifyContent="space-between"
-        width={['100%', '100%', '20%']}
         height={['20%', '20%', '100%']}
         flexDirection={['row', 'row', 'column']}
       >
-        {R.without(activeImage, extraImages).map((img, index) => (
-          <Img
+        {list.map((img, index) => (
+          <ImageComponent
+            fill
             src={img}
             key={index}
             cursor="pointer"
-            width={['20%', '20%', '100%']}
-            height={['100%', '100%', '20%']}
+            placeholder="blur"
             onClick={() => setActiveImage(img)}
+            wrapperStyles={{
+              width: ['20%', '20%', '100%'],
+              height: ['100%', '100%', '23%']
+            }}
           />
         ))}
       </Flex>
-      <Img
+      <ImageComponent
+        fill
         src={activeImage}
-        height={[350, 350, 'auto']}
-        width={['100%', '100%', '80%']}
+        placeholder="blur"
+        wrapperStyles={{
+          maxWidth: 300,
+          maxHeight: 430,
+          height: [350, 350, 'auto'],
+          width: ['100%', '100%', '80%']
+        }}
       />
     </Flex>
   );

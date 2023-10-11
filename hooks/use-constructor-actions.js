@@ -8,10 +8,13 @@ import { showToastifyMessage, isNotNilAndNotEmpty } from '../helpers';
 export const useConstructorActions = ({
   collection,
   categories,
+  chocolates,
   handleCloseModal
 }) => {
   const firebase = useFirebase();
   const dispatch = useDispatch();
+
+  // console.log('chocolates', R.head(chocolates));
 
   // general
   const handleRemoveItem = async values => {
@@ -37,8 +40,8 @@ export const useConstructorActions = ({
 
   const handleSendItemByCollectionToApi = async values => {
     const imgUrl = R.or(
-      R.prop('imgUrl', values),
-      R.head(R.pathOr([], ['extraImages'], values))
+      R.head(R.pathOr([], ['extraImages'], values)),
+      R.prop('imgUrl', values)
     );
 
     let data = values;
@@ -91,18 +94,51 @@ export const useConstructorActions = ({
 
   // order
   const handleChangeOrderStatus = async order => {
-    const orderId = R.path(['orderId'], order);
+    const { status, orderId } = order;
+
+    // debugger
 
     const path = `orders/${orderId}`;
     const ref = firebase.database().ref(path);
 
-    await ref.update(order).then(() => {
+    await ref.update(order).then(async () => {
       showToastifyMessage('success');
       dispatch({
         path,
         data: order,
         type: actionTypes.SET
       });
+
+      if (R.equals(status, 'COMPLETED')) {
+        const quantities = R.map(
+          R.prop('quantity'),
+          R.pathOr({}, ['items'], order)
+        );
+
+        const chocolatesWithNewQuantities = R.map(item => {
+          const { id, quantity } = item;
+
+          const newQuantity = R.pathOr(quantity, [id], quantities);
+
+          return R.assoc('quantity', newQuantity, chocolates);
+        }, R.indexBy(R.prop('id'), chocolates));
+
+        const chocolatesRef = firebase.database().ref('chocolates');
+
+        await chocolatesRef
+          .update(R.head(chocolates))
+          .then(() => {
+            dispatch({
+              path: 'chocolates',
+              type: actionTypes.SET,
+              chocolatesWithNewQuantities
+            });
+          })
+          .catch(error => {
+            console.log('error', error);
+            showToastifyMessage('error', collection);
+          });
+      }
     });
   };
 

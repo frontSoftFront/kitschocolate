@@ -23,19 +23,22 @@ const RecipeDescription = props => {
   const {
     title,
     imgUrl,
-    quantity,
-    activeSize,
+    // quantity,
     description,
-    setActiveSize,
-    ingredientIcons,
-    handleChangeQuantity
+    cookingTime = 30
+    // setActiveSize,
+    // ingredientIcons,
+    // handleChangeQuantity,
+    // activeSize = 'small'
   } = props;
 
-  const activeWeight = R.prop(activeSize, weight);
-  const getActiveSizeBtnColor = btn =>
-    R.equals(btn, activeSize)
-      ? Theme.colors.mediumWood
-      : Theme.colors.transparentBlue;
+  console.log('RecipeDescription', props)
+
+  // const activeWeight = R.prop(activeSize, weight);
+  // const getActiveSizeBtnColor = btn =>
+  //   R.equals(btn, activeSize)
+  //     ? Theme.colors.mediumWood
+  //     : Theme.colors.transparentBlue;
 
   return (
     <Section
@@ -57,20 +60,24 @@ const RecipeDescription = props => {
       />
       <Box width={['100%', '100%%', '45%']}>
         <Article>
-          <ArticleTitle fontWeight={500} fontSize={[18, 20, 25]}>
+          {/* <ArticleTitle fontWeight={500} fontSize={[18, 20, 25]}>
             {title}
-          </ArticleTitle>
+          </ArticleTitle> */}
           <Text
             my={20}
             opacity="0.54"
             lineHeight={1.54}
             textAlign="justify"
-            fontSize={[12, 15]}
+            fontSize={[14, 16]}
           >
             {description}
           </Text>
         </Article>
-        <>
+        <Flex fontWeight="bold">
+          <Img mr="5px" width={15} height={15} src="../dark-clock.svg" />
+          {cookingTime} хв
+        </Flex>
+        {/* <>
           <Flex alignItems="center" justifyContent="space-between">
             <Flex>
               <Input
@@ -174,8 +181,8 @@ const RecipeDescription = props => {
               </Flex>
             </Box>
           </Flex>
-        </>
-        <Flex
+        </> */}
+        {/* <Flex
           mt={20}
           p="0 0 10px 40px"
           borderRadius="16px"
@@ -192,7 +199,7 @@ const RecipeDescription = props => {
               alt={`ingredient-${item}`}
             />
           ))}
-        </Flex>
+        </Flex> */}
       </Box>
     </Section>
   );
