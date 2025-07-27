@@ -15,13 +15,14 @@ const makeSortedByOrderArrayFromObject = R.compose(
 
 const Content = ({ router, categories, chocolateList }) => {
   const mappedCategories = R.compose(
+    R.reject(({ chocolates }) => R.isEmpty(chocolates)),
     R.map(category => {
       const { chocolates } = category;
 
-      const mappedChocolates = R.map(
-        id => R.path([id], chocolateList),
-        chocolates
-      );
+      const mappedChocolates = R.compose(
+        R.filter(R.propOr(false, 'active')),
+        R.map(id => R.pathOr(null, [id], chocolateList))
+      )(chocolates);
 
       return R.assoc('chocolates', mappedChocolates, category);
     }),

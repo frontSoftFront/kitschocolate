@@ -32,6 +32,8 @@ export const FavoriteProducts = ({ shop, router, chocolates }) => {
     R.pathOr([], ['categories'])
   )(shop);
 
+  if (R.isEmpty(favoriteChocolates)) return null;
+
   return (
     <Section py={Theme.styles.spacing.paddingY}>
       <SectionTitle {...Theme.styles.pageTitle}>

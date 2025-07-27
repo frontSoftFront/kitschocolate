@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { width, display } from 'styled-system';
+import { width, space, display } from 'styled-system';
 // forms
 import { renderBorderColor } from './helpers';
 // theme
@@ -46,12 +46,12 @@ export const InputWrapper = styled.div`
 
 export const Label = styled.label`
   ${width}
+  ${space}
 
   display: block;
   font-size: 13px;
   cursor: pointer;
   font-weight: 600;
-  padding-left: 12px;
   font-family: Poppins, sans-serif;
   color: ${Theme.colors.lightSlateGrey};
 
@@ -59,6 +59,10 @@ export const Label = styled.label`
     font-size: 12px;
   }
 `;
+
+Label.defaultProps = {
+  pl: 12
+};
 
 export const TextArea = styled.textarea`
   width: 100%;

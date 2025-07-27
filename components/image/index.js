@@ -1,8 +1,24 @@
 import * as R from 'ramda';
 import Image from 'next/image';
+import { style } from 'styled-system';
+import styled from 'styled-components';
 // ui
 import { RelativeBox } from '../../ui';
 // //////////////////////////////////////////////////
+
+export const objectFit = style({
+  key: 'objectFit',
+  prop: 'objectFit',
+  cssProp: 'objectFit'
+});
+
+const StyledImage = styled(Image)`
+  ${objectFit}
+`;
+
+StyledImage.defaultProps = {
+  objectFit: 'contain'
+};
 
 const shimmer = (w, h) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -28,8 +44,7 @@ const ImageComponent = props => {
   if (R.propEq('placeholder', 'blur', props)) {
     return (
       <RelativeBox {...props.wrapperStyles}>
-        <Image
-          style={{ objectFit: 'contain' }}
+        <StyledImage
           {...R.dissoc('wrapperStyles', props)}
           alt={R.propOr('', 'alt', props)}
           sizes={R.pathOr('100vw', ['sizes'], props)}

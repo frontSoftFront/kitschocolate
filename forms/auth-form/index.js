@@ -14,8 +14,8 @@ import { FieldGroup } from '..';
 // //////////////////////////////////////////////////
 
 const initialValues = {
-  password: 'superadmin',
-  email: 'superadmin@mail.com'
+  email: '',
+  password: ''
 };
 
 const validationSchema = Yup.object().shape({

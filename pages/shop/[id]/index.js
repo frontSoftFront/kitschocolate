@@ -23,7 +23,7 @@ const Content = ({ data }) => {
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
         <Flex
           flexWrap="wrap"
-          justifyContent="space-between"
+          justifyContent="space-around"
           mt={Theme.styles.spacing.paddingY}
         >
           <OrderImage extraImages={extraImages} />

@@ -4,6 +4,8 @@ import { Form, Formik } from 'formik';
 import { LiqPayPay } from 'react-liqpay';
 import { useDispatch } from 'react-redux';
 import { actionTypes } from 'react-redux-firebase';
+// lib
+import { basketActions } from '../../lib/redux';
 // helpers
 import { isNilOrEmpty, showToastifyMessage } from '../../helpers';
 // theme
@@ -97,14 +99,14 @@ const PaymentTypes = ({ paymentType }) => (
     >
       Оберіть метод оплати
     </Text>
-    <Flex alignItems="stretch" justifyContent="space-between">
+    <Flex alignItems="stretch">
       <FieldComponent
         value="cash"
         type="radio"
         id="paymentType1"
         name="paymentType"
       />
-      <Label width="30%" htmlFor="paymentType1">
+      <Label pl="0px" width="30%" htmlFor="paymentType1">
         <Box
           p={10}
           height="100%"
@@ -186,7 +188,7 @@ const PaymentTypes = ({ paymentType }) => (
         id="paymentType3"
         name="paymentType"
       />
-      <Label width="30%" htmlFor="paymentType3">
+      {/* <Label width="30%" htmlFor="paymentType3">
         <Box
           p={10}
           height="100%"
@@ -213,7 +215,7 @@ const PaymentTypes = ({ paymentType }) => (
             </Text>
           </Article>
         </Box>
-      </Label>
+      </Label> */}
     </Flex>
   </Box>
 );
@@ -283,7 +285,7 @@ const handleSubmit = (values, handlers) => {
     orderId,
     paymentType,
     acceptedDate,
-    status: 'COMPLETED',
+    status: 'ACCEPTED',
     orderDescription: {
       email,
       shipTo,
@@ -311,6 +313,7 @@ const handleSubmit = (values, handlers) => {
       if (res.status === 200) {
         showToastifyMessage('Success');
 
+        dispatch(basketActions.setBasket(null));
         dispatch({
           data,
           type: actionTypes.SET,
@@ -378,9 +381,9 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
                 <SectionTitle {...Theme.styles.formSectionTitle}>
                   Контактна інформація
                 </SectionTitle>
-                <FieldGroup id="firstName" label="First Name" />
-                <FieldGroup id="lastName" label="Last Name" />
-                <FieldGroup id="phoneNumber" label="Phone Number" />
+                <FieldGroup id="firstName" label="Ім'я" />
+                <FieldGroup id="lastName" label="Прізвище" />
+                <FieldGroup id="phoneNumber" label="Номер Телефону" />
                 <FieldGroup id="email" label="Email" />
                 <Flex
                   mt={15}
@@ -443,7 +446,7 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
                     </Text>
                     <Text fontWeight={500}>{total} грн</Text>
                   </Flex>
-                  <Flex
+                  {/* <Flex
                     py={[10, 15]}
                     alignItems="center"
                     justifyContent="space-between"
@@ -452,7 +455,7 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
                       Вартість доставки
                     </Text>
                     <Text fontWeight={500}>50 грн</Text>
-                  </Flex>
+                  </Flex> */}
                 </Box>
                 <Flex
                   py={[15, 20, 25]}
@@ -467,7 +470,8 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
                     fontSize={[16, 18]}
                     color={Theme.colors.mainBlack}
                   >
-                    {R.add(total, 50)} грн
+                    {/* {R.add(total, 50)} грн */}
+                    {total} грн
                   </Text>
                 </Flex>
                 {R.propEq('paymentType', 'card', values) ? (

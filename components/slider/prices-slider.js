@@ -83,12 +83,10 @@ const PricesSlider = props => {
     [swiped]
   );
 
-  const containerHeight = R.path(
-    ['current', 'innerSlider', 'list', 'clientHeight'],
-    slider
-  );
-
-  console.log('containerHeight', containerHeight, 'slider', slider)
+  // const containerHeight = R.path(
+  //   ['current', 'innerSlider', 'list', 'clientHeight'],
+  //   slider
+  // );
 
   return (
     <Box mt={mt}>

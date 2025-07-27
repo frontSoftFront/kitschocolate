@@ -26,7 +26,7 @@ export const showToastifyMessage = (text, type = 'success') => {
     success: toast.success
   };
   const options = {
-    autoClose: 5000,
+    autoClose: 2000,
     draggable: true,
     pauseOnHover: true,
     closeOnClick: true,
