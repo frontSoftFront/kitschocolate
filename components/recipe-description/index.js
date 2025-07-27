@@ -19,6 +19,7 @@ import {
 
 const weight = { small: 100, medium: 200 };
 
+// TODO: uncomment if needed
 const RecipeDescription = props => {
   const {
     title,
@@ -31,8 +32,6 @@ const RecipeDescription = props => {
     // handleChangeQuantity,
     // activeSize = 'small'
   } = props;
-
-  console.log('RecipeDescription', props)
 
   // const activeWeight = R.prop(activeSize, weight);
   // const getActiveSizeBtnColor = btn =>
@@ -67,8 +66,8 @@ const RecipeDescription = props => {
             my={20}
             opacity="0.54"
             lineHeight={1.54}
-            textAlign="justify"
             fontSize={[14, 16]}
+            wordBreak="break-word"
           >
             {description}
           </Text>
@@ -77,6 +76,7 @@ const RecipeDescription = props => {
           <Img mr="5px" width={15} height={15} src="../dark-clock.svg" />
           {cookingTime} хв
         </Flex>
+        {/* TODO: uncomment if needed */}
         {/* <>
           <Flex alignItems="center" justifyContent="space-between">
             <Flex>

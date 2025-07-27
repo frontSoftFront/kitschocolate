@@ -180,7 +180,7 @@ const RecipeIngredients = props => {
           fontSize={[18, 20, 25]}
           textAlign={['center', 'center', 'left']}
         >
-          Ingredients
+          Інгредієнти
         </ArticleTitle>
         {ingredients.map((item, index) => (
           <Ingredient
@@ -205,7 +205,7 @@ const RecipeIngredients = props => {
           Direction
         </ArticleTitle>
         {direction.map((item, index) => (
-          <Text mt={10} key={index} wordBreak="break-all">
+          <Text mt={10} key={index} wordBreak="break-word">
             {R.inc(index)} {item}
           </Text>
         ))}
