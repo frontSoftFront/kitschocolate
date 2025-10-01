@@ -28,15 +28,14 @@ export const ChangeQuantity = ({
 }) => {
   const [value, setValue] = useState(quantity);
 
-  const disabled = R.equals(value, itemQuantity);
+  const disabled = R.gte(value, itemQuantity);
 
   const handleChange = newValue => {
-    const validValue = R.or(R.isEmpty(newValue), R.lte(newValue, 0))
-      ? 0
-      : newValue;
+    setValue(newValue);
 
-    setValue(validValue);
-    handleChangeQuantity(validValue);
+    if (disabled) return;
+
+    handleChangeQuantity(newValue);
   };
 
   return (
@@ -92,9 +91,9 @@ export const ChangeQuantity = ({
 const OrderItem = ({ orderItem }) => {
   const {
     id,
-    imgUrl,
     price,
     title,
+    imgUrl,
     description,
     weight = 100,
     quantity: itemQuantity
@@ -105,10 +104,12 @@ const OrderItem = ({ orderItem }) => {
 
   const handleChangeQuantity = useCallback(
     value => {
-      if (R.or(R.gt(value, 100), R.lt(value, 0))) return;
+      if ((R.gt(value, 100) || R.lte(value, 0)) && value !== '') return;
 
-      setQuantity(value);
-      setTotalPrice(R.multiply(price, value));
+      const validValue = R.isEmpty(value) ? 1 : value;
+
+      setQuantity(validValue);
+      setTotalPrice(R.multiply(price, validValue));
     },
     [price]
   );

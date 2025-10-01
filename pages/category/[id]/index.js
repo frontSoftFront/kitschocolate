@@ -58,8 +58,8 @@ const Content = ({ data, title, categoryName }) => {
   return (
     <>
       <Section
-        borderBottom="2px solid"
-        borderColor={Theme.colors.quincy}
+        // borderBottom="2px solid"
+        // borderColor={Theme.colors.quincy}
         py={Theme.styles.spacing.paddingY}
       >
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
@@ -92,7 +92,7 @@ const Content = ({ data, title, categoryName }) => {
           </Flex>
         </AnimatedBox>
       </Section>
-      <CustomerReviews />
+      {/* <CustomerReviews /> */}
     </>
   );
 };

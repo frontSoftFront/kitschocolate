@@ -158,23 +158,18 @@ export const useConstructorActions = ({
   };
 
   const handleRemoveImage = async ({ id, type, filename }) => {
+    // debugger
     const storageRef = firebase.storage().ref(`images/${type}/${filename}`);
+
+    const callback = () =>
+      handleRemoveItem({ id, collection: `images/${type}` });
 
     await storageRef
       .delete()
-      .then(async () => {
-        const databaseRef = firebase.database().ref(`images/${type}/${id}`);
-
-        await databaseRef.remove().then(() => {
-          showToastifyMessage('removed');
-          dispatch({
-            type: actionTypes.REMOVE,
-            path: `images.${type}/${id}`
-          });
-        });
-      })
+      .then(() => callback())
       .catch(error => {
         console.log('error', error);
+        callback();
         showToastifyMessage(type, 'error');
       });
   };

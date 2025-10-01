@@ -124,6 +124,8 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
   const [filter, setFilter] = useState('ALL');
   const [openedOrders, setOpenedOrders] = useState([]);
 
+  console.log('orders', orders)
+
   const handleCompleteOrder = order =>
     handleChangeOrderStatus(R.assoc('status', 'COMPLETED', order));
   const handleDeliverOrder = order =>
@@ -162,6 +164,7 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
           orderId,
           createdDate,
           acceptedDate,
+          paymentStatus,
           orderDescription = {}
         } = order;
 
@@ -179,6 +182,7 @@ const Orders = ({ orders, handleRemoveItem, handleChangeOrderStatus }) => {
               <InfoPair text={createdDate} title="Created Date: " />
               <InfoPair ml={10} text={acceptedDate} title="Accepted Date: " />
               <InfoPair mx={10} text={status} title="Status: " />
+              <InfoPair mr={10} text={paymentStatus} title="Payment Status: " />
               <InfoPair mr={10} text={total} title="Total: " />
               {R.not(openedOrder) && (
                 <Icon

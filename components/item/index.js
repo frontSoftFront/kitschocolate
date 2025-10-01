@@ -1,5 +1,6 @@
-import * as R from 'ramda';
 import is from 'is_js';
+import * as R from 'ramda';
+import { useState } from 'react';
 // components
 import ImageComponent from '../image';
 // theme
@@ -22,10 +23,18 @@ const ItemComponent = ({
   handleRemoveItemFromBasket,
   height = [410, 410, 470, 520]
 }) => {
-  const { id, price, title, imgUrl, cookingTime } = item;
+  const { id, price, title, imgUrl, cookingTime, extraImages = [] } = item;
+
+  const [activeImage, setActiveImage] = useState(imgUrl);
+
+  const handleMouseOver = () =>
+    R.last(extraImages)
+      ? setActiveImage(R.last(extraImages))
+      : setActiveImage(imgUrl);
 
   return (
     <Flex
+      pb="5px"
       height={height}
       px={R.or(px, 20)}
       flexDirection="column"
@@ -34,9 +43,12 @@ const ItemComponent = ({
       <div>
         <ImageComponent
           fill
-          src={imgUrl}
+          src={activeImage}
           placeholder="blur"
+          onFocus={handleMouseOver}
+          onMouseOver={handleMouseOver}
           onClick={() => handleGoToDetailPage(id)}
+          onMouseLeave={() => setActiveImage(imgUrl)}
           wrapperStyles={{
             mx: 'auto',
             cursor: 'pointer',
@@ -62,8 +74,8 @@ const ItemComponent = ({
           <>
             {price ? (
               <Text
-                mt={10}
                 p="5px"
+                mt={10}
                 mx="auto"
                 fontWeight="bold"
                 width="max-content"
@@ -79,6 +91,7 @@ const ItemComponent = ({
                 height={40}
                 width="100%"
                 m="20px auto 0 auto"
+                hoverTransform="scale(1.1)"
                 onClick={() => handleAddItemToBasket(item)}
               >
                 <Img
@@ -100,8 +113,8 @@ const ItemComponent = ({
                 justifyContent="space-between"
               >
                 <Button
-                  ml={10}
                   p={10}
+                  ml={10}
                   color="white"
                   fontSize={16}
                   onClick={() => handleRemoveItemFromBasket(item)}

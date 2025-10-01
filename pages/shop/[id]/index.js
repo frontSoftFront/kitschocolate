@@ -16,8 +16,8 @@ const Content = ({ data }) => {
   return (
     <>
       <Section
-        borderBottom="2px solid"
-        borderColor={Theme.colors.quincy}
+        // borderBottom="2px solid"
+        // borderColor={Theme.colors.quincy}
         py={Theme.styles.spacing.paddingY}
       >
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
@@ -30,7 +30,7 @@ const Content = ({ data }) => {
           <OrderItem orderItem={data} />
         </Flex>
       </Section>
-      <CustomerReviews />
+      {/* <CustomerReviews /> */}
     </>
   );
 };

@@ -26,7 +26,7 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
-export const ContactUs = ({ mt, mx = 'auto', text = 'Анкета' }) => {
+export const ContactUs = ({ mt, mx = 'auto', text = 'Залишити Заявку' }) => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenModal = () => {

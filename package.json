@@ -24,7 +24,7 @@
     "react-redux-firebase": "^3.5.1",
     "react-select": "^4.1.0",
     "react-slick": "^0.29.0",
-    "react-toastify": "^6.0.5",
+    "react-toastify": "11.0.5",
     "react-toggle": "^4.1.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-firestore": "^0.13.0",
