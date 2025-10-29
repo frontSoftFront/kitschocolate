@@ -189,7 +189,7 @@ const Content = ({ firebaseData }) => (
         color={Theme.colors.woodyBrown}
         mb={Theme.styles.spacing.paddingY}
       >
-        We answer all questions
+        Ви запитуєте
       </SectionTitle>
       <QuestionAnswers firebaseData={firebaseData} />
     </Section>
@@ -200,7 +200,7 @@ const Content = ({ firebaseData }) => (
         color={Theme.colors.woodyBrown}
         mb={Theme.styles.spacing.paddingY}
       >
-        Do you have any question?
+        Якщо є ще питання?
       </SectionTitle>
       <CustomerQuestionsForm />
     </Section>

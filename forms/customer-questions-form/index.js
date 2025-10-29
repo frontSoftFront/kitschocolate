@@ -19,11 +19,11 @@ const initialValues = {
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-    .email('email')
-    .required('Field is Required'),
+    .email('Неправильний email')
+    .required("Поле є обов'язковим"),
   question: Yup.string()
     .max(500, 'max 500')
-    .required('Field is Required')
+    .required("Поле є обов'язковим")
 });
 
 const getInitialValues = () => {
@@ -72,15 +72,11 @@ const CustomerQuestionsForm = () => {
     >
       {() => (
         <Form>
-          <FieldGroup
-            id="email"
-            type="text"
-            label="What's your email address?"
-          />
+          <FieldGroup id="email" type="text" label="Ваш email?" />
           <FieldGroup
             id="question"
             type="textarea"
-            label="Do you have any question?"
+            label="Пишіть питання тут"
           />
           <Button
             {...Theme.styles.actionButton}
@@ -89,7 +85,7 @@ const CustomerQuestionsForm = () => {
             width={170}
             height={50}
           >
-            Send
+            Відправити
           </Button>
         </Form>
       )}

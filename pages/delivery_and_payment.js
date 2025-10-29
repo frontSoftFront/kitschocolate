@@ -21,7 +21,7 @@ import {
 
 const PaymentAndDelivery = () => (
   <Layout title="Payment And Delivery">
-    <Flex
+    {/* <Flex
       mx="auto"
       maxWidth={1000}
       flexWrap="wrap"
@@ -44,8 +44,8 @@ const PaymentAndDelivery = () => (
           width: ['100%', '45%']
         }}
       />
-    </Flex>
-    <Section mx="auto" maxWidth={1000}>
+    </Flex> */}
+    <Section mx="auto" maxWidth={1000} mt={Theme.styles.spacing.paddingY}>
       <SectionTitle
         {...Theme.styles.pageTitle}
         width="100%"
@@ -59,17 +59,21 @@ const PaymentAndDelivery = () => (
         <ul>
           <ListItem mt={10}>
             По Львову можлива кур'єрська доставка (здійснюється кур'єром Нової
-            Пошти протягом 2-3 днів)
+            Пошти протягом 1 робочого дня)
           </ListItem>
           <ListItem mt={10}>
-            Експрес - доставка на протязі трьох годин - вартість послуги 250 грн
+            Експрес - доставка на протязі трьох годин - вартість послуги 300 грн
             (при умові повної передоплати)
           </ListItem>
         </ul>
       </Article>
       <Article mt={20}>
         <ArticleTitle fontWeight={500}>Доставка по Україні:</ArticleTitle>
-        <Text mt={10} fontWeight={500}>
+        <Text mt={10}>
+          Доставка по Україні здійснюється через Нову Пошту (оплата та доставка згідно з тарифами та умовами перевізника).<br />
+          Курʼєром Нової Пошти за вказаною адресою (оплата та доставка згідно з тарифами та умовами перевізника)
+        </Text>
+        {/* <Text mt={10} fontWeight={500}>
           Компанія Kitschocolate доставляє свою продукцію по всій території
           України через Нову Пошту (протягом 2-3 днів).
         </Text>
@@ -91,7 +95,7 @@ const PaymentAndDelivery = () => (
             п'ятиденного терміну зберігання – відбувається автоматичне
             повернення посилки відправнику.
           </Text>
-        </ul>
+        </ul> */}
       </Article>
     </Section>
     <Section mx="auto" maxWidth={1000} my={Theme.styles.spacing.paddingY}>
@@ -122,19 +126,22 @@ const PaymentAndDelivery = () => (
             target="_blank"
             fontWeight="bold"
             color={Theme.colors.blue}
-            href="https://wayforpay.com/uk"
             hoveredTextDecoration="underline"
+            href="https://monobank.ua/plata-by-mono"
           >
-            Wayforpay.
+            Monobank.
           </StyledLink>
         </Text>
       </Article>
       <Article mt={20}>
         <ArticleTitle fontWeight={500}>Оплата готівкою</ArticleTitle>
-        <Text mt={10} fontWeight={500}>
-          Ви можете здійснити оплату готівкою одним з нижчеперелічених способів:
+        <Text mt={10}>
+          Ви можете здійснити оплату готівкою коли оплачуєте товар, доставку і зворотний переказ грошей в офісі служби доставки чи курʼєру "Нова Пошта".
         </Text>
-        <ul>
+        {/* <Text mt={10} fontWeight={500}>
+          Ви можете здійснити оплату готівкою одним з нижчеперелічених способів:
+        </Text> */}
+        {/* <ul>
           <ListItem mt={10}>
             Ви можете оплатити замовлення безпосередньо в момент доставки товару
             кур'єром. (Львів)
@@ -143,7 +150,7 @@ const PaymentAndDelivery = () => (
             Ви оплачуєте товар, доставку і зворотний переказ грошей в офісі
             служби доставки "Нова Пошта" свого міста, або кур'єру при отриманні.
           </ListItem>
-        </ul>
+        </ul> */}
       </Article>
     </Section>
   </Layout>

@@ -106,7 +106,7 @@ const PartnershipPage = () => (
       <ImageComponent
         fill
         placeholder="blur"
-        src="/partnership.jpeg"
+        src="https://firebasestorage.googleapis.com/v0/b/kitschocolate-bc8f8.appspot.com/o/images%2Fchocolates%2F%D0%BA%D0%BE%D1%80%D0%BF.jpg?alt=media&token=37f5a18e-3f84-4720-b02c-f05469b8ee65"
         wrapperStyles={{
           height: 250,
           width: ['100%', '45%']
