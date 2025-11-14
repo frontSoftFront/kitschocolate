@@ -1,8 +1,7 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
-import { useRouter } from 'next/router';
 import { Form, Formik } from 'formik';
-import { LiqPayPay } from 'react-liqpay';
+import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { actionTypes } from 'react-redux-firebase';
 // lib
@@ -26,8 +25,6 @@ import {
 // forms
 import { Label } from '../ui';
 import { FieldGroup, FieldComponent } from '..';
-// components
-import MonobankPayment from '../../components/monobank-payment';
 // //////////////////////////////////////////////////
 
 const OrderComposition = ({ orderComposition }) => (
@@ -94,7 +91,7 @@ const validationSchema = Yup.object().shape({
 
 const PaymentTypes = ({ paymentType }) => (
   <Box mt={15}>
-    <Text mb={10} fontWeight={600} color={Theme.colors.lightSlateGrey}>
+    <Text fontWeight={600} color={Theme.colors.lightSlateGrey}>
       Оберіть метод оплати
     </Text>
     <Flex alignItems="stretch" flexWrap="wrap" gap={10}>
@@ -104,7 +101,7 @@ const PaymentTypes = ({ paymentType }) => (
         id="paymentType1"
         name="paymentType"
       />
-      <Label pl="0px" width={['100%', '48%', '30%']} htmlFor="paymentType1">
+      <Label mt={10} pl="0px" mr={12} width={160} htmlFor="paymentType1">
         <Box
           p={10}
           height="100%"
@@ -120,19 +117,8 @@ const PaymentTypes = ({ paymentType }) => (
         >
           <Article color={Theme.colors.mainBlack}>
             <ArticleTitle fontSize={14} fontWeight={600}>
-              Готівкою
-            </ArticleTitle>
-            <Text mt="5px" fontSize={10} textAlign="justify">
               Оплата при отриманні
-            </Text>
-            {/* <Text
-              mt="5px"
-              fontSize={10}
-              textAlign="justify"
-              color={Theme.colors.mediumWood}
-            >
-              Опція оплати доступна на замовлення від 400 грн
-            </Text> */}
+            </ArticleTitle>
           </Article>
         </Box>
       </Label>
@@ -142,7 +128,7 @@ const PaymentTypes = ({ paymentType }) => (
         id="paymentType2"
         name="paymentType"
       />
-      <Label width={['100%', '48%', '30%']} htmlFor="paymentType2">
+      <Label pl="0px" mt={10} width={160} htmlFor="paymentType2">
         <Box
           p={10}
           height="100%"
@@ -293,7 +279,7 @@ const handleSubmit = (values, handlers) => {
     }
   });
 
-  const handleAcceptOrder = async ({ shouldRedirect, redirectUrl }) => {
+  const handleAcceptOrder = async ({ shouldRedirect, redirectUrl } = {}) => {
     const url =
       'https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/acceptOrder';
     const options = {
@@ -425,8 +411,6 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
   )(orderComposition);
 
   const initialValues = getInitialValues();
-
-  console.log('order', order);
 
   return (
     <Formik

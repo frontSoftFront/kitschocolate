@@ -26,6 +26,20 @@ import {
 } from '../ui';
 // ////////////////////////////////////////////////
 
+// const HeartFilledIcon = () => (
+//   <Icon
+//     mr={10}
+//     width={14}
+//     height={14}
+//     iconName="heartFilled"
+//     display="inline-block"
+//   />
+// );
+
+const HeartFilledIcon = () => (
+  <Box mr="10px" display="inline-block">🖤</Box>
+);
+
 export const ContactUs = ({ mt, mx = 'auto', text = 'Залишити Заявку' }) => {
   const [opened, setOpened] = useState(false);
 
@@ -115,27 +129,27 @@ const PartnershipPage = () => (
       <Article width={['100%', '45%']} fontSize={[12, 14, 15, 16]}>
         <ArticleTitle fontWeight={500}>Ми обіцяємо:</ArticleTitle>
         <Text mt={10}>
-          <Icon mr={10} iconName="checkMark" display="inline-block" />
+          <HeartFilledIcon />
           ощадне використання вашого часу;
         </Text>
         <Text mt={10}>
-          <Icon mr={10} iconName="checkMark" display="inline-block" />
+          <HeartFilledIcon />
           індивідуальний підхід;
         </Text>
         <Text mt={10}>
-          <Icon mr={10} iconName="checkMark" display="inline-block" />
+          <HeartFilledIcon />
           регулювання бюджету від 200 грн;
         </Text>
         <Text mt={10}>
-          <Icon mr={10} iconName="checkMark" display="inline-block" />
+          <HeartFilledIcon />
           можливість дегустації;
         </Text>
         <Text mt={10}>
-          <Icon mr={10} iconName="checkMark" display="inline-block" />
+          <HeartFilledIcon />
           за бажанням – брендування;
         </Text>
         <Text mt={10}>
-          <Icon mr={10} iconName="checkMark" display="inline-block" />
+          <HeartFilledIcon />
           вчасну логістику;
         </Text>
       </Article>

@@ -32,7 +32,6 @@ const Content = ({ router, categories, chocolateList }) => {
   return (
     <Section py={Theme.styles.spacing.paddingY}>
       <PageTitle {...Theme.styles.pageTitle}>
-        Істинний шоколад, народжений з бобів какао <br />
         Шоколад, яким він повинен бути
       </PageTitle>
       {mappedCategories.map(

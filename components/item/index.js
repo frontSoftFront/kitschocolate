@@ -1,6 +1,7 @@
 import is from 'is_js';
 import * as R from 'ramda';
 import { useState } from 'react';
+import { css } from 'styled-components';
 // components
 import ImageComponent from '../image';
 // theme
@@ -58,13 +59,20 @@ const ItemComponent = ({
         />
         <Text
           mt={20}
+          title={title}
           cursor="pointer"
           fontWeight={600}
+          overflow="hidden"
           textAlign="center"
+          display="-webkit-box"
           fontSize={[16, 16, 18]}
           color={Theme.colors.congoBrown}
           hoveredColor={Theme.colors.blue}
           onClick={() => handleGoToDetailPage(id)}
+          css={css`
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          `}
         >
           {title}
         </Text>

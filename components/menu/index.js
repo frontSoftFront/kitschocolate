@@ -24,13 +24,17 @@ const Categories = ({ categories, handleClick, categoryTitle }) => (
       {categoryTitle}
     </Text>
     {categories.map(({ id, title, categoryName }, index) => (
-      <Flex key={index} alignItems="center" justifyContent="space-between">
+      <Flex
+        key={index}
+        alignItems="center"
+        justifyContent="space-between"
+        onClick={() => handleClick({ id, categoryName })}
+      >
         <Text
           py={10}
           fontSize={14}
           fontWeight={600}
           color={Theme.colors.quincy}
-          onClick={() => handleClick({ id, categoryName })}
         >
           {title}
         </Text>
@@ -85,7 +89,7 @@ const SubCategory = props => {
 
   return (
     <>
-      <Flex alignItems="center">
+      <Flex alignItems="center" onClick={() => setActiveCategory(null)}>
         <Icon iconName="arrowLeft" />
         <Text
           py={10}
@@ -93,7 +97,6 @@ const SubCategory = props => {
           fontSize={14}
           fontWeight={600}
           color={Theme.colors.quincy}
-          onClick={() => setActiveCategory(null)}
         >
           Назад
         </Text>
@@ -121,8 +124,7 @@ const Menu = props => {
     R.pathOr({}, ['chocolates'], data)
   );
 
-  const handleSetActiveCategory = ({ categoryName }) =>
-    setActiveCategory(categoryName);
+  const handleSetActiveCategory = ({ id }) => setActiveCategory(id);
 
   return (
     <AnimatedBox
