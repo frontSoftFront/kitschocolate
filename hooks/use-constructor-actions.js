@@ -14,8 +14,6 @@ export const useConstructorActions = ({
   const firebase = useFirebase();
   const dispatch = useDispatch();
 
-  // console.log('chocolates', R.head(chocolates));
-
   // general
   const handleRemoveItem = async values => {
     const { id, shouldCloseModal } = values;

@@ -85,8 +85,6 @@ const Layout = ({ children, collections, title = 'kitschocolate' }) => {
     return R.not(R.path([collectionName], requestedCollections));
   }, R.or(collections, []));
 
-  console.log(collections, collectionsToConnect);
-
   useFirebaseConnect(collectionsToConnect);
 
   if (H.isNotEmpty(collectionsToConnect)) return <Glimmer />;
