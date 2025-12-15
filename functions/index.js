@@ -351,6 +351,45 @@ exports.createMonobankPayment = functions.https.onRequest((req, res) => {
   });
 });
 
+// Save checkout form draft (values, errors, touched, etc.) to Firebase
+exports.saveOrderDraft = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    if (req.method !== 'POST') {
+      return res.status(405).json({
+        message: 'Method not allowed!'
+      });
+    }
+
+    try {
+      const { orderId, draftForm } = req.body || {};
+
+      if (!orderId || !draftForm) {
+        return res.status(400).json({
+          error: 'Missing required fields: orderId, draftForm'
+        });
+      }
+
+      const orderRef = admin.database().ref(`orders/${orderId}`);
+
+      await orderRef.update({
+        draftForm,
+        status: 'DRAFT',
+        draftUpdatedAt: new Date().toISOString()
+      });
+
+      return res.status(200).json({
+        success: true
+      });
+    } catch (error) {
+      console.error('saveOrderDraft error:', error);
+      return res.status(500).json({
+        error: 'Failed to save order draft',
+        message: error.message
+      });
+    }
+  });
+});
+
 // Monobank Webhook Handler
 exports.monobankWebhook = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
@@ -407,7 +446,6 @@ exports.monobankWebhook = functions.https.onRequest((req, res) => {
 
       // Update payment status in orders object
       const orderRef = admin.database().ref(`orders/${reference}`);
-      
       // First, get the current payment data
       const orderSnapshot = await orderRef.once('value');
       const currentOrderData = orderSnapshot.val() || {};

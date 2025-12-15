@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import { useEffect, useRef } from 'react';
 import { actionTypes } from 'react-redux-firebase';
 // lib
 import { basketActions } from '../../lib/redux';
@@ -412,91 +413,145 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
 
   const initialValues = getInitialValues();
 
+  // keep latest form state & submit status
+  const formStateRef = useRef({ values: initialValues });
+  const hasSubmittedRef = useRef(false);
+  const hasSavedDraftRef = useRef(false);
+
+  useEffect(() => {
+    const handleSaveDraft = () => {
+      if (hasSubmittedRef.current || hasSavedDraftRef.current) return;
+
+      const formState = formStateRef.current;
+
+      if (R.isNil(formState)) return;
+
+      hasSavedDraftRef.current = true;
+
+      // Save draft to Firebase via Cloud Function
+      fetch(
+        'https://us-central1-kitschocolate-bc8f8.cloudfunctions.net/saveOrderDraft',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            orderId,
+            draftForm: formState
+          })
+        }
+      ).catch(() => {
+        // fail silently – this is only a draft
+      });
+    };
+
+    window.addEventListener('beforeunload', handleSaveDraft);
+
+    return () => {
+      handleSaveDraft();
+      window.removeEventListener('beforeunload', handleSaveDraft);
+    };
+  }, [dispatch, order, orderId]);
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={values =>
-        handleSubmit(
+      onSubmit={values => {
+        hasSubmittedRef.current = true;
+
+        return handleSubmit(
           { ...values, order, total, orderId },
           { push, dispatch, handleOpenLoader, handleCloseLoader }
-        )
-      }
+        );
+      }}
     >
-      {({ values }) => (
-        <Form>
-          <Flex flexWrap="wrap" justifyContent="space-between">
-            <Box width={['100%', '100%', '48%']}>
-              <Section>
-                <SectionTitle {...Theme.styles.formSectionTitle}>
-                  Контактна інформація
-                </SectionTitle>
-                <FieldGroup id="firstName" label="Ім'я" />
-                <FieldGroup id="lastName" label="Прізвище" />
-                <FieldGroup id="phoneNumber" label="Номер Телефону" />
-                <FieldGroup id="email" label="Email" />
-                <Flex
-                  mt={15}
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Label htmlFor="call">
-                    Прошу зателефонувати мені для уточнення замовлення
-                  </Label>
-                  <FieldComponent id="call" type="toggle" />
-                </Flex>
-              </Section>
-              <Section mt={50}>
-                <SectionTitle {...Theme.styles.formSectionTitle}>
-                  Доставка та оплата
-                </SectionTitle>
-                <FieldGroup
-                  id="shippingCity"
-                  type="searchCity"
-                  label="Місто або населений пункт"
-                />
-                <FieldGroup
-                  id="warehouse"
-                  type="warehouse"
-                  label="Номер відділення Новой Пошти"
-                />
-                <FieldGroup
-                  id="comments"
-                  type="textarea"
-                  label="Коментар до замовлення"
-                />
-              </Section>
-              <PaymentTypes paymentType={values.paymentType} />
-            </Box>
-            <Box
-              pl={[0, 0, 30]}
-              mt={[20, 30, 0]}
-              pt={[20, 30, 0]}
-              width={['100%', '100%', '48%']}
-              borderColor={Theme.colors.lightGrey}
-              borderLeft={['none', 'none', '1px solid']}
-              borderTop={['1px solid', '1px solid', 'none']}
-            >
-              <OrderComposition orderComposition={orderComposition} />
-              <Section mt={Theme.styles.spacing.paddingY}>
-                <SectionTitle {...Theme.styles.formSectionTitle}>
-                  Разом до сплати
-                </SectionTitle>
-                <Box
-                  borderBottom="1px solid"
-                  borderColor={Theme.colors.lightGrey}
-                >
+      {({ values, errors, touched, isValid, isSubmitting, submitCount }) => {
+        // keep ref in sync with current Formik state
+        formStateRef.current = {
+          values,
+          errors,
+          touched,
+          isValid,
+          isSubmitting,
+          submitCount
+        };
+
+        return (
+          <Form>
+            <Flex flexWrap="wrap" justifyContent="space-between">
+              <Box width={['100%', '100%', '48%']}>
+                <Section>
+                  <SectionTitle {...Theme.styles.formSectionTitle}>
+                    Контактна інформація
+                  </SectionTitle>
+                  <FieldGroup id="firstName" label="Ім'я" />
+                  <FieldGroup id="lastName" label="Прізвище" />
+                  <FieldGroup id="phoneNumber" label="Номер Телефону" />
+                  <FieldGroup id="email" label="Email" />
                   <Flex
-                    py={[10, 15]}
+                    mt={15}
                     alignItems="center"
                     justifyContent="space-between"
                   >
-                    <Text color={Theme.colors.lightSlateGrey}>
-                      {totalQuantity} товарів на суму
-                    </Text>
-                    <Text fontWeight={500}>{total} грн</Text>
+                    <Label htmlFor="call">
+                      Прошу зателефонувати мені для уточнення замовлення
+                    </Label>
+                    <FieldComponent id="call" type="toggle" />
                   </Flex>
-                  {/* <Flex
+                </Section>
+                <Section mt={50}>
+                  <SectionTitle {...Theme.styles.formSectionTitle}>
+                    Доставка та оплата
+                  </SectionTitle>
+                  <FieldGroup
+                    id="shippingCity"
+                    type="searchCity"
+                    label="Місто або населений пункт"
+                  />
+                  <FieldGroup
+                    id="warehouse"
+                    type="warehouse"
+                    label="Номер відділення Новой Пошти"
+                  />
+                  <FieldGroup
+                    id="comments"
+                    type="textarea"
+                    label="Коментар до замовлення"
+                  />
+                </Section>
+                <PaymentTypes paymentType={values.paymentType} />
+              </Box>
+              <Box
+                pl={[0, 0, 30]}
+                mt={[20, 30, 0]}
+                pt={[20, 30, 0]}
+                width={['100%', '100%', '48%']}
+                borderColor={Theme.colors.lightGrey}
+                borderLeft={['none', 'none', '1px solid']}
+                borderTop={['1px solid', '1px solid', 'none']}
+              >
+                <OrderComposition orderComposition={orderComposition} />
+                <Section mt={Theme.styles.spacing.paddingY}>
+                  <SectionTitle {...Theme.styles.formSectionTitle}>
+                    Разом до сплати
+                  </SectionTitle>
+                  <Box
+                    borderBottom="1px solid"
+                    borderColor={Theme.colors.lightGrey}
+                  >
+                    <Flex
+                      py={[10, 15]}
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Text color={Theme.colors.lightSlateGrey}>
+                        {totalQuantity} товарів на суму
+                      </Text>
+                      <Text fontWeight={500}>{total} грн</Text>
+                    </Flex>
+                    {/* <Flex
                     py={[10, 15]}
                     alignItems="center"
                     justifyContent="space-between"
@@ -506,26 +561,26 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
                     </Text>
                     <Text fontWeight={500}>50 грн</Text>
                   </Flex> */}
-                </Box>
-                <Flex
-                  py={[15, 20, 25]}
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Text color={Theme.colors.lightSlateGrey}>
-                    Разом до сплати
-                  </Text>
-                  <Text
-                    fontWeight="bold"
-                    fontSize={[16, 18]}
-                    color={Theme.colors.mainBlack}
+                  </Box>
+                  <Flex
+                    py={[15, 20, 25]}
+                    alignItems="center"
+                    justifyContent="space-between"
                   >
-                    {/* {R.add(total, 50)} грн */}
-                    {total} грн
-                  </Text>
-                </Flex>
-                <PaymentButton />
-                {/* {R.propEq('paymentType', 'card1', values) ? (
+                    <Text color={Theme.colors.lightSlateGrey}>
+                      Разом до сплати
+                    </Text>
+                    <Text
+                      fontWeight="bold"
+                      fontSize={[16, 18]}
+                      color={Theme.colors.mainBlack}
+                    >
+                      {/* {R.add(total, 50)} грн */}
+                      {total} грн
+                    </Text>
+                  </Flex>
+                  <PaymentButton />
+                  {/* {R.propEq('paymentType', 'card1', values) ? (
                   <LiqPayPay
                     amount="1"
                     currency="UAH"
@@ -556,11 +611,12 @@ const OrderForm = ({ order, orderId, handleOpenLoader, handleCloseLoader }) => {
                 ) : (
                   <PaymentButton />
                 )} */}
-              </Section>
-            </Box>
-          </Flex>
-        </Form>
-      )}
+                </Section>
+              </Box>
+            </Flex>
+          </Form>
+        );
+      }}
     </Formik>
   );
 };
