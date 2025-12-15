@@ -222,7 +222,7 @@ const defaultValues = {
   shippingCity: '',
   paymentType: 'monobank',
   loadedWarehouse: false,
-  email: 'greedisgood214@gmail.com'
+  email: ''
 };
 
 const getInitialValues = () => {
