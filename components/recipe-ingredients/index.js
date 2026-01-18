@@ -1,13 +1,15 @@
 import * as R from 'ramda';
 import Link from 'next/link';
-import { useState } from 'react';
-import { useFirebase } from 'react-redux-firebase';
+import { useState, useCallback } from 'react';
 // lib
 import { basketActions } from '../../lib/redux';
+// components
+import { BasketModal } from '../basket';
 // helpers
 import * as H from '../../helpers';
 // hooks
 import { useActions } from '../../hooks/use-actions';
+import { useBasketActions } from '../../hooks/use-basket-actions';
 // icons
 import Icon from '../../icons';
 // theme
@@ -25,15 +27,57 @@ import {
 } from '../../ui';
 // //////////////////////////////////////////////////
 
+const OpenBasket = ({ router, handleAddItemToBasket }) => {
+  const {
+    basketList,
+    basketOpened,
+    handleOpenBasket,
+    handleCloseBasket
+  } = useBasketActions();
+
+  const renderBasketIcon = useCallback(
+    () => (
+      <Button
+        width={250}
+        height={40}
+        fontWeight={500}
+        border="1px solid"
+        textTransform="uppercase"
+        color={Theme.colors.congoBrown}
+        background={Theme.colors.white}
+        borderColor={Theme.colors.congoBrown}
+        onClick={() => {
+          handleOpenBasket();
+          handleAddItemToBasket();
+        }}
+      >
+        купити
+      </Button>
+    ),
+    [handleOpenBasket]
+  );
+
+  return (
+    <BasketModal
+      router={router}
+      basketList={basketList}
+      basketOpened={basketOpened}
+      renderComponent={renderBasketIcon}
+      handleOpenBasket={handleOpenBasket}
+      handleCloseBasket={handleCloseBasket}
+    />
+  );
+};
+
 const Ingredient = props => {
   const {
     id,
     type,
     title,
+    router,
     quantity,
     unit = 'gr.',
     recipeQuantity,
-    handleGoToOrder,
     handleAddItemToBasket
   } = props;
 
@@ -91,7 +135,7 @@ const Ingredient = props => {
           <Button
             mr={50}
             width={250}
-            height={60}
+            height={40}
             fontWeight={500}
             textTransform="uppercase"
             color={Theme.colors.white}
@@ -100,19 +144,10 @@ const Ingredient = props => {
           >
             додати в корзину
           </Button>
-          <Button
-            width={250}
-            height={60}
-            fontWeight={500}
-            border="1px solid"
-            textTransform="uppercase"
-            color={Theme.colors.congoBrown}
-            background={Theme.colors.white}
-            borderColor={Theme.colors.congoBrown}
-            onClick={() => handleGoToOrder(props)}
-          >
-            купити
-          </Button>
+          <OpenBasket
+            router={router}
+            handleAddItemToBasket={() => handleAddItemToBasket(props)}
+          />
         </Flex>
       )}
     </Box>
@@ -122,25 +157,12 @@ const Ingredient = props => {
 const RecipeIngredients = props => {
   const { router, direction, ingredients, recipeQuantity } = props;
 
-  const firebase = useFirebase();
   const addItemToBasket = useActions(basketActions.addItemToBasket);
+
   const handleAddItemToBasket = ({ id, title, price, imgUrl }) => {
     H.showToastifyMessage('success');
+
     addItemToBasket({ id, title, price, imgUrl, quantity: 1 });
-  };
-  const handleGoToOrder = async ({ id, title, price, imgUrl }) => {
-    const newDatabaseRouteRef = firebase
-      .database()
-      .ref()
-      .child('orders')
-      .push();
-    const orderId = newDatabaseRouteRef.key;
-    const order = {
-      [id]: { id, title, price, imgUrl, quantity: 1 }
-    };
-    await newDatabaseRouteRef
-      .set(order)
-      .then(() => router.push(`/checkout/${orderId}`));
   };
 
   return (
@@ -158,14 +180,14 @@ const RecipeIngredients = props => {
           fontSize={[18, 20, 25]}
           textAlign={['center', 'center', 'left']}
         >
-          Ingredients
+          Інгредієнти
         </ArticleTitle>
         {ingredients.map((item, index) => (
           <Ingredient
             {...item}
             key={index}
+            router={router}
             recipeQuantity={recipeQuantity}
-            handleGoToOrder={handleGoToOrder}
             handleAddItemToBasket={handleAddItemToBasket}
           />
         ))}
@@ -183,7 +205,7 @@ const RecipeIngredients = props => {
           Direction
         </ArticleTitle>
         {direction.map((item, index) => (
-          <Text mt={10} key={index} wordBreak="break-all">
+          <Text mt={10} key={index} wordBreak="break-word">
             {R.inc(index)} {item}
           </Text>
         ))}

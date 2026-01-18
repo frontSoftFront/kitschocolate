@@ -34,14 +34,6 @@ const PricesSlider = props => {
     handleMarkAsFavoriteCategory
   } = props;
 
-  // TODO: remove after testing
-  // const [visible, setVisible] = useState(true);
-
-  // useEffect(() => {
-  //   setVisible(false);
-  //   setVisible(true);
-  // }, [router]);
-
   const { push } = router;
 
   const itemId = useId();
@@ -50,9 +42,11 @@ const PricesSlider = props => {
 
   const { basketList } = useSelector(makeSelectBasket);
 
+  const listLength = R.length(list);
+
   const sliderSettings = R.assoc(
     'infinite',
-    R.gt(R.length(4, list)),
+    R.gt(listLength, 4),
     priceSettings
   );
 
@@ -83,12 +77,10 @@ const PricesSlider = props => {
     [swiped]
   );
 
-  const containerHeight = R.path(
-    ['current', 'innerSlider', 'list', 'clientHeight'],
-    slider
-  );
-
-  console.log('containerHeight', containerHeight, 'slider', slider)
+  // const containerHeight = R.path(
+  //   ['current', 'innerSlider', 'list', 'clientHeight'],
+  //   slider
+  // );
 
   return (
     <Box mt={mt}>

@@ -1,9 +1,12 @@
+import is from 'is_js';
 import * as R from 'ramda';
 import Link from 'next/link';
-import { useState, useEffect, useCallback } from 'react';
 import { useFirebase } from 'react-redux-firebase';
+import { useState, useEffect, useCallback } from 'react';
 // lib
 import { basketActions } from '../../lib/redux';
+// components
+import Portal from '../portal';
 // helpers
 import * as H from '../../helpers';
 // hooks
@@ -117,7 +120,8 @@ const BasketItem = ({
               alignItems="center"
               justifyContent="center"
               onClick={() =>
-                handleChangeQuantity({ id, quantity: R.dec(quantity) })}
+                handleChangeQuantity({ id, quantity: R.dec(quantity) })
+              }
             >
               <Box
                 width="0px"
@@ -264,3 +268,28 @@ const Basket = ({ router, basketList, handleCloseBasket }) => {
 };
 
 export default Basket;
+
+export const BasketModal = props => {
+  const {
+    router,
+    basketList,
+    basketOpened,
+    renderComponent,
+    handleCloseBasket
+  } = props;
+
+  return (
+    <>
+      {is.function(renderComponent) ? renderComponent() : null}
+      {basketOpened ? (
+        <Portal selector="#modal">
+          <Basket
+            router={router}
+            basketList={basketList}
+            handleCloseBasket={handleCloseBasket}
+          />
+        </Portal>
+      ) : null}
+    </>
+  );
+};

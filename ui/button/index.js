@@ -34,6 +34,7 @@ export const Button = styled.button`
 
   &:hover {
     color: ${({ hoverColor }) => hoverColor};
+    transform: ${({ hoverTransform }) => hoverTransform};
     background: ${({ hoverBackground }) => hoverBackground};
     border-color: ${({ hoverBorderColor }) => hoverBorderColor};
   }

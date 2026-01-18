@@ -16,21 +16,21 @@ const Content = ({ data }) => {
   return (
     <>
       <Section
-        borderBottom="2px solid"
-        borderColor={Theme.colors.quincy}
+        // borderBottom="2px solid"
+        // borderColor={Theme.colors.quincy}
         py={Theme.styles.spacing.paddingY}
       >
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
         <Flex
           flexWrap="wrap"
-          justifyContent="space-between"
+          justifyContent="space-around"
           mt={Theme.styles.spacing.paddingY}
         >
           <OrderImage extraImages={extraImages} />
           <OrderItem orderItem={data} />
         </Flex>
       </Section>
-      <CustomerReviews />
+      {/* <CustomerReviews /> */}
     </>
   );
 };

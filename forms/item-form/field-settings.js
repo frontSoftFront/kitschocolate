@@ -61,7 +61,7 @@ const validationSchema = Yup.object().shape({
 export const validationKeys = {
   title: Yup.string().required('Field is Required'),
   price: Yup.string().required('Field is Required'),
-  quantity: Yup.string().required('Field is Required'),
+  // quantity: Yup.string().required('Field is Required'),
   description: Yup.string().required('Field is Required')
 };
 
@@ -98,6 +98,11 @@ export const fieldsMap = {
     id: 'quantity',
     type: 'number',
     label: 'Quantity'
+  },
+  weight: {
+    id: 'weight',
+    type: 'text',
+    label: 'Weight'
   },
   unit: {
     id: 'unit',
@@ -317,22 +322,28 @@ export const chocolateFields = [
     key: 'title',
     wrapperStyles: {
       mr: 20,
-      width: 250
+      width: 350
     }
   },
   {
     key: 'price',
     wrapperStyles: {
       mr: 20,
-      width: 250
+      width: 120
     }
   },
-
   {
     key: 'quantity',
     wrapperStyles: {
       mr: 20,
-      width: 250
+      width: 120
+    }
+  },
+  {
+    key: 'weight',
+    wrapperStyles: {
+      mr: 20,
+      width: 120
     }
   },
   {
@@ -377,13 +388,13 @@ export const recipeFields = [
       width: 250
     }
   },
-  {
-    key: 'ingredientIcons',
-    wrapperStyles: {
-      width: 400,
-      mr: 20,
-    }
-  },
+  // {
+  //   key: 'ingredientIcons',
+  //   wrapperStyles: {
+  //     mr: 20,
+  //     width: 400
+  //   }
+  // },
   {
     key: 'recipeDirectionImages',
     wrapperStyles: {

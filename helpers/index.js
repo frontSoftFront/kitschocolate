@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { toast } from 'react-toastify';
+import { toast, Zoom } from 'react-toastify';
 // //////////////////////////////////////////////////
 
 export const isNotNil = R.complement(R.isNil);
@@ -26,8 +26,9 @@ export const showToastifyMessage = (text, type = 'success') => {
     success: toast.success
   };
   const options = {
-    autoClose: 5000,
+    autoClose: 2000,
     draggable: true,
+    transition: Zoom,
     pauseOnHover: true,
     closeOnClick: true,
     progress: undefined,
