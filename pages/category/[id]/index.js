@@ -17,6 +17,7 @@ const Content = ({ data, title, categoryName }) => {
   const { shop, chocolates } = data;
   const categoryChocolatesPath = ['categories', categoryName, 'chocolates'];
   const category = R.compose(
+    R.filter(R.prop('active')),
     R.map(id => R.path([id], chocolates)),
     R.sortBy(R.prop('order')),
     R.values,
