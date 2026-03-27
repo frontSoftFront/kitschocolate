@@ -17,6 +17,7 @@ const Content = ({ data, title, categoryName }) => {
   const { shop, chocolates } = data;
   const categoryChocolatesPath = ['categories', categoryName, 'chocolates'];
   const category = R.compose(
+    R.filter(R.prop('active')),
     R.map(id => R.path([id], chocolates)),
     R.sortBy(R.prop('order')),
     R.values,
@@ -58,8 +59,8 @@ const Content = ({ data, title, categoryName }) => {
   return (
     <>
       <Section
-        borderBottom="2px solid"
-        borderColor={Theme.colors.quincy}
+        // borderBottom="2px solid"
+        // borderColor={Theme.colors.quincy}
         py={Theme.styles.spacing.paddingY}
       >
         <PageTitle {...Theme.styles.pageTitle}>Магазин / {title}</PageTitle>
@@ -86,13 +87,13 @@ const Content = ({ data, title, categoryName }) => {
           animationName={animationName}
           animationProps="0.6s cubic-bezier(.77,0.000,.175,1.000) both"
         >
-          <Flex flexWrap="wrap" justifyContent="space-between">
+          <Flex flexWrap="wrap" justifyContent="space-around">
             <OrderImage extraImages={orderItem.extraImages} />
             <OrderItem category orderItem={orderItem} />
           </Flex>
         </AnimatedBox>
       </Section>
-      <CustomerReviews />
+      {/* <CustomerReviews /> */}
     </>
   );
 };

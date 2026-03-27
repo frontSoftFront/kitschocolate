@@ -1,4 +1,7 @@
+import is from 'is_js';
 import * as R from 'ramda';
+import { useState } from 'react';
+import { css } from 'styled-components';
 // components
 import ImageComponent from '../image';
 // theme
@@ -11,6 +14,7 @@ const ItemComponent = ({
   px,
   item,
   quantity,
+  renderActions,
   handleEditItem,
   handleRemoveItem,
   handleGoToDetailPage,
@@ -20,10 +24,18 @@ const ItemComponent = ({
   handleRemoveItemFromBasket,
   height = [410, 410, 470, 520]
 }) => {
-  const { id, price, title, imgUrl, cookingTime } = item;
+  const { id, price, title, imgUrl, cookingTime, extraImages = [] } = item;
+
+  const [activeImage, setActiveImage] = useState(imgUrl);
+
+  const handleMouseOver = () =>
+    R.last(extraImages)
+      ? setActiveImage(R.last(extraImages))
+      : setActiveImage(imgUrl);
 
   return (
     <Flex
+      pb="5px"
       height={height}
       px={R.or(px, 20)}
       flexDirection="column"
@@ -32,9 +44,12 @@ const ItemComponent = ({
       <div>
         <ImageComponent
           fill
-          src={imgUrl}
+          src={activeImage}
           placeholder="blur"
+          onFocus={handleMouseOver}
+          onMouseOver={handleMouseOver}
           onClick={() => handleGoToDetailPage(id)}
+          onMouseLeave={() => setActiveImage(imgUrl)}
           wrapperStyles={{
             mx: 'auto',
             cursor: 'pointer',
@@ -44,13 +59,20 @@ const ItemComponent = ({
         />
         <Text
           mt={20}
+          title={title}
           cursor="pointer"
           fontWeight={600}
+          overflow="hidden"
           textAlign="center"
+          display="-webkit-box"
           fontSize={[16, 16, 18]}
           color={Theme.colors.congoBrown}
           hoveredColor={Theme.colors.blue}
           onClick={() => handleGoToDetailPage(id)}
+          css={css`
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          `}
         >
           {title}
         </Text>
@@ -60,8 +82,8 @@ const ItemComponent = ({
           <>
             {price ? (
               <Text
-                mt={10}
                 p="5px"
+                mt={10}
                 mx="auto"
                 fontWeight="bold"
                 width="max-content"
@@ -77,6 +99,7 @@ const ItemComponent = ({
                 height={40}
                 width="100%"
                 m="20px auto 0 auto"
+                hoverTransform="scale(1.1)"
                 onClick={() => handleAddItemToBasket(item)}
               >
                 <Img
@@ -98,8 +121,8 @@ const ItemComponent = ({
                 justifyContent="space-between"
               >
                 <Button
-                  ml={10}
                   p={10}
+                  ml={10}
                   color="white"
                   fontSize={16}
                   onClick={() => handleRemoveItemFromBasket(item)}
@@ -135,19 +158,9 @@ const ItemComponent = ({
             {cookingTime} хв
           </Flex>
         )}
+        {is.function(renderActions) ? renderActions(item) : null}
         {R.equals(itemType, 'configurable') && (
           <>
-            <Text
-              mt={10}
-              p="5px"
-              mx="auto"
-              fontWeight="bold"
-              width="max-content"
-              fontSize={[16, 16, 18]}
-              color={Theme.colors.congoBrown}
-            >
-              {price} грн
-            </Text>
             <Flex mt={20} justifyContent="space-between">
               <Button
                 {...Theme.styles.actionButton}

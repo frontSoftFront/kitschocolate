@@ -53,7 +53,7 @@ const getCityOptions = (inputValue, callback) => {
   const options = {
     modelName: 'Address',
     calledMethod: 'getCities',
-    apiKey: '5edf2628e12e6fd5f9fecf7286047dd8', // NOTE: expires on 	26.02.2024 14:13:20
+    apiKey: '06cc39a880ff8afeb7ebf9e5828f8e66', // NOTE: expires on 	26.02.2024 14:13:20
     methodProperties: {
       FindByString: inputValue
     }
@@ -124,6 +124,7 @@ const SearchCityField = ({ form, field }) => {
       styles={selectStyles}
       onChange={handleChange}
       onInputChange={handleOnInputChange}
+      placeholder="Перші дві літери міста"
       loadOptions={setDebounce(getCityOptions, 400)}
       onBlur={() => setFieldTouched(fieldName, true)}
       defaultValue={R.pathOr({}, [fieldName], values)}
@@ -136,7 +137,7 @@ const getWarehouseOptions = (CityRef, callback) => {
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: { CityRef },
-    apiKey: '5edf2628e12e6fd5f9fecf7286047dd8' // NOTE: expires on 	26.02.2024 14:13:20
+    apiKey: '06cc39a880ff8afeb7ebf9e5828f8e66' // NOTE: expires on 	26.02.2024 14:13:20
   };
   const url =
     'https://api.novaposhta.ua/v2.0/json/AddressGeneral/getWarehouses';
@@ -192,6 +193,7 @@ const WarehouseField = ({ form, field }) => {
       styles={selectStyles}
       value={values.warehouse}
       options={warehouseOptions}
+      placeholder="Номер відділення"
       onBlur={() => setFieldTouched(field.name, true)}
       onChange={value => setFieldValue(field.name, value)}
     />

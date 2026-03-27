@@ -33,7 +33,8 @@ export const Text = styled.p`
   word-break: ${({ wordBreak }) => wordBreak};
   text-transform: ${({ textTransform }) => textTransform};
   text-decoration: ${({ textDecoration }) => textDecoration};
-  overflow: ${({ withEllipsis }) => (withEllipsis ? 'hidden' : 'initial')};
+  overflow: ${({ overflow = 'initial', withEllipsis }) =>
+    withEllipsis ? 'hidden' : overflow};
   white-space: ${({ withEllipsis }) => (withEllipsis ? 'nowrap' : 'initial')};
   text-overflow: ${({ withEllipsis }) =>
     withEllipsis ? 'ellipsis' : 'initial'};

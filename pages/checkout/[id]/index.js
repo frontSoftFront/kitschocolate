@@ -7,8 +7,29 @@ import OrderForm from '../../../forms/order-form';
 // theme
 import Theme from '../../../theme';
 // ui
-import { Section, PageTitle } from '../../../ui';
+import { Button, Section, PageTitle } from '../../../ui';
 // ////////////////////////////////////////////////
+
+const AcceptedOrder = ({ paymentStatus }) => {
+  const { push } = useRouter();
+
+  return (
+    <Section maxWidth={1100} pt={Theme.styles.spacing.paddingY}>
+      <PageTitle {...Theme.styles.pageTitle} mb={Theme.styles.spacing.paddingY}>
+        Замовлення прийнято
+      </PageTitle>
+      <Button
+        {...Theme.styles.actionButton}
+        height={40}
+        width={150}
+        mx="auto"
+        onClick={() => push('/')}
+      >
+        На головну
+      </Button>
+    </Section>
+  );
+};
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -20,22 +41,30 @@ const CheckoutPage = () => {
       title="Оформлення замовлення"
       collections={['chocolates', `orders/${id}`]}
     >
-      {({ firebaseData, handleOpenLoader, handleCloseLoader }) => (
-        <Section maxWidth={1100} py={Theme.styles.spacing.paddingY}>
-          <PageTitle
-            {...Theme.styles.pageTitle}
-            mb={Theme.styles.spacing.paddingY}
-          >
-            Оформлення замовлення
-          </PageTitle>
-          <OrderForm
-            orderId={id}
-            handleOpenLoader={handleOpenLoader}
-            handleCloseLoader={handleCloseLoader}
-            order={R.path(['data', 'orders', id], firebaseData)}
+      {({ firebaseData, handleOpenLoader, handleCloseLoader }) =>
+        R.pathEq(['data', 'orders', id, 'status'], 'ACCEPTED', firebaseData) ? (
+          <AcceptedOrder
+            paymentStatus={R.path(
+              ['data', 'orders', id, 'paymentStatus'],
+              firebaseData
+            )}
           />
-        </Section>
-      )}
+        ) : (
+          <Section maxWidth={1100} py={Theme.styles.spacing.paddingY}>
+            <PageTitle
+              {...Theme.styles.pageTitle}
+              mb={Theme.styles.spacing.paddingY}
+            >
+              Оформлення замовлення
+            </PageTitle>
+            <OrderForm
+              orderId={id}
+              handleOpenLoader={handleOpenLoader}
+              handleCloseLoader={handleCloseLoader}
+              order={R.path(['data', 'orders', id], firebaseData)}
+            />
+          </Section>
+        )}
     </Layout>
   );
 };

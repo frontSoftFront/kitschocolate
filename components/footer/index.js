@@ -129,7 +129,7 @@ const Footer = ({ route, activeNavItem, handleNavigate }) => {
             fontSize={[14, 13, 14, 16]}
             color={Theme.colors.quincy}
           >
-            kit’s_chocolate@gmail.com
+            kitschocolate@gmail.com
           </Text>
         </Box>
         <Box mt={[20, 20, 0, 0]}>
@@ -146,7 +146,7 @@ const Footer = ({ route, activeNavItem, handleNavigate }) => {
             fontSize={[14, 13, 14, 16]}
             color={Theme.colors.quincy}
           >
-            kit’schocolate.com © 2019
+            kitschocolate.com © 2025
           </Text>
           <Flex mt={15} height={20} justifyContent="space-around">
             <Img height="100%" src="../../master-card.svg" />

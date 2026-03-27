@@ -16,32 +16,41 @@ const Content = ({ router, recipe, recipes, chocolates }) => {
     title,
     imgUrl,
     direction,
+    cookingTime,
     description,
     ingredients,
     ingredientIcons,
     recipeDirectionImages = []
   } = recipe;
 
-  const [quantity, setQuantity] = useState(1);
-  const [activeSize, setActiveSize] = useState('small');
-  const handleChangeQuantity = value => {
-    if (R.or(R.gt(value, 100), R.lt(value, 1))) return;
-    setQuantity(value);
-  };
+  // const [quantity, setQuantity] = useState(1);
+  // const [activeSize, setActiveSize] = useState('small');
+  // const handleChangeQuantity = value => {
+  //   if (R.or(R.gt(value, 100), R.lt(value, 1))) return;
+  //   setQuantity(value);
+  // };
 
   const mapIngredients = R.map(item => {
-    const { id, type } = item;
+    const { id, type, quantity } = item;
 
     if (R.equals(type, 'recipe')) {
       return R.merge(item, R.pathOr({}, [id], recipes));
     }
 
     if (R.equals(type, 'chocolate')) {
-      return R.merge(item, R.pathOr({}, [id], chocolates));
+      const chocolate = R.pathOr({}, [id], chocolates);
+
+      return {
+        ...item,
+        ...chocolate,
+        quantity,
+        chocolateQuantity: chocolate.quantity
+      };
     }
 
     return item;
   });
+
   const mappedIngredients = mapIngredients(ingredients);
 
   return (
@@ -49,19 +58,22 @@ const Content = ({ router, recipe, recipes, chocolates }) => {
       <Section mx="auto" maxWidth={1200} py={Theme.styles.spacing.paddingY}>
         <PageTitle {...Theme.styles.pageTitle}>Рецепт / {title}</PageTitle>
         <RecipeDescription
+          quantity={1}
           imgUrl={imgUrl}
-          quantity={quantity}
-          activeSize={activeSize}
+          // quantity={quantity}
+          cookingTime={cookingTime}
+          // activeSize={activeSize}
           description={description}
-          setActiveSize={setActiveSize}
+          // setActiveSize={setActiveSize}
           ingredientIcons={ingredientIcons}
-          handleChangeQuantity={handleChangeQuantity}
+          // handleChangeQuantity={handleChangeQuantity}
         />
         <RecipeIngredients
           router={router}
+          recipeQuantity={1}
           direction={direction}
-          activeSize={activeSize}
-          recipeQuantity={quantity}
+          // activeSize={activeSize}
+          // recipeQuantity={quantity}
           ingredients={mappedIngredients}
         />
       </Section>

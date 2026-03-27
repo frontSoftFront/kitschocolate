@@ -1,9 +1,9 @@
 import * as R from 'ramda';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 // lib
 import { basketActions } from '../../lib/redux';
 // helpers
-import { showToastifyMessage } from '../../helpers';
+import { setDebounce, showToastifyMessage } from '../../helpers';
 // hooks
 import { useActions } from '../../hooks/use-actions';
 // theme
@@ -21,18 +21,95 @@ import {
 } from '../../ui';
 // //////////////////////////////////////////////////
 
+export const ChangeQuantity = ({
+  quantity,
+  itemQuantity,
+  handleChangeQuantity
+}) => {
+  const [value, setValue] = useState(quantity);
+
+  const disabled = R.gte(value, itemQuantity);
+
+  const handleChange = newValue => {
+    setValue(newValue);
+
+    if (disabled) return;
+
+    handleChangeQuantity(newValue);
+  };
+
+  return (
+    <Flex ml={20}>
+      <Input
+        pl={10}
+        width={40}
+        type="number"
+        value={value}
+        fontWeight={500}
+        border="1px solid"
+        height={[40, 50, 60]}
+        borderColor={Theme.colors.lightBlue}
+        onChange={event => handleChange(event.target.value)}
+      />
+      <Box width={30} height={[40, 50, 60]} background={Theme.colors.quincy}>
+        <Button
+          height="50%"
+          width="100%"
+          disabled={disabled}
+          alignItems="center"
+          justifyContent="center"
+          onClick={() => handleChange(R.inc(value))}
+        >
+          <Box
+            width="0px"
+            height="0px"
+            borderBottom="5px solid white"
+            borderLeft="5px solid transparent"
+            borderRight="5px solid transparent"
+          />
+        </Button>
+        <Flex
+          height="50%"
+          cursor="pointer"
+          alignItems="center"
+          justifyContent="center"
+          onClick={() => handleChange(R.dec(value))}
+        >
+          <Box
+            width="0px"
+            height="0px"
+            borderTop="5px solid white"
+            borderLeft="5px solid transparent"
+            borderRight="5px solid transparent"
+          />
+        </Flex>
+      </Box>
+    </Flex>
+  );
+};
+
 const OrderItem = ({ orderItem }) => {
-  const { id, imgUrl, price, title, description } = orderItem;
+  const {
+    id,
+    price,
+    title,
+    imgUrl,
+    description,
+    weight = 100,
+    quantity: itemQuantity
+  } = orderItem;
 
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(price);
 
   const handleChangeQuantity = useCallback(
     value => {
-      if (R.or(R.gt(value, 100), R.lt(value, 0))) return;
+      if ((R.gt(value, 100) || R.lte(value, 0)) && value !== '') return;
 
-      setQuantity(value);
-      setTotalPrice(R.multiply(price, value));
+      const validValue = R.isEmpty(value) ? 1 : value;
+
+      setQuantity(validValue);
+      setTotalPrice(R.multiply(price, validValue));
     },
     [price]
   );
@@ -67,6 +144,7 @@ const OrderItem = ({ orderItem }) => {
           opacity="0.54"
           lineHeight={1.54}
           fontSize={[14, 16]}
+          wordBreak="break-word"
         >
           {description}
         </Text>
@@ -76,7 +154,7 @@ const OrderItem = ({ orderItem }) => {
           <Flex mb={20} fontSize={[12, 14]}>
             <Text color={Theme.colors.lightGrey}>Вага:</Text>
             <Text ml="5px" fontWeight={500} color={Theme.colors.quincy}>
-              100 gr
+              {weight} гр.
             </Text>
           </Flex>
         </Flex>
@@ -88,58 +166,14 @@ const OrderItem = ({ orderItem }) => {
         borderBottom="1px solid"
         borderColor={Theme.colors.transparentBlue}
       >
-        <Text withEllipsis fontSize={[20, 30]} width={[70, 110]}>
+        <Text withEllipsis fontSize={[20, 30]} width={[80, 130]}>
           ₴ {totalPrice}
         </Text>
-        <Flex ml={20}>
-          <Input
-            pl={10}
-            width={40}
-            type="number"
-            fontWeight={500}
-            value={quantity}
-            border="1px solid"
-            height={[40, 50, 60]}
-            borderColor={Theme.colors.lightBlue}
-            onChange={event => handleChangeQuantity(event.currentTarget.value)}
-          />
-          <Box
-            width={30}
-            height={[40, 50, 60]}
-            background={Theme.colors.quincy}
-          >
-            <Flex
-              height="50%"
-              cursor="pointer"
-              alignItems="center"
-              justifyContent="center"
-              onClick={() => handleChangeQuantity(R.inc(quantity))}
-            >
-              <Box
-                width="0px"
-                height="0px"
-                borderBottom="5px solid white"
-                borderLeft="5px solid transparent"
-                borderRight="5px solid transparent"
-              />
-            </Flex>
-            <Flex
-              height="50%"
-              cursor="pointer"
-              alignItems="center"
-              justifyContent="center"
-              onClick={() => handleChangeQuantity(R.dec(quantity))}
-            >
-              <Box
-                width="0px"
-                height="0px"
-                borderTop="5px solid white"
-                borderLeft="5px solid transparent"
-                borderRight="5px solid transparent"
-              />
-            </Flex>
-          </Box>
-        </Flex>
+        <ChangeQuantity
+          quantity={quantity}
+          itemQuantity={itemQuantity}
+          handleChangeQuantity={handleChangeQuantity}
+        />
       </Flex>
       <Button
         {...Theme.styles.actionButton}

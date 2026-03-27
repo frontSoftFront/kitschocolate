@@ -18,4 +18,5 @@ export const Img = styled.img`
   ${maxHeight}
 
   cursor: ${({ cursor }) => cursor};
+  transform: ${({ transform }) => transform};
 `;
